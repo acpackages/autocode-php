@@ -1,0 +1,12 @@
+{
+    "name": "ac_packages/autocode",
+    "description": "Base package for autocode packages",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Autocode\\": "src/Core/",
+            "Autocode\\enums\\": "src/Enums/"
+        }
+    },
+    "require": {}
+}

@@ -1,0 +1,11 @@
+{
+    "name": "ac_packages/autocode-extensions",
+    "description": "PHP Extension Methods",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "AcExtensions\\": "src/"
+        }
+    },
+    "require": {}
+}

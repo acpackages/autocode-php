@@ -1,0 +1,11 @@
+{
+    "name": "ac_packages/autocode-sql",
+    "description": "SQL database operations",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "AcSql\\": "src/"            
+        }
+    },
+    "require": {}
+}

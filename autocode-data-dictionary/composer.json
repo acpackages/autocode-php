@@ -1,0 +1,11 @@
+{
+    "name": "ac_packages/autocode-data-dictionary",
+    "description": "Data dictionary package for autocode",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "AcDataDictionary\\": "src/"
+        }
+    },
+    "require": {}
+}
