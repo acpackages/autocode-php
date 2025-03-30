@@ -1,0 +1,41 @@
+<?php
+
+namespace AcSql\Database;
+
+require_once '../../autocode/vendor/autoload.php';
+require_once '../../autocode-data-dictionary/vendor/autoload.php';
+
+use Autocode\AcLogger;
+use Autocode\AcResult;
+use AcDataDictionary\AcDataDictionary;
+use AcDataDictionary\Models\AcDDTable;
+use Exception;
+
+class AcSqlDbTableRowEvent{
+    public AcLogger $logger;
+    public string $tableName = "";
+    public string $dataDictionaryName = "default";
+    public AcDDTable $acDDTable;
+    public AcDataDictionary $acDataDictionary;
+    public string $condition = "";
+    public mixed $data;
+    public mixed $result;
+    public array $parameters = [];
+    public bool $abortOperation = false;
+
+    public function __construct(string $tableName,string $dataDictionaryName = "default") {
+        $this->tableName = $tableName;
+        $this->acDDTable = AcDataDictionary::getTable(tableName:$tableName,dataDictionaryName:$dataDictionaryName);
+        $this->acDataDictionary = AcDataDictionary::getInstance();
+    }
+
+
+    public function execute():AcResult {
+        $result = new AcResult();
+        $result->setSuccess();
+        return $result;
+    }
+
+    
+    
+}

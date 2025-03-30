@@ -93,7 +93,7 @@ class AcPostgresDao {
     /**
      * Execute a SELECT statement with optional parameters.
      */
-    public function selectStatement(string $statement, array $parameters = [], bool $firstRowOnly = false): array {
+    public function getRows(string $statement, array $parameters = [], bool $firstRowOnly = false): array {
         try {
             $pdo = $this->getConnectionObject();
             $stmt = $pdo->prepare($statement);
@@ -108,7 +108,7 @@ class AcPostgresDao {
     /**
      * Execute an arbitrary SQL statement (INSERT, UPDATE, DELETE, etc.).
      */
-    public function sqlStatement(string $statement, array $parameters = []): bool {
+    public function executeStatement(string $statement, array $parameters = []): bool {
         try {
             $pdo = $this->getConnectionObject();
             $stmt = $pdo->prepare($statement);

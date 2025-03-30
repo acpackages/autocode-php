@@ -69,14 +69,14 @@ class AcSqliteDao {
         return ['success' => true, 'lastInsertedId' => $pdo->lastInsertId()];
     }
 
-    public function selectStatement($query, $parameters = []) {
+    public function getRows($query, $parameters = []) {
         $pdo = $this->getConnection();
         $stmt = $pdo->prepare($query);
         $stmt->execute($parameters);
         return ['success' => true, 'rows' => $stmt->fetchAll(PDO::FETCH_ASSOC)];
     }
 
-    public function sqlStatement($query, $parameters = []) {
+    public function executeStatement($query, $parameters = []) {
         $pdo = $this->getConnection();
         $stmt = $pdo->prepare($query);
         $stmt->execute($parameters);

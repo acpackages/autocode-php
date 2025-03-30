@@ -23,14 +23,16 @@ class AcMysqlDao extends AcBaseSqlDao {
     public function checkDatabaseExist(): AcResult {
         $result = new AcResult();
         try {
-            $statement = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?";
+            $statement = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = @databaseName";
+            $parameterValues = [];
+            $this->setSqlStatementParameters($statement,parameters:["@databaseName"=> $this->sqlConnection->database],values:$parameterValues);
             $db = $this->getConnectionObject(false);
             if (!$db) {
                 $result->setFailure(message:'Database connection error');
             }
             else{
                 $stmt = $db->prepare($statement);
-                $stmt->execute([$this->sqlConnection->database]);
+                $stmt->execute($parameterValues);
                 $exists = $stmt->fetch();
                 $result->setSuccess((bool) $exists, message: $exists ? 'Database exists' : 'Database does not exist');
             }            
@@ -40,17 +42,22 @@ class AcMysqlDao extends AcBaseSqlDao {
         return $result;
     }
 
-    public function checkTableExist(string $table): AcResult {
+    public function checkTableExist(string $tableName): AcResult {
         $result = new AcResult();
         try {
-            $statement = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?";
             $db = $this->getConnectionObject();
             if (!$db) {
-                return $result->setFailure(message:'Database connection error');
+                $result->setFailure(message:'Database connection error');
             }
-            $stmt = $db->prepare($statement);
-            $stmt->execute([$this->sqlConnection->database, $table]);
-            $result->setSuccess((bool) $stmt->fetch(), message: $stmt->fetch() ? 'Table exists' : 'Table does not exist');
+            else{                
+                $statement = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = @databaseName AND TABLE_NAME = @tableName";
+                $parameterValues = [];
+                $this->setSqlStatementParameters($statement,parameters:["@databaseName"=> $this->sqlConnection->database,'@tableName'=>$tableName],values:$parameterValues);
+                $stmt = $db->prepare($statement);
+                $stmt->execute([$this->sqlConnection->database, $tableName]);
+                $exists = $stmt->fetch();
+                $result->setSuccess((bool) $exists, message: $exists ? 'Table exists' : 'Table does not exist');
+            }            
         } catch (PDOException $ex) {
             $result->setException($ex);
         }
@@ -60,8 +67,8 @@ class AcMysqlDao extends AcBaseSqlDao {
     public function createDatabase(): AcResult {
         $result = new AcResult();
         try {
+            $db = $this->getConnectionObject(false);            
             $statement = "CREATE DATABASE IF NOT EXISTS `{$this->sqlConnection->database}`";
-            $db = $this->getConnectionObject(false);
             $stmt = $db->prepare($statement);
             $stmt->execute();
             $result->setSuccess(true, message: 'Database created');
@@ -71,20 +78,50 @@ class AcMysqlDao extends AcBaseSqlDao {
         return $result;
     }
 
-    public function deleteRows(string $table, string $condition = "", array $parameters = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
+    public function deleteRows(string $tableName, string $condition = "", array $parameters = []): AcSqlDaoResult {
+        $result = new AcSqlDaoResult(operation:AcEnumRowOperation::DELETE);
         try {
-            $statement = "DELETE FROM {$table} " . ($condition ? "WHERE {$condition}" : "");
+            $statement = "DELETE FROM {$tableName} " . ($condition ? "WHERE {$condition}" : "");
             $db = $this->getConnectionObject();
+            $parameterValues = [];
+            $this->setSqlStatementParameters($statement,parameters:$parameters,values:$parameterValues);
             $stmt = $db->prepare($statement);
-            foreach ($parameters as $key => $value) {
-                $stmt->bindValue($key, $value);
-            }
-            $stmt->execute();
+            $stmt->execute($parameterValues);
             $result->affectedRowsCount = $stmt->rowCount();
             $result->setSuccess();
         } catch (PDOException $ex) {
             $result->setException($ex);
+        }
+        return $result;
+    }
+
+    public function executeMultipleSqlStatements(array $statements, array $parameters = []): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        try {
+            $db = $this->getConnectionObject();
+            $db->beginTransaction();
+            foreach ($statements as $statement) {
+                $stmt = $db->prepare($statement);
+                $stmt->execute();
+            }
+            $db->commit();
+            $result->setSuccess();
+        } catch (PDOException $e) {
+            $db->rollBack();
+            $result->setException($e);
+        }
+        return $result;
+    }
+
+    public function executeStatement(string $statement, ?string $operation = AcEnumRowOperation::UNKNOWN, ?array $parameters = []): AcSqlDaoResult {
+        $result = new AcSqlDaoResult(operation:$operation);
+        try {
+            $db = $this->getConnectionObject();
+            $stmt = $db->prepare($statement);
+            $stmt->execute($parameters);
+            $result->setSuccess();
+        } catch (PDOException $e) {
+            $result->setException($e);
         }
         return $result;
     }
@@ -116,6 +153,36 @@ class AcMysqlDao extends AcBaseSqlDao {
         return $result;
     }
 
+    public function getDatabaseFuntions(): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        try {
+            $statement = "SELECT ROUTINE_NAME, DATA_TYPE, CREATED, DEFINER  FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA = ? AND ROUTINE_TYPE = 'FUNCTION'";
+            $db = $this->getConnectionObject();
+            $stmt = $db->prepare($statement);
+            $stmt->execute([$this->sqlConnection->database]);
+            $result->rows = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            $result->setSuccess();
+        } catch (PDOException $ex) {
+            $result->setException($ex);
+        }
+        return $result;
+    }
+
+    public function getDatabaseStoredProcedures(): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        try {
+            $statement = "SELECT ROUTINE_NAME, CREATED, DEFINER  FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA = ? AND ROUTINE_TYPE = 'PROCEDURE'";
+            $db = $this->getConnectionObject();
+            $stmt = $db->prepare($statement);
+            $stmt->execute([$this->sqlConnection->database]);
+            $result->rows = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            $result->setSuccess();
+        } catch (PDOException $ex) {
+            $result->setException($ex);
+        }
+        return $result;
+    }
+
     public function getDatabaseTables(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
@@ -131,11 +198,60 @@ class AcMysqlDao extends AcBaseSqlDao {
         return $result;
     }
 
-    public function getTableDefinition(string $table): AcSqlDaoResult {
+    public function getDatabaseTriggers(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
+            $statement = "SELECT TRIGGER_NAME, EVENT_MANIPULATION, EVENT_OBJECT_TABLE, ACTION_STATEMENT, ACTION_TIMING FROM INFORMATION_SCHEMA.TRIGGERS WHERE TRIGGER_SCHEMA  = ?";
             $db = $this->getConnectionObject();
-            $stmt = $db->prepare("DESCRIBE `{$table}`");
+            $stmt = $db->prepare($statement);
+            $stmt->execute([$this->sqlConnection->database]);
+            $result->rows = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            $result->setSuccess();
+        } catch (PDOException $ex) {
+            $result->setException($ex);
+        }
+        return $result;
+    }
+
+    public function getDatabaseViews(): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        try {
+            $statement = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_SCHEMA = ?";
+            $db = $this->getConnectionObject();
+            $stmt = $db->prepare($statement);
+            $stmt->execute([$this->sqlConnection->database]);
+            $result->rows = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            $result->setSuccess();
+        } catch (PDOException $ex) {
+            $result->setException($ex);
+        }
+        return $result;
+    }
+
+    public function getRows(?string $statement, ?string $condition = "", ?array $parameters = [],?string $mode = AcEnumSelectMode::LIST, ?array $formatColumns = [], ?int $startIndex = -1, ?int $rowCount = -1): AcSqlDaoResult {
+        $result = new AcSqlDaoResult(operation:AcEnumRowOperation::SELECT);
+        try {
+            $db = $this->getConnectionObject();
+            if($condition!=""){
+                $statement .= " WHERE $condition";
+            }
+            $parameterValues = [];
+            $this->setSqlStatementParameters($statement,parameters:$parameters,values:$parameterValues);
+            $stmt = $db->prepare($statement);
+            $stmt->execute($parameterValues);
+            $result->rows = $mode == AcEnumSelectMode::FIRST ? $stmt->fetch(PDO::FETCH_ASSOC) : $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result->setSuccess();
+        } catch (PDOException $ex) {
+            $result->setException($ex);
+        }
+        return $result;
+    }    
+
+    public function getTableColumns(string $tableName): AcSqlDaoResult {
+        $result = new AcSqlDaoResult(operation:AcEnumRowOperation::SELECT);
+        try {
+            $db = $this->getConnectionObject();
+            $stmt = $db->prepare("DESCRIBE `{$tableName}`");
             $stmt->execute();
             $result->rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $result->setSuccess();
@@ -145,8 +261,22 @@ class AcMysqlDao extends AcBaseSqlDao {
         return $result;
     }
 
-    public function insertRows(string $table, array $values, ?string $primaryKeyColumn = ""): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
+    public function getViewColumns(string $viewName): AcSqlDaoResult {
+        $result = new AcSqlDaoResult(operation:AcEnumRowOperation::SELECT);
+        try {
+            $db = $this->getConnectionObject();
+            $stmt = $db->prepare("DESCRIBE `{$viewName}`");
+            $stmt->execute();
+            $result->rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result->setSuccess();
+        } catch (PDOException $e) {
+            $result->setException($e);
+        }
+        return $result;
+    }
+
+    public function insertRows(string $table, array $values): AcSqlDaoResult {
+        $result = new AcSqlDaoResult(operation:AcEnumRowOperation::INSERT);
         try {
             $columns = implode(", ", array_keys($values));
             $placeholders = implode(", ", array_map(fn($col) => ":$col", array_keys($values)));
@@ -165,56 +295,8 @@ class AcMysqlDao extends AcBaseSqlDao {
         return $result;
     }
     
-    public function selectStatement(string $statement, ?string $mode = AcEnumSelectMode::LIST, ?string $condition = "", ?array $parameters = [], ?array $formatColumns = [], ?bool $firstRowOnly = false): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
-        try {
-            $db = $this->getConnectionObject();
-            if($condition!=""){
-                $statement .= " WHERE $condition";
-            }
-            $stmt = $db->prepare($statement);
-            $stmt->execute($parameters);
-            $result->rows = $firstRowOnly ? $stmt->fetch(PDO::FETCH_ASSOC) : $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $result->setSuccess();
-        } catch (PDOException $ex) {
-            $result->setException($ex);
-        }
-        return $result;
-    }    
-
-    public function sqlStatement(string $statement, ?string $operation = AcEnumRowOperation::UNKNOWN, ?array $parameters = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
-        try {
-            $db = $this->getConnectionObject();
-            $stmt = $db->prepare($statement);
-            $stmt->execute($parameters);
-            $result->setSuccess();
-        } catch (PDOException $e) {
-            $result->setException($e);
-        }
-        return $result;
-    }
-
-    public function sqlBatchStatement(array $statements, array $parameters = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
-        try {
-            $db = $this->getConnectionObject();
-            $db->beginTransaction();
-            foreach ($statements as $statement) {
-                $stmt = $db->prepare($statement);
-                $stmt->execute();
-            }
-            $db->commit();
-            $result->setSuccess();
-        } catch (PDOException $e) {
-            $db->rollBack();
-            $result->setException($e);
-        }
-        return $result;
-    }
-
     public function updateRows(string $table, array $values, string $condition = "", array $parameters = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
+        $result = new AcSqlDaoResult(operation:AcEnumRowOperation::UPDATE);
         try {
             $statement = "";
             $updateFieldIndex = -1;

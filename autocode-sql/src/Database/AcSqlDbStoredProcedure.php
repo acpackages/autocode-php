@@ -4,16 +4,28 @@ namespace AcSql\Database;
 
 require_once '../../autocode/vendor/autoload.php';
 
-use Autocode\AcLogger;
+use AcDataDictionary\Models\AcDDStoredProcedure;
+use AcDataDictionary\AcDataDictionary;
+use Exception;
 
-class AcSqlDbStoredProcedure {
-    public AcLogger $logger;
+
+class AcSqlDbStoredProcedure  extends AcSqlDbBase {    
+    public AcDDStoredProcedure $acDDStoredProcedure;
     public string $storedProcedureName = "";
-    public string $dataDictionaryName = "default";
 
     public function __construct(string $storedProcedureName,string $dataDictionaryName = "default") {
-        $this->logger = new AcLogger();
+        parent::__construct(dataDictionaryName: "default");
         $this->storedProcedureName = $storedProcedureName;
-        $this->dataDictionaryName = $dataDictionaryName;
-    }    
+        $this->acDDStoredProcedure = AcDataDictionary::getStoredProcedure(storedProcedureName: $storedProcedureName, dataDictionaryName: $dataDictionaryName);
+    } 
+    
+    public function getCreateStoredProcedureStatement(): string{
+        $result = $this->acDDStoredProcedure->storedProcedureCode;
+        return $result;
+    }
+
+    public function getDropStoredProcedureStatement(): string{
+        $result = "DROP STORED PROCEDURE IF EXISTS $this->storedProcedureName;";
+        return $result;
+    }
 }

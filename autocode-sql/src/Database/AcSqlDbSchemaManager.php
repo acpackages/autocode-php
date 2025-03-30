@@ -6,14 +6,16 @@ require_once __DIR__ . './../../../autocode/vendor/autoload.php';
 require_once __DIR__ . './../../../autocode-data-dictionary/vendor/autoload.php';
 require_once __DIR__ . './../../../autocode-extensions/vendor/autoload.php';
 
-use Autocode\AcLogger;
 use Autocode\AcResult;
 use AcExtensions\AcExtensionMethods;
 use AcDataDictionary\AcDataDictionary;
 use AcDataDictionary\Enums\AcEnumDDFieldType;
-use AcDataDictionary\Enums\AcEnumDDFieldProperties;
+use AcDataDictionary\Models\AcDDFunction;
+use AcDataDictionary\Models\AcDDStoredProcedure;
 use AcDataDictionary\Models\AcDDTable;
 use AcDataDictionary\Models\AcDDTableField;
+use AcDataDictionary\Models\AcDDTrigger;
+use AcDataDictionary\Models\AcDDView;
 
 class AcSqlDbSchemaManager extends AcSqlDbBase{
 
@@ -119,7 +121,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase{
                     }
                     else{
                         $continueOperation = false;
-                        $result->setFromResult($createSchemaResult,message:"Error creating database schema from data dictionary");
+                        $result->setFromResult($updateSchemaResult,message:"Error creating database schema from data dictionary");
                     }
                 }    
             }
@@ -170,6 +172,57 @@ class AcSqlDbSchemaManager extends AcSqlDbBase{
         return $result;
     }
 
+    function createDatabaseFunctions():AcResult{
+        $result = new AcResult();
+        $acDDFunctions = AcDataDictionary::getFunctions(dataDictionaryName:$this->dataDictionaryName);
+        $continueOperation = true;
+        foreach ($acDDFunctions as $acDDFunction) {
+            if($continueOperation){
+                $acSqlDbTable = new AcSqlDbFunction(functionName:$acDDFunction->functionName,dataDictionaryName:$this->dataDictionaryName);
+                $dropStatement = $acSqlDbTable->getDropFunctionStatement();
+                $dropResult = $this->dao->executeStatement($dropStatement);
+                if($dropResult->isSuccess()){                    
+                }
+                else{
+                    $continueOperation = false;
+                    $result->setFromResult($dropResult);
+                }
+                $createStatement = $acSqlDbTable->getCreateFunctionStatement();
+                $createResult = $this->dao->executeStatement($createStatement);
+                if($createResult->isSuccess()){                    
+                }
+                else{
+                    $continueOperation = false;
+                    $result->setFromResult($createResult);
+                }
+            }
+        }
+        if($continueOperation){
+            $result->setSuccess();
+        }
+        return $result;
+    }
+
+    function createDatabaseRelationships():AcResult{
+        $result = new AcResult();
+        try{
+        }
+        catch(Exception $ex ){
+            $result->setException($ex);
+        }        
+        return $result;
+    }
+
+    function createDatabaseStoredProcedures():AcResult{
+        $result = new AcResult();
+        try{
+        }
+        catch(Exception $ex ){
+            $result->setException($ex);
+        }        
+        return $result;
+    }
+
     function createDatabaseTables():AcResult{
         $result = new AcResult();
         $acDDTables = AcDataDictionary::getTables(dataDictionaryName:$this->dataDictionaryName);
@@ -178,7 +231,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase{
             if($continueOperation){
                 $acSqlDbTable = new AcSqlDbTable(tableName:$acDDTable->tableName,dataDictionaryName:$this->dataDictionaryName);
                 $createTableStatement = $acSqlDbTable->getCreateTableStatement();
-                $createTableResult = $this->dao->sqlStatement($createTableStatement);
+                $createTableResult = $this->dao->executeStatement($createTableStatement);
                 if($createTableResult->isSuccess()){                    
                 }
                 else{
@@ -190,6 +243,26 @@ class AcSqlDbSchemaManager extends AcSqlDbBase{
         if($continueOperation){
             $result->setSuccess();
         }
+        return $result;
+    }
+
+    function createDatabaseTriggers():AcResult{
+        $result = new AcResult();
+        try{
+        }
+        catch(Exception $ex ){
+            $result->setException($ex);
+        }        
+        return $result;
+    }
+
+    function createDatabaseViews():AcResult{
+        $result = new AcResult();
+        try{
+        }
+        catch(Exception $ex ){
+            $result->setException($ex);
+        }        
         return $result;
     }
 

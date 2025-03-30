@@ -80,6 +80,11 @@ class AcDDTableField {
         }
         return $result;
     }
+
+    public function getAutoNumberPrefixLength(): int {
+        $prefix = $this->getAutoNumberPrefix();
+        return strlen($prefix);
+    }
     
     public function getDefaultValue(): mixed {
         $result = null;
@@ -88,6 +93,14 @@ class AcDDTableField {
         }
         return $result;
     }
+
+    public function getFieldFormats(): array {
+        $result = [];
+        if(AcExtensionMethods::arrayContainsKey(AcEnumDDFieldProperty::FORMAT,$this->fieldProperties)){
+            $result = $this->fieldProperties[AcEnumDDFieldProperty::FORMAT]->propertyValue;
+        }
+        return $result;
+    }  
     
     public function getFieldTitle(): string {
         $result = $this->fieldName;
@@ -148,13 +161,29 @@ class AcDDTableField {
         return $result;
     }
 
+    public function isRequired(): bool {
+        $result = false;
+        if(AcExtensionMethods::arrayContainsKey(AcEnumDDFieldProperty::REQUIRED,$this->fieldProperties)){
+            $result = ($this->fieldProperties[AcEnumDDFieldProperty::REQUIRED]->propertyValue ?? false) === true;
+        }
+        return $result;
+    }
+
+    public function isSetValuesNullBeforeDelete(): bool {
+        $result = false;
+        if(AcExtensionMethods::arrayContainsKey(AcEnumDDFieldProperty::SET_NULL_BEFORE_DELETE,$this->fieldProperties)){
+            $result = ($this->fieldProperties[AcEnumDDFieldProperty::SET_NULL_BEFORE_DELETE]->propertyValue ?? false) === true;
+        }
+        return $result;
+    }
+
     public function isUniqueKey(): bool {
         $result = false;
         if(AcExtensionMethods::arrayContainsKey(AcEnumDDFieldProperty::UNIQUE_KEY,$this->fieldProperties)){
             $result = ($this->fieldProperties[AcEnumDDFieldProperty::UNIQUE_KEY]->propertyValue ?? false) === true;
         }
         return $result;
-    }
+    }    
     
     public function setValuesFromJson(array $jsonData): void {
         $this->fieldName = $jsonData[self::KEY_FIELD_NAME] ?? "";

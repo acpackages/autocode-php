@@ -33,6 +33,10 @@ class AcResult {
         return $instance;
     }
 
+    public function __construct(?string $message = "Nothing executed") {
+        $this->message = $message;
+    }
+
     public function isException(): bool {
         return $this->status === "failure" && $this->code === self::CODE_EXCEPTION;
     }
@@ -53,7 +57,7 @@ class AcResult {
         $this->log = array_merge($result->log, $this->log);
     }
 
-    public function setFromResult(AcResult $result,?string $message = null) {
+    public function setFromResult(AcResult $result,?string $message = null,?AcLogger $logger = null) {
         $this->status = $result->status;
         $this->message = $result->message;
         $this->code = $result->code;
@@ -77,10 +81,10 @@ class AcResult {
         if(isset($message)) {
             $this->message = $message;
             if (isset($logger)) {
-                $logger->success([$params['message']]);
+                $logger->success($this->message);
             }
             if ($this->logger) {
-                $this->logger->success([$params['message']]);
+                $this->logger->success($this->message);
             }
         }
     }
@@ -92,10 +96,10 @@ class AcResult {
         if(isset($message)) {
             $this->message = $message;
             if (isset($logger)) {
-                $logger->error([$params['message']]);
+                $logger->error($this->message);
             }
             if ($this->logger) {
-                $this->logger->error([$params['message']]);
+                $this->logger->error($this->message);
             }
         }
     }

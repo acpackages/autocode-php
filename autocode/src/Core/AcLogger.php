@@ -22,7 +22,7 @@ class AcLogger {
         "debug" => "Green",
         "error" => "Red",
         "info" => "Blue",
-        "log" => "Cyan",
+        "log" => "Black",
         "warn" => "Yellow",
         "success" => "Green"
     ];
@@ -46,6 +46,10 @@ class AcLogger {
 
     public function error(...$args) {
         $this->loggerMessage($args, "error");
+    }
+
+    public function exception($exception) {
+        $this->loggerMessage($exception->getMessage(), "error");
     }
 
     public function info(...$args) {
@@ -94,11 +98,22 @@ class AcLogger {
         echo "{$label}{$message}\n";
     }
 
+    private function printMessage($message, $type) {
+        $color = $this->messageColors[$type];
+        $label = $this->prefix ? "{$this->prefix} : " : "";
+        echo '<p style="color:'.$color.';">'.$label.$message.'</p>';
+    }
+
     private function loggerMessage($args, $type) {
         if ($this->logMessages) {
             foreach ($args as $message) {
-                if ($this->logType !== AcEnumLogType::CONSOLE) {
+                if(is_array($message)) {
+                    $message = json_encode($message);
+                }
+                if ($this->logType !== AcEnumLogType::CONSOLE && $this->logType !== AcEnumLogType::PRINT) {
                     $this->writeToFile($message, $type);
+                } else if ($this->logType == AcEnumLogType::PRINT) {
+                    $this->printMessage($message, $type);
                 } else {
                     $this->consoleMessage($message, $type);
                 }

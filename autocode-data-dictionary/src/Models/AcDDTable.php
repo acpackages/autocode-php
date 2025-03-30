@@ -5,6 +5,9 @@ namespace AcDataDictionary\Models;
 require_once __DIR__ . './../AcDataDictionary.php';
 require_once 'AcDDTableField.php';
 require_once 'AcDDTableProperty.php';
+use AcDataDictionary\AcDataDictionary;
+use AcDataDictionary\Models\AcDDTableField;
+use AcDataDictionary\Models\AcDDTableProperty;
 
 class AcDDTable {
     const KEY_TABLE_FIELDS = "table_fields";
@@ -32,6 +35,33 @@ class AcDDTable {
         return $result;
     }
 
+    public function getField(string $fieldName): ?AcDDTableField {
+        $result = null;
+        foreach($this->tableFields as $field){
+            if( $field->fieldName == $fieldName ){
+                $result = $field;
+            }
+        }
+        return $result;
+    }
+
+    public function getFieldNames(): array {
+        $result = [];
+        foreach($this->tableFields as $field){
+            $result[] = $field->fieldName;
+        }
+        return $result;
+    }
+
+    public function getPrimaryKeyFieldName(): string {
+        $result = "";
+        $primaryKeyField = $this->getPrimaryKeyField();
+        if($primaryKeyField!=null){
+            $result = $primaryKeyField->fieldName;
+        }
+        return $result;
+    }
+
     public function getPrimaryKeyField(): ?AcDDTableField {
         $primaryKeyFields = $this->getPrimaryKeyFields();
         return !empty($primaryKeyFields) ? $primaryKeyFields[0] : null;
@@ -40,7 +70,7 @@ class AcDDTable {
     public function getPrimaryKeyFields(): array {
         $result = [];
         foreach ($this->tableFields as $tableField) {
-            if ($tableField->primaryKey) {
+            if ($tableField->isPrimaryKey()) {
                 $result[] = $tableField;
             }
         }

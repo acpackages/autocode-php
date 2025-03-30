@@ -1,6 +1,5 @@
 <?php 
 require_once '../../autocode-sql/vendor/autoload.php';
-require_once 'tests.php';
 use AcSql\Models\AcSqlConnection;
 use AcSql\Daos\AcBaseSqlDao;
 use AcSql\Daos\AcMysqlDao;
@@ -22,22 +21,23 @@ function executeTests(AcBaseSqlDao $dao) {
         
         $operationIndex++;
         echo "<br><br><br>". "$operationIndex : Checking test_table exist...";
-        $result = $dao->checkTableExist(table:'test_table');
+        $result = $dao->checkTableExist(tableName:'test_table');
         echo "<br><br><br>". $result->toString();
         
         if ($result->isSuccess()) {
             if (!$result->value) {
                 $operationIndex++;
                 echo "<br><br><br>". "$operationIndex : Creating test_table...";
-                $result = $dao->sqlStatement(statement:'CREATE TABLE test_table (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50));' );
+                $result = $dao->executeStatement(statement:'CREATE TABLE test_table (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50));' );
+                echo "<br><br><br>". $result->toString();
+                $operationIndex++;
+                echo "<br><br><br>". "$operationIndex : Checking test_table exist...";
+                $result = $dao->checkTableExist(tableName:'test_table' );
                 echo "<br><br><br>". $result->toString();
             }
         }
         
-        $operationIndex++;
-        echo "<br><br><br>". "$operationIndex : Checking test_table exist...";
-        $result = $dao->checkTableExist(table:'test_table' );
-        echo "<br><br><br>". $result->toString();
+        
         
         $operationIndex++;
         echo "<br><br><br>". "$operationIndex : Inserting row in test_table...";
@@ -51,12 +51,12 @@ function executeTests(AcBaseSqlDao $dao) {
         
         $operationIndex++;
         echo "<br><br><br>". "$operationIndex : Getting rows from test_table...";
-        $result = $dao->selectStatement(statement:'SELECT * FROM test_table');
+        $result = $dao->getRows(statement:'SELECT * FROM test_table');
         echo "<br><br><br>". $result->toString();
         
         $operationIndex++;
         echo "<br><br><br>". "$operationIndex : Getting rows from test_table with parameter name test...";
-        $result = $dao->selectStatement(statement:'SELECT * FROM test_table', parameters:[ ':name' => 'test' ], condition:'name = :name' );
+        $result = $dao->getRows(statement:'SELECT * FROM test_table', parameters:[ ':name' => 'test' ], condition:'name = :name' );
         echo "<br><br><br>". $result->toString();
         
         $operationIndex++;
@@ -66,12 +66,12 @@ function executeTests(AcBaseSqlDao $dao) {
         
         $operationIndex++;
         echo "<br><br><br>". "$operationIndex : Getting rows from test_table...";
-        $result = $dao->selectStatement(statement:'SELECT * FROM test_table' );
+        $result = $dao->getRows(statement:'SELECT * FROM test_table' );
         echo "<br><br><br>". $result->toString();
         
         $operationIndex++;
         echo "<br><br><br>". "$operationIndex : Getting rows from test_table with parameter name test_modified...";
-        $result = $dao->selectStatement(statement:'SELECT * FROM test_table', parameters:[ ':name' => 'test_modified' ], condition:'name = :name' );
+        $result = $dao->getRows(statement:'SELECT * FROM test_table', parameters:[ ':name' => 'test_modified' ], condition:'name = :name' );
         echo "<br><br><br>". $result->toString();
         
         $operationIndex++;
@@ -81,7 +81,7 @@ function executeTests(AcBaseSqlDao $dao) {
         
         $operationIndex++;
         echo "<br><br><br>". "$operationIndex : Getting rows from test_table...";
-        $result = $dao->selectStatement(statement:'SELECT * FROM test_table' );
+        $result = $dao->getRows(statement:'SELECT * FROM test_table' );
         echo "<br><br><br>". $result->toString();
         
         $operationIndex++;
@@ -91,7 +91,7 @@ function executeTests(AcBaseSqlDao $dao) {
         
         $operationIndex++;
         echo "<br><br><br>". "$operationIndex : Getting table definition...";
-        $result = $dao->getTableDefinition(table:'test_table' );
+        $result = $dao->getTableColumns(tableName:'test_table' );
         echo "<br><br><br>". $result->toString();
     }
     else{
@@ -107,7 +107,6 @@ $acSqlConnection = AcSqlConnection::fromJson([
     "port" => 3306,
     "database" => 'test_db',
 ]);
-print_r($acSqlConnection->toJson());
 $dao->setSqlConnection($acSqlConnection);
 executeTests($dao);
 ?>

@@ -32,43 +32,53 @@ class AcBaseSqlDao {
 
     public function checkDatabaseExist(): AcResult {
         $result = new AcResult();
-        try {
-            // Database existence check logic
-        } catch (Exception $ex) {
-            $result->setException($ex);
-        }
+        return $result;
+    }
+
+    public function checkFunctionExist(string $functionName): AcResult {
+        $result = new AcResult();
+        return $result;
+    }
+
+    public function checkStoredProcedureExist(string $stroedProcedureName): AcResult {
+        $result = new AcResult();
+        return $result;
+    }
+
+    public function checkTableExist(string $tableName): AcResult {
+        $result = new AcResult();
+        return $result;
+    }
+
+    public function checkTriggerExist(string $triggerName): AcResult {
+        $result = new AcResult();
+        return $result;
+    }
+
+    public function checkViewExist(string $viewName): AcResult {
+        $result = new AcResult();
         return $result;
     }
 
     public function createDatabase(): AcResult {
         $result = new AcResult();
-        try {
-            // Database creation logic
-        } catch (Exception $ex) {
-            $this->logger->log("Error in createDatabase: " . $ex->getMessage());
-        }
         return $result;
     }
 
-    public function checkTableExist(string $table): AcResult {
-        $result = new AcResult();
-        try {
-            // Table existence check logic
-        } catch (Exception $ex) {
-            $result->setException($ex);
-        }
-        return $result;
-    }
-
-    public function deleteRows(string $table, string $condition = "", array $parameters = []): AcSqlDaoResult {
+    public function deleteRows(string $tableName, string $condition = "", array $parameters = []): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
-        try {
-            // Row deletion logic
-        } catch (Exception $ex) {
-            $result->setException($ex);
-        }
         return $result;
     }
+
+    public function executeMultipleSqlStatements(array $statements, array $parameters = []): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        return $result;
+    }
+
+    public function executeStatement(string $statement, ?string $operation = AcEnumRowOperation::UNKNOWN, ?array $parameters = []): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        return $result;
+    }    
 
     public function formatRow(array $row, array $formatColumns = []): array {
         return $row;
@@ -83,6 +93,16 @@ class AcBaseSqlDao {
         return null;
     }
 
+    public function getDatabaseFuntions(): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        return $result;
+    }
+
+    public function getDatabaseStoredProcedures(): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        return $result;
+    }
+
     public function getDatabaseTables(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
@@ -93,112 +113,76 @@ class AcBaseSqlDao {
         return $result;
     }
 
-    public function getTableDefinition(string $table): AcSqlDaoResult {
+    public function getDatabaseTriggers(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
-        try {
-            // Table definition logic
-        } catch (Exception $ex) {
-            $result->setException($ex);
-        }
         return $result;
     }
 
-    public function insertRows(string $table, array $values, ?string $primaryKeyColumn): AcSqlDaoResult {
+    public function getDatabaseViews(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
-        try {
-            // Row insertion logic
-        } catch (Exception $ex) {
-            $result->setException($ex);
-        }
         return $result;
     }
 
-    public function selectStatement(string $statement, ?string $mode = AcEnumSelectMode::LIST, ?string $condition = "", ?array $parameters = [], ?array $formatColumns = [], ?bool $firstRowOnly = false): AcSqlDaoResult {
+    public function getRows(string $statement, ?string $condition = "", ?array $parameters = [],?string $mode = AcEnumSelectMode::LIST, ?array $formatColumns = [], ?int $startIndex = -1, ?int $rowCount = -1 ): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
-        try {
-            // Select statement logic
-        } catch (Exception $ex) {
-            $result->setException($ex);
-        }
+        return $result;
+    }
+
+    public function getTableColumns(string $tableName): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        return $result;
+    }
+
+    public function getViewColumns(string $viewName): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        return $result;
+    }
+
+    public function insertRows(string $table, array $values): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
         return $result;
     }
 
     public function setSqlConnection(AcSqlConnection $sqlConnection): AcResult {
         $result = new AcResult();
-        try {
-            $this->sqlConnection = $sqlConnection;
-            $result->setSuccess(["value" => true]);
-        } catch (Exception $ex) {
-            $result->setException($ex);
-        }
+        $this->sqlConnection = $sqlConnection;
+        $result->setSuccess();
         return $result;
     }
 
     public function setSqlConnectionFromJson(array $jsonData): AcResult {
         $result = new AcResult();
-        try {
-            $this->sqlConnection->setValuesFromJson($jsonData);
-            $result->setSuccess(["value" => true]);
-        } catch (Exception $ex) {
-            $result->setException($ex);
-        }
+        $this->sqlConnection = AcSqlConnection::fromJson($jsonData);
         return $result;
     }
 
-    public function setSqlStatementParameters(string &$statement, array &$parameters, array &$values) {
-        // foreach ($parameters as $key => $value) {
-        //     if(strpos($statement, $key) > 0){
-        //         $values[$key] = $value;
-        //     }
-            
-        // }
+    public function setSqlStatementParameters(string &$statement, array &$values,array $parameters) {
+        $keys = array_keys($parameters);
+        foreach ($keys as $key) {
+            $value = $parameters[$key];
             while (strpos($statement, $key) !== false) {
-                $valueIndex = sizeof($values);
+                $this->logger->log("Searching For Key: " . $key);
+                $this->logger->log("Key Value: " . json_encode($value));
                 $beforeQueryString = substr($statement, 0, strpos($statement, $key));
+                $this->logger->log("Before Query String: " . $beforeQueryString);
                 $parameterIndex = substr_count($beforeQueryString, '?');
+                $this->logger->log("Parameter Index: " . $parameterIndex);
+                $this->logger->log("Values Before: " . json_encode($values));
                 if (is_array($value)) {
-                    $valueStrings = [];
-                    for($i=0;$i<sizeof($value);$i++){
-                        $valueStrings[] = ":$valueIndex";
-                        $valueIndex++;
-                        $values[$valueIndex] = $value;
-                    }
-                    $statement = str_replace($key, implode(",",$valueStrings), $statement);
+                    $statement = preg_replace('/' . preg_quote($key, '/') . '/', implode(',', array_fill(0, count($value), '?')), $statement, 1);
+                    array_splice($values, $parameterIndex, 0, $value);
                 } else {
-                    $statement = str_replace($key, ":$valueIndex", $statement);
-                    $values[$valueIndex] = $value;
+                    $statement = preg_replace('/' . preg_quote($key, '/') . '/', '?', $statement, 1);
+                    array_splice($values, $parameterIndex, 0, $value);
                 }
+                $this->logger->log("Query: " . $statement);
+                $this->logger->log("Values After: " . json_encode($values));
             }
-        // }
-    }
-
-    public function sqlStatement(string $statement, ?string $operation = AcEnumRowOperation::UNKNOWN, ?array $parameters = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
-        try {
-            // SQL statement execution logic
-        } catch (Exception $ex) {
-            $result->setException($ex);
         }
-        return $result;
-    }
-
-    public function sqlBatchStatement(array $statements, array $parameters = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
-        try {
-            // Batch execution logic
-        } catch (Exception $ex) {
-            $result->setException($ex);
-        }
-        return $result;
-    }
+    }    
 
     public function updateRows(string $table, array $values, string $condition = "", array $parameters = []): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
-        try {
-            // Update rows logic
-        } catch (Exception $ex) {
-            $result->setException($ex);
-        }
         return $result;
     }
 }

@@ -4,16 +4,28 @@ namespace AcSql\Database;
 
 require_once '../../autocode/vendor/autoload.php';
 
-use Autocode\AcLogger;
+use AcDataDictionary\Models\AcDDView;
+use AcDataDictionary\AcDataDictionary;
+use Exception;
 
-class AcSqlDbView {
-    public AcLogger $logger;
+class AcSqlDbView extends AcSqlDbBase{
     public string $viewName = "";
-    public string $dataDictionaryName = "default";
+    public AcDDView $acDDView;
 
-    public function __construct(string $viewName,string $dataDictionaryName = "default") {
-        $this->logger = new AcLogger();
+    public function __construct(string $viewName, string $dataDictionaryName = "default"){
+        parent::__construct(dataDictionaryName: "default");
         $this->viewName = $viewName;
-        $this->dataDictionaryName = $dataDictionaryName;
-    } 
+        $this->acDDView = AcDataDictionary::getView(viewName: $viewName, dataDictionaryName: $dataDictionaryName);
+    }
+
+    public function getCreateViewStatement(): string{
+        $result = "CREATE VIEW $this->viewName AS $this->acDDView->viewQuery;";
+        return $result;
+    }
+
+    public function getDropViewStatement(): string{
+        $result = "DROP VIEW IF EXISTS $this->viewName;";
+        return $result;
+    }
+
 }

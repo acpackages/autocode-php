@@ -5,22 +5,28 @@ namespace AcSql\Database;
 require_once '../../autocode/vendor/autoload.php';
 require_once '../../autocode-data-dictionary/vendor/autoload.php';
 
-use Autocode\AcLogger;
+use AcDataDictionary\Models\AcDDFunction;
 use AcDataDictionary\AcDataDictionary;
-use AcDataDictionary\Models\AcDDTable;
-use AcDataDictionary\Models\AcDDTableField;
-use AcDataDictionary\Models\AcDDTableFieldProperty;
-use AcDataDictionary\Models\AcDDTableProperty;
-use AcDataDictionary\Models\AcDDTableRowEvent;
+use Exception;
 
-class AcSqlDbFunction {
-    public AcLogger $logger;
+
+class AcSqlDbFunction extends AcSqlDbBase{
+    public AcDDFunction $acDDFunction;
     public string $functionName = "";
-    public string $dataDictionaryName = "default";
 
     public function __construct(string $functionName,string $dataDictionaryName = "default") {
-        $this->logger = new AcLogger();
+        parent::__construct(dataDictionaryName: "default");
         $this->functionName = $functionName;
-        $this->dataDictionaryName = $dataDictionaryName;
+        $this->acDDFunction = AcDataDictionary::getFunction(functionName: $functionName, dataDictionaryName: $dataDictionaryName);
     }    
+
+    public function getCreateFunctionStatement(): string{
+        $result = $this->acDDFunction->functionCode;
+        return $result;
+    }
+
+    public function getDropFunctionStatement(): string{
+        $result = "DROP FUNCTION IF EXISTS $this->functionName;";
+        return $result;
+    }
 }

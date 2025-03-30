@@ -3,18 +3,22 @@
 namespace AcDataDictionary;
 
 require __DIR__ . './../../autocode-extensions/vendor/autoload.php';
+require_once __DIR__ . './Enums/AcEnumDDFieldRelationType.php';
 require_once __DIR__ . './Models/AcDDFunction.php';
 require_once __DIR__ . './Models/AcDDRelationship.php';
 require_once __DIR__ . './Models/AcDDStoredProcedure.php';
 require_once __DIR__ . './Models/AcDDTable.php';
+require_once __DIR__ . './Models/AcDDTableField.php';
 require_once __DIR__ . './Models/AcDDTrigger.php';
 require_once __DIR__ . './Models/AcDDView.php';
 
 use AcExtensions\AcExtensionMethods;
+use AcDataDictionary\Enums\AcEnumDDFieldRelationType;
 use AcDataDictionary\Models\AcDDFunction;
 use AcDataDictionary\Models\AcDDRelationship;
 use AcDataDictionary\Models\AcDDStoredProcedure;
 use AcDataDictionary\Models\AcDDTable;
+use AcDataDictionary\Models\AcDDTableField;
 use AcDataDictionary\Models\AcDDTrigger;
 use AcDataDictionary\Models\AcDDView;
 
@@ -60,7 +64,7 @@ class AcDataDictionary {
         return $result;
     }
 
-    public static function getFunction(string $functionName,string $dataDictionaryName = "default"): array {
+    public static function getFunction(string $functionName,string $dataDictionaryName = "default"): ?AcDDFunction {
         $result = null;
         $acDataDictionary = self::getInstance($dataDictionaryName);
         if (!empty($acDataDictionary->functions)) {
@@ -108,7 +112,7 @@ class AcDataDictionary {
         return $result;
     }
 
-    public static function getStoredProcedure(string $storedProcedureName,string $dataDictionaryName = "default"): array {
+    public static function getStoredProcedure(string $storedProcedureName,string $dataDictionaryName = "default"): ?AcDDStoredProcedure {
         $result = null;
         $acDataDictionary = self::getInstance($dataDictionaryName);
         if (!empty($acDataDictionary->storedProcedures)) {
@@ -138,7 +142,26 @@ class AcDataDictionary {
         return $result;
     }
 
-    public static function getTableFieldRelationships(string $tableName,$fieldName,bool $asDestination = true,string $dataDictionaryName = "default"): array {
+    public static function getTableField(string $tableName,string $fieldName,?string $dataDictionaryName = "default"): ?AcDDTableField {
+        $result = null;
+        $acDataDictionary = self::getInstance($dataDictionaryName);
+        if (!empty($acDataDictionary->tables)) {
+            if(AcExtensionMethods::arrayContainsKey($tableName,$acDataDictionary->tables)){
+                $tableData = $acDataDictionary->tables[$tableName];
+                $acDDTable = AcDDTable::fromJson($tableData);
+                $result = $acDDTable->getField($fieldName);
+            }
+            else{
+                echo "Not found";
+            }
+        }
+        else{
+            echo "Tables is empty";
+        }
+        return $result;
+    }
+
+    public static function getTableFieldRelationships(string $tableName,$fieldName,?string $relationType = AcEnumDDFieldRelationType::ANY,string $dataDictionaryName = "default"): array {
         $result = null;
         $acDataDictionary = self::getInstance($dataDictionaryName);
         if (!empty($acDataDictionary->relationships)) {
@@ -146,15 +169,61 @@ class AcDataDictionary {
                 foreach ($destinationTableDetails as $destinationFieldName => $destinationFieldDetails) {
                     foreach ($destinationFieldDetails as $sourceTableName => $sourceTableDetails) {
                         foreach ($sourceTableDetails as $sourceFieldName => $relationshipDetails) {
-                            $checkTable = AcDDRelationship::KEY_DESTINATION_TABLE;
-                            $checkField = AcDDRelationship::KEY_DESTINATION_FIELD;
-                            if(!($asDestination)){
-                                $checkTable = AcDDRelationship::KEY_SOURCE_TABLE;
-                                $checkField = AcDDRelationship::KEY_SOURCE_FIELD;
+                            $includeRelation = false;
+                            if($relationType == AcEnumDDFieldRelationType::ANY){
+                                if(($tableName == $relationshipDetails[AcDDRelationship::KEY_DESTINATION_TABLE] && $fieldName == $relationshipDetails[AcDDRelationship::KEY_DESTINATION_FIELD]) || ($tableName == $relationshipDetails[AcDDRelationship::KEY_SOURCE_TABLE] && $fieldName == $relationshipDetails[AcDDRelationship::KEY_SOURCE_FIELD])){
+                                    $includeRelation = true;
+                                    $result[] = AcDDRelationship::fromJson($relationshipDetails);
+                                } 
                             }
-                            if($tableName == $relationshipDetails[$checkTable] && $fieldName == $relationshipDetails[$checkField] ){
+                            else if($relationType == AcEnumDDFieldRelationType::SOURCE){
+                                if($tableName == $relationshipDetails[AcDDRelationship::KEY_SOURCE_TABLE] && $fieldName == $relationshipDetails[AcDDRelationship::KEY_SOURCE_FIELD]){
+                                    $includeRelation = true;
+                                }
+                            }
+                            else if($relationType == AcEnumDDFieldRelationType::DESTINATION){
+                                if($tableName == $relationshipDetails[AcDDRelationship::KEY_DESTINATION_TABLE] && $fieldName == $relationshipDetails[AcDDRelationship::KEY_DESTINATION_FIELD]){
+                                    $includeRelation = true;
+                                }
+                            }
+                            if($includeRelation){
                                 $result[] = AcDDRelationship::fromJson($relationshipDetails);
-                            }                            
+                            } 
+                        }
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
+    public static function getTableRelationships(string $tableName,?string $relationType = AcEnumDDFieldRelationType::ANY,string $dataDictionaryName = "default"): array {
+        $result = null;
+        $acDataDictionary = self::getInstance($dataDictionaryName);
+        if (!empty($acDataDictionary->relationships)) {
+            foreach ($acDataDictionary->relationships as $destinationTableName => $destinationTableDetails) {
+                foreach ($destinationTableDetails as $destinationFieldName => $destinationFieldDetails) {
+                    foreach ($destinationFieldDetails as $sourceTableName => $sourceTableDetails) {
+                        foreach ($sourceTableDetails as $sourceFieldName => $relationshipDetails) {
+                            $includeRelation = false;
+                            if($relationType == AcEnumDDFieldRelationType::ANY){
+                                if($tableName == $relationshipDetails[AcDDRelationship::KEY_DESTINATION_TABLE] || $tableName == $relationshipDetails[AcDDRelationship::KEY_SOURCE_TABLE]){
+                                    $includeRelation = true;
+                                } 
+                            }
+                            else if($relationType == AcEnumDDFieldRelationType::SOURCE){
+                                if($tableName == $relationshipDetails[AcDDRelationship::KEY_SOURCE_TABLE]){
+                                    $includeRelation = true;
+                                }
+                            }
+                            else if($relationType == AcEnumDDFieldRelationType::DESTINATION){
+                                if($tableName == $relationshipDetails[AcDDRelationship::KEY_DESTINATION_TABLE]){
+                                    $includeRelation = true;
+                                }
+                            }
+                            if($includeRelation){
+                                $result[] = AcDDRelationship::fromJson($relationshipDetails);
+                            } 
                         }
                     }
                 }
@@ -185,13 +254,13 @@ class AcDataDictionary {
         return $result;
     }
 
-    public static function getTrigger(string $triggerName,string $dataDictionaryName = "default"): array {
+    public static function getTrigger(string $triggerName,string $dataDictionaryName = "default"): ?AcDDTrigger {
         $result = null;
         $acDataDictionary = self::getInstance($dataDictionaryName);
         if (!empty($acDataDictionary->triggers)) {
             if(AcExtensionMethods::arrayContainsKey($triggerName,$acDataDictionary->triggers)){
                 $triggerData = $acDataDictionary->triggers[$triggerName];
-                $result = AcDDTable::fromJson($triggerData);
+                $result = AcDDTrigger::fromJson($triggerData);
             }
         }
         return $result;
@@ -208,13 +277,13 @@ class AcDataDictionary {
         return $result;
     }
 
-    public static function getView(string $viewName,string $dataDictionaryName = "default"): array {
+    public static function getView(string $viewName,string $dataDictionaryName = "default"): ?AcDDView {
         $result = null;
         $acDataDictionary = self::getInstance($dataDictionaryName);
         if (!empty($acDataDictionary->views)) {
             if(AcExtensionMethods::arrayContainsKey($viewName,$acDataDictionary->views)){
                 $viewData = $acDataDictionary->views[$viewName];
-                $result = AcDDTable::fromJson($viewData);
+                $result = AcDDView::fromJson($viewData);
             }
         }
         return $result;

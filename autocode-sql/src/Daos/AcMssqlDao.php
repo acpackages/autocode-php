@@ -146,7 +146,7 @@ class AcMssqlDao extends AcBaseSqlDao {
         }
     }
 
-    public function selectStatement(string $statement, array $parameters = [], bool $firstRowOnly = false): AcSqlDaoResult {
+    public function getRows(string $statement, ?string $condition = "", ?array $parameters = [],?string $mode = AcEnumSelectMode::LIST, ?array $formatColumns = [], ?int $startIndex = -1, ?int $rowCount): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
             $connection = $this->getConnection();
@@ -160,7 +160,7 @@ class AcMssqlDao extends AcBaseSqlDao {
         return $result;
     }
 
-    public function sqlStatement(string $statement, array $parameters = []): AcSqlDaoResult {
+    public function executeStatement(string $statement, array $parameters = []): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
             $connection = $this->getConnection();

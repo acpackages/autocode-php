@@ -87,7 +87,7 @@ class AcOracleDao extends AcBaseSqlDao {
         return $result;
     }
 
-    public function selectStatement(string $statement, array $parameters = [], bool $firstRowOnly = false): array {
+    public function getRows(string $statement, array $parameters = [], bool $firstRowOnly = false): array {
         try {
             $db = $this->getConnectionObject();
             $stmt = $db->prepare($statement);
@@ -100,7 +100,7 @@ class AcOracleDao extends AcBaseSqlDao {
         }
     }
 
-    public function sqlStatement(string $statement, array $parameters = []): bool {
+    public function executeStatement(string $statement, array $parameters = []): bool {
         try {
             $db = $this->getConnectionObject();
             $stmt = $db->prepare($statement);
