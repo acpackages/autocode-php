@@ -6,6 +6,7 @@ require_once __DIR__ . './../../../autocode/vendor/autoload.php';
 require_once __DIR__ . './../../../autocode-data-dictionary/vendor/autoload.php';
 require_once __DIR__ . './../../../autocode-extensions/vendor/autoload.php';
 
+use AcSql\Enums\AcEnumSqlDatabaseType;
 use Autocode\AcResult;
 use AcExtensions\AcExtensionMethods;
 use AcDataDictionary\AcDataDictionary;
@@ -206,6 +207,60 @@ class AcSqlDbSchemaManager extends AcSqlDbBase{
     function createDatabaseRelationships():AcResult{
         $result = new AcResult();
         try{
+            $continueOperation = true;
+            if($this->databaseType == AcEnumSqlDatabaseType::MYSQL){
+                $setCheckResult = $this->dao->executeStatement("SET FOREIGN_KEY_CHECKS = 0;");
+                if($setCheckResult->isFailure()){
+                    $continueOperation = false;
+                    $result->setFromResult($setCheckResult,logger: $this->logger);
+                }
+            }
+            if($continueOperation){
+                $getDropRelationshipsStatements = "SELECT CONCAT('ALTER TABLE `', table_name, '` DROP FOREIGN KEY `', constraint_name, '`;') AS drop_query FROM information_schema.table_constraints WHERE constraint_type = 'FOREIGN KEY' AND table_schema = '".$this->sqlConnection->database."'";
+                $getResult = $this->dao->getRows($getDropRelationshipsStatements);
+                if($getResult->isSuccess()){
+                    $rows = $getResult->rows;
+                    foreach ($rows as $row) {
+                        if($continueOperation){
+                            $dropResponse = $this->dao->executeStatement($row['drop_query']);
+                            if($dropResponse->isFailure()){
+                                $continueOperation = false;
+                                $result->setFromResult($dropResponse,logger: $this->logger);
+                            }
+                        }                        
+                    }
+                }
+                else{
+                    $continueOperation = false;
+                    $result->setFromResult($getResult,logger: $this->logger);
+                }
+            }
+            if($continueOperation){
+                $acDDRelationships = AcDataDictionary::getRelationships(dataDictionaryName:$this->dataDictionaryName);
+                foreach ($acDDRelationships as $acDDRelationship) {
+                    $acSqlDbRelationship = new AcSqlDbRelationship(acDDRelationship:$acDDRelationship,dataDictionaryName: $this->dataDictionaryName);
+                    # code...
+                }
+
+                $getDropRelationshipsStatements = "SELECT CONCAT('ALTER TABLE `', table_name, '` DROP FOREIGN KEY `', constraint_name, '`;') AS drop_query FROM information_schema.table_constraints WHERE constraint_type = 'FOREIGN KEY' AND table_schema = '".$this->sqlConnection->database."'";
+                $getResult = $this->dao->getRows($getDropRelationshipsStatements);
+                if($getResult->isSuccess()){
+                    $rows = $getResult->rows;
+                    foreach ($rows as $row) {
+                        if($continueOperation){
+                            $dropResponse = $this->dao->executeStatement($row['drop_query']);
+                            if($dropResponse->isFailure()){
+                                $continueOperation = false;
+                                $result->setFromResult($dropResponse,logger: $this->logger);
+                            }
+                        }                        
+                    }
+                }
+                else{
+                    $continueOperation = false;
+                    $result->setFromResult($getResult,logger: $this->logger);
+                }
+            }
         }
         catch(Exception $ex ){
             $result->setException($ex);
