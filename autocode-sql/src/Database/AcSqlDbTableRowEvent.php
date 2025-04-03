@@ -18,7 +18,7 @@ class AcSqlDbTableRowEvent{
     public AcDDTable $acDDTable;
     public AcDataDictionary $acDataDictionary;
     public string $condition = "";
-    public mixed $data;
+    public mixed $row;
     public mixed $result;
     public array $parameters = [];
     public bool $abortOperation = false;

@@ -5,6 +5,9 @@ namespace AcDataDictionary\Models;
 require_once __DIR__ . './../AcDataDictionary.php';
 require_once 'AcDDViewField.php';
 
+use AcDataDictionary\AcDataDictionary;
+use AcDataDictionary\Models\AcDDViewField;
+
 class AcDDView {
     public const KEY_VIEW_NAME = "view_name";
     public const KEY_VIEW_FIELDS = "view_fields";

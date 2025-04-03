@@ -33,10 +33,10 @@ class AcSqlDbBase {
 
     public function __construct(string $dataDictionaryName = "default") {
         $this->databaseType = AcSqlDatabase::$databaseType;
-        $this->dataDictionaryName = AcSqlDatabase::$dataDictionaryName;
+        $this->dataDictionaryName = $dataDictionaryName;
         $this->sqlConnection = AcSqlDatabase::$sqlConnection;        
         $this->acDataDictionary = AcDataDictionary::getInstance(dataDictionaryName:$dataDictionaryName);
-        $this->logger = new AcLogger(logType:AcEnumLogType::PRINT);
+        $this->logger = new AcLogger(logType:AcEnumLogType::PRINT,logMessages:true);
         if($this->databaseType == AcEnumSqlDatabaseType::MYSQL){
             $this->dao = new AcMysqlDao();
             $this->dao->setSqlConnection($this->sqlConnection);

@@ -18,14 +18,16 @@ class AcSqlDbView extends AcSqlDbBase{
         $this->acDDView = AcDataDictionary::getView(viewName: $viewName, dataDictionaryName: $dataDictionaryName);
     }
 
-    public function getCreateViewStatement(): string{
-        $result = "CREATE VIEW $this->viewName AS $this->acDDView->viewQuery;";
+    public static function getDropViewStatement(string $viewName,string $databaseType = AcEnumSqlDatabaseType::UNKNOWN): string{
+        $result = "DROP VIEW IF EXISTS $viewName;";
         return $result;
     }
 
-    public function getDropViewStatement(): string{
-        $result = "DROP VIEW IF EXISTS $this->viewName;";
+    public function getCreateViewStatement(): string{
+        $result = "CREATE VIEW $this->viewName AS {$this->acDDView->viewQuery};";
         return $result;
     }
+
+    
 
 }

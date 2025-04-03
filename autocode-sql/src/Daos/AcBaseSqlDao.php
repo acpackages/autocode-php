@@ -26,7 +26,7 @@ class AcBaseSqlDao {
     protected AcSqlConnection $sqlConnection;
 
     public function __construct() {
-        $this->logger = new AcLogger(logType: AcEnumLogType::HTML);
+        $this->logger = new AcLogger(logType: AcEnumLogType::PRINT,logMessages:false);
         $this->sqlConnection = new AcSqlConnection();
     }
 
@@ -138,7 +138,12 @@ class AcBaseSqlDao {
         return $result;
     }
 
-    public function insertRows(string $table, array $values): AcSqlDaoResult {
+    public function insertRow(string $tableName, array $row): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        return $result;
+    }
+
+    public function insertRows(string $tableName, array $rows): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         return $result;
     }
@@ -156,32 +161,39 @@ class AcBaseSqlDao {
         return $result;
     }
 
-    public function setSqlStatementParameters(string &$statement, array &$values,array $parameters) {
-        $keys = array_keys($parameters);
+    public function setSqlStatementParameters(string $statement, array $statementParameters,array $passedParameters) {
+        $keys = array_keys($passedParameters);
         foreach ($keys as $key) {
-            $value = $parameters[$key];
+            $value = $passedParameters[$key];
             while (strpos($statement, $key) !== false) {
-                $this->logger->log("Searching For Key: " . $key);
+                $this->logger->log("Searching For Key : " . $key);
+                $this->logger->log("SQL Statement : " . $statement);
                 $this->logger->log("Key Value: " . json_encode($value));
                 $beforeQueryString = substr($statement, 0, strpos($statement, $key));
-                $this->logger->log("Before Query String: " . $beforeQueryString);
+                $this->logger->log("Before String in Statement Where Key is found: " . $beforeQueryString);
                 $parameterIndex = substr_count($beforeQueryString, '?');
                 $this->logger->log("Parameter Index: " . $parameterIndex);
-                $this->logger->log("Values Before: " . json_encode($values));
+                $this->logger->log("Values Before: " . json_encode($statementParameters));
                 if (is_array($value)) {
                     $statement = preg_replace('/' . preg_quote($key, '/') . '/', implode(',', array_fill(0, count($value), '?')), $statement, 1);
-                    array_splice($values, $parameterIndex, 0, $value);
+                    array_splice($statementParameters, $parameterIndex, 0, $value);
                 } else {
                     $statement = preg_replace('/' . preg_quote($key, '/') . '/', '?', $statement, 1);
-                    array_splice($values, $parameterIndex, 0, $value);
+                    array_splice($statementParameters, $parameterIndex, 0, $value);
                 }
-                $this->logger->log("Query: " . $statement);
-                $this->logger->log("Values After: " . json_encode($values));
+                $this->logger->log("Statement : " . $statement);
+                $this->logger->log("Values After: " . json_encode($statementParameters));
             }
         }
+        return ['statement'=>$statement,'statementParameters'=>$statementParameters,'passedParameters'=>$passedParameters];
     }    
 
-    public function updateRows(string $table, array $values, string $condition = "", array $parameters = []): AcSqlDaoResult {
+    public function updateRow(string $tableName, array $row, string $condition = "", array $parameters = []): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        return $result;
+    }
+
+    public function updateRows(string $tableName, array $rows, string $condition = "", array $parameters = []): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         return $result;
     }

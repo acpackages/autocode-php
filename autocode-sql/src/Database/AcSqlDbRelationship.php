@@ -13,7 +13,6 @@ use Exception;
 
 class AcSqlDbRelationship extends AcSqlDbBase{
     public AcDDRelationship $acDDRelationship;
-
     public function __construct(AcDDRelationship $acDDRelationship,string $dataDictionaryName = "default") {
         parent::__construct(dataDictionaryName: "default");
         $this->acDDRelationship = $acDDRelationship;

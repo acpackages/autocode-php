@@ -20,6 +20,11 @@ class AcSqlDbTrigger extends AcSqlDbBase {
         $this->acDDTrigger = AcDataDictionary::getTrigger(triggerName: $triggerName, dataDictionaryName: $dataDictionaryName);
     } 
 
+    public static function getDropTriggerStatement(string $triggerName,string $databaseType = AcEnumSqlDatabaseType::UNKNOWN): string{
+        $result = "DROP TRIGGER IF EXISTS $triggerName;";
+        return $result;
+    }
+
     public function getCreateTriggerStatement(): string{
         $result = "";
         if ($this->databaseType == AcEnumSqlDatabaseType::MYSQL) {
@@ -31,8 +36,5 @@ class AcSqlDbTrigger extends AcSqlDbBase {
         return $result;
     }
 
-    public function getDropTriggerStatement(): string{
-        $result = "DROP TRIGGER IF EXISTS $this->triggerName;";
-        return $result;
-    }
+    
 }

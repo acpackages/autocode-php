@@ -18,14 +18,16 @@ class AcSqlDbStoredProcedure  extends AcSqlDbBase {
         $this->storedProcedureName = $storedProcedureName;
         $this->acDDStoredProcedure = AcDataDictionary::getStoredProcedure(storedProcedureName: $storedProcedureName, dataDictionaryName: $dataDictionaryName);
     } 
+
+    public static function getDropStoredProcedureStatement(string $storedProcedureName,string $databaseType = AcEnumSqlDatabaseType::UNKNOWN): string{
+        $result = "DROP PROCEDURE IF EXISTS $storedProcedureName;";
+        return $result;
+    }
     
     public function getCreateStoredProcedureStatement(): string{
         $result = $this->acDDStoredProcedure->storedProcedureCode;
         return $result;
     }
 
-    public function getDropStoredProcedureStatement(): string{
-        $result = "DROP STORED PROCEDURE IF EXISTS $this->storedProcedureName;";
-        return $result;
-    }
+    
 }

@@ -17,6 +17,7 @@ class AcSqlDaoResult extends AcResult {
     public array $rows = [];
     public int $affectedRowsCount = 0;
     public mixed $lastInsertedId = null;
+    public mixed $lastInsertedIds = null;
     public string $operation = AcEnumRowOperation::UNKNOWN;
     public ?string $primaryKeyField = "";
     public mixed $primaryKeyValue = null;

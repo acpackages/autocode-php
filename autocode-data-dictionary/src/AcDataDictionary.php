@@ -58,7 +58,7 @@ class AcDataDictionary {
         $acDataDictionary = self::getInstance($dataDictionaryName);
         if (!empty($acDataDictionary->functions)) {
             foreach ($acDataDictionary->functions as $functionName => $functionData) {
-                $result[$functionName] = AcDDStoredProcedure::fromJson($functionData);
+                $result[$functionName] = AcDDFunction::fromJson($functionData);
             }
         }
         return $result;
@@ -70,7 +70,7 @@ class AcDataDictionary {
         if (!empty($acDataDictionary->functions)) {
             if(AcExtensionMethods::arrayContainsKey($functionName,$acDataDictionary->functions)){
                 $functionData = $acDataDictionary->functions[$functionName];
-                $result = AcDDStoredProcedure::fromJson($functionData);
+                $result = AcDDFunction::fromJson($functionData);
             }
         }
         return $result;
@@ -298,8 +298,18 @@ class AcDataDictionary {
         self::registerDataDictionary($jsonData,$dataDictionaryName);
     }
 
+    public function getTableNames(): array {
+        return array_keys($this->tables);
+    }
+
     public function getTablesList(): array {
         return array_values($this->tables);
+    }
+
+    public function getTableFieldNames(string $tableName): array {
+        return isset($this->tables[$tableName][AcDDTable::KEY_TABLE_FIELDS])
+            ? array_keys($this->tables[$tableName][AcDDTable::KEY_TABLE_FIELDS])
+            : [];
     }
 
     public function getTableFieldsList(string $tableName): array {
