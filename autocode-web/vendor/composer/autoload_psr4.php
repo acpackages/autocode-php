@@ -6,6 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Autocode\\Enums\\' => array($baseDir . '/src/Enums'),
-    'Autocode\\' => array($baseDir . '/src/Core'),
+    'AcWeb\\' => array($baseDir . '/src'),
 );

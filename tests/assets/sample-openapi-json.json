@@ -1,0 +1,200 @@
+{
+    "openapi": "3.0.4",
+    "info": {
+      "title": "Sample API",
+      "description": "This is a sample OpenAPI 3.0.4 specification with all major properties.",
+      "termsOfService": "https://example.com/terms/",
+      "contact": {
+        "name": "API Support",
+        "url": "https://example.com/support",
+        "email": "support@example.com"
+      },
+      "license": {
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+      },
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "https://api.example.com/v1",
+        "description": "Production server"
+      },
+      {
+        "url": "https://staging-api.example.com",
+        "description": "Staging server"
+      }
+    ],
+    "tags": [
+      {
+        "name": "users",
+        "description": "Operations about users",
+        "externalDocs": {
+          "description": "Find more info here",
+          "url": "https://example.com/docs/users"
+        }
+      }
+    ],
+    "paths": {
+      "/users": {
+        "get": {
+          "tags": ["users"],
+          "summary": "List users",
+          "description": "Returns a list of users.",
+          "operationId": "listUsers",
+          "parameters": [
+            {
+              "name": "limit",
+              "in": "query",
+              "description": "Max number of results",
+              "required": false,
+              "schema": {
+                "type": "integer",
+                "format": "int32",
+                "default": 100
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A list of users.",
+              "headers": {
+                "X-Rate-Limit": {
+                  "description": "Calls per hour allowed by the user",
+                  "schema": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserList"
+                  }
+                }
+              }
+            },
+            "default": {
+              "description": "Unexpected error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "apiKeyAuth": [],
+              "oauth2": ["read:users"]
+            }
+          ]
+        },
+        "post": {
+          "tags": ["users"],
+          "summary": "Create a user",
+          "description": "Adds a new user to the system.",
+          "operationId": "createUser",
+          "requestBody": {
+            "description": "User to add",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "User created"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "User": {
+          "type": "object",
+          "required": ["id", "name", "email"],
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            }
+          }
+        },
+        "UserList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "Error": {
+          "type": "object",
+          "required": ["code", "message"],
+          "properties": {
+            "code": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "parameters": {
+        "userId": {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "The ID of the user",
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "securitySchemes": {
+        "apiKeyAuth": {
+          "type": "apiKey",
+          "in": "header",
+          "name": "X-API-Key"
+        },
+        "oauth2": {
+          "type": "oauth2",
+          "flows": {
+            "authorizationCode": {
+              "authorizationUrl": "https://example.com/oauth/authorize",
+              "tokenUrl": "https://example.com/oauth/token",
+              "scopes": {
+                "read:users": "Read access to users",
+                "write:users": "Write access to users"
+              }
+            }
+          }
+        }
+      }
+    },
+    "externalDocs": {
+      "description": "Full API docs",
+      "url": "https://example.com/docs"
+    },
+    "security": [
+      {
+        "apiKeyAuth": []
+      }
+    ]
+  }
+  

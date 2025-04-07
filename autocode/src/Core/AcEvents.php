@@ -63,9 +63,6 @@ class AcEvents {
                 $this->events[$eventName] = AcExtensionMethods.arrayRemove($eventFunctions,$eventFunctions[$subscriptionId]);
             }
         }
-        $functionId = Autocode::uniqueId();
-        $this->events[$eventName][$functionId] = $fun;
-        return $functionId;
     }
 }
 ?>

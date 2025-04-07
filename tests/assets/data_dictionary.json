@@ -127,7 +127,28 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "access_group_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"access_group"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"access_groups"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["access_group_name"]
+				}
 			}
+
 		},
 		"access_rights" : {
 			 "table_name" : "access_rights",
@@ -194,7 +215,28 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "access_right_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"access_right"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"access_rights"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["access_right_name"]
+				}
 			}
+
 		},
 		"accounts" : {
 			 "table_name" : "accounts",
@@ -441,7 +483,28 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "account_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"account"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"accounts"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["account_name"]
+				}
 			}
+
 		},
 		"api_logs" : {
 			 "table_name" : "api_logs",
@@ -460,8 +523,8 @@
 						}
 					}
 				},
-				"api_request_status_modified" : {
-					"field_name" : "api_request_status_modified",
+				"api_request_status" : {
+					"field_name" : "api_request_status",
 					"field_type" : "string",
 					"field_properties" : {
 						"field_title" : {
@@ -560,10 +623,21 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"api_log"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"api_logs"
+				}
 			}
+
 		},
-		"apis_modified" : {
-			 "table_name" : "apis_modified",
+		"apis" : {
+			 "table_name" : "apis",
 			 "table_fields" : {
 				"api_id" : {
 					"field_name" : "api_id",
@@ -599,7 +673,28 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "api_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"api"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"apis"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["api_name"]
+				}
 			}
+
 		},
 		"asset_attributes" : {
 			 "table_name" : "asset_attributes",
@@ -690,7 +785,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"asset_attribute"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"asset_attributes"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["attribute_label"]
+				}
 			}
+
 		},
 		"asset_depreciations" : {
 			 "table_name" : "asset_depreciations",
@@ -823,7 +933,25 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "depreciation_date", "order" : "DESC" },
+						{ "field_name" : "depreciation_number", "order" : "DESC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"asset_depreciation"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"asset_depreciations"
+				}
 			}
+
 		},
 		"asset_documents" : {
 			 "table_name" : "asset_documents",
@@ -972,7 +1100,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"asset_document"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"asset_documents"
+				}
 			}
+
 		},
 		"asset_items" : {
 			 "table_name" : "asset_items",
@@ -1065,7 +1204,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"asset_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"asset_items"
+				}
 			}
+
 		},
 		"asset_maintenance" : {
 			 "table_name" : "asset_maintenance",
@@ -1252,7 +1402,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"asset_maintenance"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"asset_maintenance"
+				}
 			}
+
 		},
 		"asset_maintenance_expenses" : {
 			 "table_name" : "asset_maintenance_expenses",
@@ -1321,7 +1482,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"asset_maintenance_expense"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"asset_maintenance_expenses"
+				}
 			}
+
 		},
 		"asset_requests" : {
 			 "table_name" : "asset_requests",
@@ -1510,11 +1682,32 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"asset_request"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"asset_requests"
+				}
 			}
+
 		},
 		"assets" : {
 			 "table_name" : "assets",
 			 "table_fields" : {
+				"account_balance" : {
+					"field_name" : "account_balance",
+					"field_type" : "double",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Balance"
+						}
+					}
+				},
 				"account_id" : {
 					"field_name" : "account_id",
 					"field_type" : "string",
@@ -1965,7 +2158,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"asset"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"assets"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["asset_name","asset_serial_number"]
+				}
 			}
+
 		},
 		"automated_task_logs" : {
 			 "table_name" : "automated_task_logs",
@@ -2129,7 +2337,27 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_automated_task_logs"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "start_time", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_automated_task_logs"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"automated_task_log"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"automated_task_logs"
+				}
+			}
+
 		},
 		"automated_tasks" : {
 			 "table_name" : "automated_tasks",
@@ -2264,7 +2492,28 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "automated_task_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"automated_task"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"automated_tasks"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["automated_task_name"]
+				}
 			}
+
 		},
 		"automation_flags" : {
 			 "table_name" : "automation_flags",
@@ -2303,7 +2552,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"automation_flag"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"automation_flags"
+				}
 			}
+
 		},
 		"backups" : {
 			 "table_name" : "backups",
@@ -2466,7 +2726,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "backup_timestamp", "order" : "DESC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"backup"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"backups"
+				}
 			}
+
 		},
 		"barcodes" : {
 			 "table_name" : "barcodes",
@@ -2549,7 +2826,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"barcode"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"barcodes"
+				}
 			}
+
 		},
 		"bookings" : {
 			 "table_name" : "bookings",
@@ -2736,7 +3024,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"booking"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"bookings"
+				}
 			}
+
 		},
 		"budget_account_groups" : {
 			 "table_name" : "budget_account_groups",
@@ -2867,7 +3166,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"budget_account_group"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"budget_account_groups"
+				}
 			}
+
 		},
 		"budget_accounts" : {
 			 "table_name" : "budget_accounts",
@@ -2977,7 +3287,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_budget_accounts"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_budget_accounts"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"budget_account"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"budget_accounts"
+				}
+			}
+
 		},
 		"budgets" : {
 			 "table_name" : "budgets",
@@ -3101,7 +3425,29 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_budgets"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "budget_start_date", "order" : "DESC" },
+						{ "field_name" : "budget_end_date", "order" : "DESC" },
+						{ "field_name" : "budget_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_budgets"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"budget"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"budgets"
+				}
+			}
+
 		},
 		"checklist_items" : {
 			 "table_name" : "checklist_items",
@@ -3194,7 +3540,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"checklist_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"checklist_items"
+				}
 			}
+
 		},
 		"checklists" : {
 			 "table_name" : "checklists",
@@ -3307,7 +3664,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"checklist"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"checklists"
+				}
 			}
+
 		},
 		"companies" : {
 			 "table_name" : "companies",
@@ -3523,7 +3891,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_companies"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "company_name", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_companies"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"company"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"companies"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["company_name"]
+				}
+			}
+
 		},
 		"company_documents" : {
 			 "table_name" : "company_documents",
@@ -3676,7 +4068,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"company_document"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"company_documents"
+				}
 			}
+
 		},
 		"company_email_credentials" : {
 			 "table_name" : "company_email_credentials",
@@ -3815,7 +4218,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"company_email_credential"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"company_email_credentials"
+				}
 			}
+
 		},
 		"countries" : {
 			 "table_name" : "countries",
@@ -3912,7 +4326,28 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "country_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"country"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"countries"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["country_name"]
+				}
 			}
+
 		},
 		"coupon_issues" : {
 			 "table_name" : "coupon_issues",
@@ -4013,7 +4448,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"coupon_issue"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"coupon_issues"
+				}
 			}
+
 		},
 		"coupon_uses" : {
 			 "table_name" : "coupon_uses",
@@ -4100,7 +4546,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"coupon_use"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"coupon_uses"
+				}
 			}
+
 		},
 		"coupons" : {
 			 "table_name" : "coupons",
@@ -4272,7 +4729,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_coupons"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "coupon_code", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_coupons"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"coupon"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"coupons"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["coupon_name","coupon_code"]
+				}
+			}
+
 		},
 		"cron_logs" : {
 			 "table_name" : "cron_logs",
@@ -4371,7 +4852,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "start_time", "order" : "DESC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"cron_log"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"cron_logs"
+				}
 			}
+
 		},
 		"currencies" : {
 			 "table_name" : "currencies",
@@ -4536,7 +5034,28 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "currency_code", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"currency"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"currencies"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["country_name","currency_code"]
+				}
 			}
+
 		},
 		"currency_denominations" : {
 			 "table_name" : "currency_denominations",
@@ -4595,7 +5114,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"currency_denomination"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"currency_denominations"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["denomination_label"]
+				}
 			}
+
 		},
 		"currency_rate_updates" : {
 			 "table_name" : "currency_rate_updates",
@@ -4739,7 +5273,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_currency_rate_updates"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "updated_at", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_currency_rate_updates"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"currency_rate_update"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"currency_rate_updates"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["currency_code"]
+				}
+			}
+
 		},
 		"customer_contracts" : {
 			 "table_name" : "customer_contracts",
@@ -4903,11 +5461,41 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_customer_contracts"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "customer_contract_number", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_customer_contracts"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"customer_contract"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"customer_contracts"
+				}
+			}
+
 		},
 		"customers" : {
 			 "table_name" : "customers",
 			 "table_fields" : {
+				"account_balance" : {
+					"field_name" : "account_balance",
+					"field_type" : "double",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Balance"
+						}
+					}
+				},
 				"account_id" : {
 					"field_name" : "account_id",
 					"field_type" : "string",
@@ -5239,7 +5827,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_customers"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "customer_name", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_customers"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"customer"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"customers"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["customer_name","contact_person","phone_details"]
+				}
+			}
+
 		},
 		"dashboard_widgets" : {
 			 "table_name" : "dashboard_widgets",
@@ -5346,7 +5958,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"dashboard_widget"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"dashboard_widgets"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["widget_name"]
+				}
 			}
+
 		},
 		"dashboards" : {
 			 "table_name" : "dashboards",
@@ -5477,7 +6104,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"dashboard"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"dashboards"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["dashboard_name"]
+				}
 			}
+
 		},
 		"database_fields" : {
 			 "table_name" : "database_fields",
@@ -5584,7 +6226,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"database_field"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"database_fields"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["field_name","field_label"]
+				}
 			}
+
 		},
 		"device_data_share_actions" : {
 			 "table_name" : "device_data_share_actions",
@@ -5721,7 +6378,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "device_data_share_action_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"device_data_share_action"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"device_data_share_actions"
+				}
 			}
+
 		},
 		"device_data_shares" : {
 			 "table_name" : "device_data_shares",
@@ -5862,7 +6536,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"device_data_share"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"device_data_shares"
+				}
 			}
+
 		},
 		"devices" : {
 			 "table_name" : "devices",
@@ -6146,7 +6831,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_devices"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_devices"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"device"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"devices"
+				}
+			}
+
 		},
 		"docks" : {
 			 "table_name" : "docks",
@@ -6338,7 +7037,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_docks"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "dock_name", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_docks"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"dock"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"docks"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["dock_name"]
+				}
+			}
+
 		},
 		"document_expenses" : {
 			 "table_name" : "document_expenses",
@@ -6676,7 +7399,27 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_document_expenses"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "document_expense_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_document_expenses"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"document_expense"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"document_expenses"
+				}
+			}
+
 		},
 		"document_payments" : {
 			 "table_name" : "document_payments",
@@ -6913,7 +7656,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "document_payment_number", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"document_payment"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"document_payments"
+				}
 			}
+
 		},
 		"employee_assets" : {
 			 "table_name" : "employee_assets",
@@ -7048,7 +7808,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee_asset"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_assets"
+				}
 			}
+
 		},
 		"employee_attendance" : {
 			 "table_name" : "employee_attendance",
@@ -7185,7 +7956,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee_attendance"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_attendance"
+				}
 			}
+
 		},
 		"employee_contracts" : {
 			 "table_name" : "employee_contracts",
@@ -7326,7 +8108,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee_contract"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_contracts"
+				}
 			}
+
 		},
 		"employee_documents" : {
 			 "table_name" : "employee_documents",
@@ -7475,7 +8268,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee_document"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_documents"
+				}
 			}
+
 		},
 		"employee_hiring_drives" : {
 			 "table_name" : "employee_hiring_drives",
@@ -7624,7 +8428,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee_hiring_drive"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_hiring_drives"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["hiring_drive_name"]
+				}
 			}
+
 		},
 		"employee_hirings" : {
 			 "table_name" : "employee_hirings",
@@ -7867,7 +8686,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee_hiring"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_hirings"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["candidate_name","phone_details"]
+				}
 			}
+
 		},
 		"employee_leaves" : {
 			 "table_name" : "employee_leaves",
@@ -8050,7 +8884,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee_leave"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_leaves"
+				}
 			}
+
 		},
 		"employee_loan_installments" : {
 			 "table_name" : "employee_loan_installments",
@@ -8206,7 +9051,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_employee_loan_installments"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_employee_loan_installments"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee_loan_installment"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_loan_installments"
+				}
+			}
+
 		},
 		"employee_loans" : {
 			 "table_name" : "employee_loans",
@@ -8413,7 +9272,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee_loan"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_loans"
+				}
 			}
+
 		},
 		"employee_payroll" : {
 			 "table_name" : "employee_payroll",
@@ -8660,7 +9530,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee_payroll"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_payroll"
+				}
 			}
+
 		},
 		"employee_raises" : {
 			 "table_name" : "employee_raises",
@@ -8851,7 +9732,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee_raise"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_raises"
+				}
 			}
+
 		},
 		"employee_requirements" : {
 			 "table_name" : "employee_requirements",
@@ -9014,7 +9906,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee_requirement"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_requirements"
+				}
 			}
+
 		},
 		"employee_status_updates" : {
 			 "table_name" : "employee_status_updates",
@@ -9133,11 +10036,32 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"status_update"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employee_status_updates"
+				}
 			}
+
 		},
 		"employees" : {
 			 "table_name" : "employees",
 			 "table_fields" : {
+				"account_balance" : {
+					"field_name" : "account_balance",
+					"field_type" : "double",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Balance"
+						}
+					}
+				},
 				"account_id" : {
 					"field_name" : "account_id",
 					"field_type" : "string",
@@ -9549,7 +10473,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_employees"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "employee_name", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_employees"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"employee"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"employees"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["first_name","middle_name","last_name","employee_code","phone_details"]
+				}
+			}
+
 		},
 		"expenses" : {
 			 "table_name" : "expenses",
@@ -9678,7 +10626,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"expense"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"expenses"
+				}
 			}
+
 		},
 		"field_settings" : {
 			 "table_name" : "field_settings",
@@ -9725,7 +10684,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"field_setting"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"field_settings"
+				}
 			}
+
 		},
 		"hiring_adverts" : {
 			 "table_name" : "hiring_adverts",
@@ -9930,7 +10900,28 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "hiring_advert_number", "order" : "DESC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"hiring_advert"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"hiring_adverts"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["hiring_advert_name"]
+				}
 			}
+
 		},
 		"incomes" : {
 			 "table_name" : "incomes",
@@ -10059,7 +11050,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"income"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"incomes"
+				}
 			}
+
 		},
 		"inventory_tracking_quantities" : {
 			 "table_name" : "inventory_tracking_quantities",
@@ -10179,7 +11181,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_inventory_tracking_quantities"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_inventory_tracking_quantities"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"inventory_tracking_quantity"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"inventory_tracking_quantities"
+				}
+			}
+
 		},
 		"inventory_trackings" : {
 			 "table_name" : "inventory_trackings",
@@ -10316,7 +11332,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "inventory_tracking_number", "order" : "DESC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"inventory_tracking"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"inventory_trackings"
+				}
 			}
+
 		},
 		"item_attributes" : {
 			 "table_name" : "item_attributes",
@@ -10397,7 +11430,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_attribute"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_attributes"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["item_attribute_name"]
+				}
 			}
+
 		},
 		"item_batches" : {
 			 "table_name" : "item_batches",
@@ -10426,7 +11474,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_batch"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_batches"
+				}
 			}
+
 		},
 		"item_categories" : {
 			 "table_name" : "item_categories",
@@ -10567,7 +11626,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_category"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_categories"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["category_name"]
+				}
 			}
+
 		},
 		"item_inward_storages" : {
 			 "table_name" : "item_inward_storages",
@@ -10680,7 +11754,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_inward_storage"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_inward_storages"
+				}
 			}
+
 		},
 		"item_location_price" : {
 			 "table_name" : "item_location_price",
@@ -10775,7 +11860,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_location_price"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_location_price"
+				}
 			}
+
 		},
 		"item_outward_storages" : {
 			 "table_name" : "item_outward_storages",
@@ -10888,7 +11984,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_outward_storage"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_outward_storages"
+				}
 			}
+
 		},
 		"item_parts" : {
 			 "table_name" : "item_parts",
@@ -10990,7 +12097,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_item_parts"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_item_parts"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_part"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_parts"
+				}
+			}
+
 		},
 		"item_price_update_items" : {
 			 "table_name" : "item_price_update_items",
@@ -11070,7 +12191,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_item_price_update_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_item_price_update_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_price_update_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_price_update_items"
+				}
+			}
+
 		},
 		"item_price_updates" : {
 			 "table_name" : "item_price_updates",
@@ -11213,7 +12348,188 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_price_update"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_price_updates"
+				}
 			}
+
+		},
+		"item_quantity_locations" : {
+			 "table_name" : "item_quantity_locations",
+			 "table_fields" : {
+				"customer_waitlist_quantity" : {
+					"field_name" : "customer_waitlist_quantity",
+					"field_type" : "double",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Waitlist Quantity"
+						}
+					}
+				},
+				"in_order_quantity" : {
+					"field_name" : "in_order_quantity",
+					"field_type" : "double",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "In Order Quantity"
+						}
+					}
+				},
+				"item_id" : {
+					"field_name" : "item_id",
+					"field_type" : "string",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Item"
+						}
+					}
+				},
+				"item_quantity_location_id" : {
+					"field_name" : "item_quantity_location_id",
+					"field_type" : "string",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Company Stock Company Id"
+						},
+						"primary_key" : {
+							"property_name" : "primary_key",
+							"property_value" : true
+						}
+					}
+				},
+				"location_id" : {
+					"field_name" : "location_id",
+					"field_type" : "string",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Location"
+						}
+					}
+				},
+				"remarks" : {
+					"field_name" : "remarks",
+					"field_type" : "text",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Remarks"
+						}
+					}
+				},
+				"stock_quantity" : {
+					"field_name" : "stock_quantity",
+					"field_type" : "double",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Stock Quantity"
+						}
+					}
+				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_stock_location"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_quantity_locations"
+				}
+			}
+
+		},
+		"item_quantity_storage_locations" : {
+			 "table_name" : "item_quantity_storage_locations",
+			 "table_fields" : {
+				"in_order_quantity" : {
+					"field_name" : "in_order_quantity",
+					"field_type" : "double",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "In Order Quantity"
+						}
+					}
+				},
+				"item_id" : {
+					"field_name" : "item_id",
+					"field_type" : "string",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Item"
+						}
+					}
+				},
+				"item_quantity_storage_location_id" : {
+					"field_name" : "item_quantity_storage_location_id",
+					"field_type" : "string",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Company Stock Company Id"
+						},
+						"primary_key" : {
+							"property_name" : "primary_key",
+							"property_value" : true
+						}
+					}
+				},
+				"remarks" : {
+					"field_name" : "remarks",
+					"field_type" : "text",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Remarks"
+						}
+					}
+				},
+				"stock_quantity" : {
+					"field_name" : "stock_quantity",
+					"field_type" : "double",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Stock Quantity"
+						}
+					}
+				},
+				"storage_location_id" : {
+					"field_name" : "storage_location_id",
+					"field_type" : "string",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Storage Location"
+						}
+					}
+				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_stock_storage_location"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_quantity_storage_locations"
+				}
+			}
+
 		},
 		"item_raw_materials" : {
 			 "table_name" : "item_raw_materials",
@@ -11318,7 +12634,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_raw_material"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_raw_materials"
+				}
 			}
+
 		},
 		"item_requests" : {
 			 "table_name" : "item_requests",
@@ -11427,125 +12754,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_request"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_requests"
+				}
 			}
-		},
-		"item_stock_location" : {
-			 "table_name" : "item_stock_location",
-			 "table_fields" : {
-				"item_id" : {
-					"field_name" : "item_id",
-					"field_type" : "string",
-					"field_properties" : {
-						"field_title" : {
-							"property_name" : "field_title",
-							"property_value" : "Item"
-						}
-					}
-				},
-				"item_stock_location_id" : {
-					"field_name" : "item_stock_location_id",
-					"field_type" : "string",
-					"field_properties" : {
-						"field_title" : {
-							"property_name" : "field_title",
-							"property_value" : "Company Stock Company Id"
-						},
-						"primary_key" : {
-							"property_name" : "primary_key",
-							"property_value" : true
-						}
-					}
-				},
-				"location_id" : {
-					"field_name" : "location_id",
-					"field_type" : "string",
-					"field_properties" : {
-						"field_title" : {
-							"property_name" : "field_title",
-							"property_value" : "Location"
-						}
-					}
-				},
-				"remarks" : {
-					"field_name" : "remarks",
-					"field_type" : "text",
-					"field_properties" : {
-						"field_title" : {
-							"property_name" : "field_title",
-							"property_value" : "Remarks"
-						}
-					}
-				},
-				"stock_quantity" : {
-					"field_name" : "stock_quantity",
-					"field_type" : "double",
-					"field_properties" : {
-						"field_title" : {
-							"property_name" : "field_title",
-							"property_value" : "Stock Quantity"
-						}
-					}
-				}			
-			}
-		},
-		"item_stock_storage_location" : {
-			 "table_name" : "item_stock_storage_location",
-			 "table_fields" : {
-				"item_id" : {
-					"field_name" : "item_id",
-					"field_type" : "string",
-					"field_properties" : {
-						"field_title" : {
-							"property_name" : "field_title",
-							"property_value" : "Item"
-						}
-					}
-				},
-				"item_stock_storage_location_id" : {
-					"field_name" : "item_stock_storage_location_id",
-					"field_type" : "string",
-					"field_properties" : {
-						"field_title" : {
-							"property_name" : "field_title",
-							"property_value" : "Company Stock Company Id"
-						},
-						"primary_key" : {
-							"property_name" : "primary_key",
-							"property_value" : true
-						}
-					}
-				},
-				"remarks" : {
-					"field_name" : "remarks",
-					"field_type" : "text",
-					"field_properties" : {
-						"field_title" : {
-							"property_name" : "field_title",
-							"property_value" : "Remarks"
-						}
-					}
-				},
-				"stock_quantity" : {
-					"field_name" : "stock_quantity",
-					"field_type" : "double",
-					"field_properties" : {
-						"field_title" : {
-							"property_name" : "field_title",
-							"property_value" : "Stock Quantity"
-						}
-					}
-				},
-				"storage_location_id" : {
-					"field_name" : "storage_location_id",
-					"field_type" : "string",
-					"field_properties" : {
-						"field_title" : {
-							"property_name" : "field_title",
-							"property_value" : "Storage Location"
-						}
-					}
-				}			
-			}
+
 		},
 		"item_uoms" : {
 			 "table_name" : "item_uoms",
@@ -11594,7 +12814,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_uom"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_uoms"
+				}
 			}
+
 		},
 		"item_uqcs" : {
 			 "table_name" : "item_uqcs",
@@ -11643,7 +12874,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item_uqc"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"item_uqcs"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["label","value"]
+				}
 			}
+
 		},
 		"items" : {
 			 "table_name" : "items",
@@ -11675,6 +12921,16 @@
 						"field_title" : {
 							"property_name" : "field_title",
 							"property_value" : "Company"
+						}
+					}
+				},
+				"customer_waitlist_quantity" : {
+					"field_name" : "customer_waitlist_quantity",
+					"field_type" : "double",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Waitlist Quantity"
 						}
 					}
 				},
@@ -11719,6 +12975,16 @@
 						"is_select_distinct" : {
 							"property_name" : "is_select_distinct",
 							"property_value" : true
+						}
+					}
+				},
+				"in_order_quantity" : {
+					"field_name" : "in_order_quantity",
+					"field_type" : "double",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "In Order Quantity"
 						}
 					}
 				},
@@ -12181,7 +13447,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_items"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "item_name", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"items"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["item_name"]
+				}
+			}
+
 		},
 		"landing_price_items" : {
 			 "table_name" : "landing_price_items",
@@ -12449,7 +13739,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_landing_price_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_landing_price_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"landing_price_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"landing_price_items"
+				}
+			}
+
 		},
 		"landing_price_location_items" : {
 			 "table_name" : "landing_price_location_items",
@@ -12706,7 +14010,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"landing_price_location_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"landing_price_location_items"
+				}
 			}
+
 		},
 		"landing_price_locations" : {
 			 "table_name" : "landing_price_locations",
@@ -12885,7 +14200,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"landing_price_location"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"landing_price_locations"
+				}
 			}
+
 		},
 		"landing_prices" : {
 			 "table_name" : "landing_prices",
@@ -13112,7 +14438,25 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "landing_price_date", "order" : "DESC" },
+						{ "field_name" : "landing_price_number", "order" : "DESC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"landing_price"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"landing_prices"
+				}
 			}
+
 		},
 		"lift_assets" : {
 			 "table_name" : "lift_assets",
@@ -13197,7 +14541,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"lift_asset"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"lift_assets"
+				}
 			}
+
 		},
 		"lifts" : {
 			 "table_name" : "lifts",
@@ -13326,7 +14681,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"lift"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"lifts"
+				}
 			}
+
 		},
 		"location_documents" : {
 			 "table_name" : "location_documents",
@@ -13475,7 +14841,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"location_document"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"location_documents"
+				}
 			}
+
 		},
 		"location_item_deliveries" : {
 			 "table_name" : "location_item_deliveries",
@@ -13679,7 +15056,27 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_location_item_deliveries"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "item_delivery_number", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_location_item_deliveries"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"location_item_delivery"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"location_item_deliveries"
+				}
+			}
+
 		},
 		"location_item_delivery_storage_locations" : {
 			 "table_name" : "location_item_delivery_storage_locations",
@@ -13797,7 +15194,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_location_item_delivery_storage_locations"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_location_item_delivery_storage_locations"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"location_item_delivery_storage_location"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"location_item_delivery_storage_locations"
+				}
+			}
+
 		},
 		"location_item_receipt_storage_locations" : {
 			 "table_name" : "location_item_receipt_storage_locations",
@@ -13915,7 +15326,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_location_item_receipt_storage_locations"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_location_item_receipt_storage_locations"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"location_item_receipt_storage_location"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"location_item_receipt_storage_locations"
+				}
+			}
+
 		},
 		"location_item_receipts" : {
 			 "table_name" : "location_item_receipts",
@@ -14119,7 +15544,27 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_location_item_receipts"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "item_receipt_number", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_location_item_receipts"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"location_item_receipt"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"location_item_receipts"
+				}
+			}
+
 		},
 		"locations" : {
 			 "table_name" : "locations",
@@ -14367,7 +15812,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_locations"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "location_name", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_locations"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"location"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"locations"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["location_name"]
+				}
+			}
+
 		},
 		"log" : {
 			 "table_name" : "log",
@@ -14416,7 +15885,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"log"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"log"
+				}
 			}
+
 		},
 		"mandatory_documents" : {
 			 "table_name" : "mandatory_documents",
@@ -14465,7 +15945,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"mandatory_document"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"mandatory_documents"
+				}
 			}
+
 		},
 		"master_item_categories" : {
 			 "table_name" : "master_item_categories",
@@ -14524,7 +16015,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "category_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"master_item_category"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"master_item_categories"
+				}
 			}
+
 		},
 		"master_items" : {
 			 "table_name" : "master_items",
@@ -14597,7 +16105,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "item_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"master_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"master_items"
+				}
 			}
+
 		},
 		"material_requests" : {
 			 "table_name" : "material_requests",
@@ -15051,7 +16576,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_material_requests"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "material_request_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_material_requests"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"material_request"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"material_requests"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["material_name"]
+				}
+			}
+
 		},
 		"material_requests_purchase_requests_link_items" : {
 			 "table_name" : "material_requests_purchase_requests_link_items",
@@ -15110,7 +16659,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"material_requests_purchase_requests_link_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"material_requests_purchase_requests_link_items"
+				}
 			}
+
 		},
 		"material_requests_purchase_requests_links" : {
 			 "table_name" : "material_requests_purchase_requests_links",
@@ -15149,7 +16709,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"material_requests_purchase_requests_link"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"material_requests_purchase_requests_links"
+				}
 			}
+
 		},
 		"media" : {
 			 "table_name" : "media",
@@ -15218,7 +16789,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"media"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"media"
+				}
 			}
+
 		},
 		"membership_cards" : {
 			 "table_name" : "membership_cards",
@@ -15406,7 +16988,27 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_membership_cards"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "membership_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_membership_cards"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"membership_card"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"membership_cards"
+				}
+			}
+
 		},
 		"membership_types" : {
 			 "table_name" : "membership_types",
@@ -15519,7 +17121,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"membership_type"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"membership_types"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["membership_name"]
+				}
 			}
+
 		},
 		"mini_projects" : {
 			 "table_name" : "mini_projects",
@@ -15645,7 +17262,27 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_mini_projects"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "mini_project_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_mini_projects"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"mini-project"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"mini_projects"
+				}
+			}
+
 		},
 		"notes" : {
 			 "table_name" : "notes",
@@ -15738,7 +17375,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "note_number", "order" : "DESC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"note"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"notes"
+				}
 			}
+
 		},
 		"notification_actions" : {
 			 "table_name" : "notification_actions",
@@ -15867,7 +17521,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "notification_action_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"notification_action"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"notification_actions"
+				}
 			}
+
 		},
 		"notifications" : {
 			 "table_name" : "notifications",
@@ -15986,7 +17657,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"notification"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"notifications"
+				}
 			}
+
 		},
 		"offer_items" : {
 			 "table_name" : "offer_items",
@@ -16145,7 +17827,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"offer_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"offer_items"
+				}
 			}
+
 		},
 		"offers" : {
 			 "table_name" : "offers",
@@ -16351,7 +18044,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_offers"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "offer_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_offers"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"offer"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"offers"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["offer_name"]
+				}
+			}
+
 		},
 		"payment_method_documents" : {
 			 "table_name" : "payment_method_documents",
@@ -16410,7 +18127,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"payment_mode_document"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"payment_method_documents"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["document_name"]
+				}
 			}
+
 		},
 		"payment_method_exceptions" : {
 			 "table_name" : "payment_method_exceptions",
@@ -16493,7 +18225,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"payment_mode_exception"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"payment_method_exceptions"
+				}
 			}
+
 		},
 		"payment_methods" : {
 			 "table_name" : "payment_methods",
@@ -16749,7 +18492,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_payment_methods"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "payment_method_name", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_payment_methods"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"payment_method"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"payment_methods"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["payment_method_name"]
+				}
+			}
+
 		},
 		"pricing_group_items" : {
 			 "table_name" : "pricing_group_items",
@@ -16880,7 +18647,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"pricing_group_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"pricing_group_items"
+				}
 			}
+
 		},
 		"pricing_groups" : {
 			 "table_name" : "pricing_groups",
@@ -17058,7 +18836,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_pricing_groups"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "pricing_group_name", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_pricing_groups"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"pricing_group"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"pricing_groups"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["pricing_group_name"]
+				}
+			}
+
 		},
 		"project_documents" : {
 			 "table_name" : "project_documents",
@@ -17219,7 +19021,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"project_document"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"project_documents"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["document_name"]
+				}
 			}
+
 		},
 		"project_service_form_inputs" : {
 			 "table_name" : "project_service_form_inputs",
@@ -17306,7 +19123,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "project_service_input_index", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"project_service_form_input"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"project_service_form_inputs"
+				}
 			}
+
 		},
 		"project_service_input_group_inputs" : {
 			 "table_name" : "project_service_input_group_inputs",
@@ -17403,7 +19237,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "project_service_input_group_input_index", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"project_service_input_group_input"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"project_service_input_group_inputs"
+				}
 			}
+
 		},
 		"project_service_input_groups" : {
 			 "table_name" : "project_service_input_groups",
@@ -17512,7 +19363,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"project_service_input_group"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"project_service_input_groups"
+				}
 			}
+
 		},
 		"project_service_input_values" : {
 			 "table_name" : "project_service_input_values",
@@ -17724,7 +19586,27 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_project_service_input_values"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "project_service_input_value_index", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_project_service_input_values"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"project_service_input_value"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"project_service_input_values"
+				}
+			}
+
 		},
 		"project_service_inputs" : {
 			 "table_name" : "project_service_inputs",
@@ -17877,7 +19759,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"project_service_input"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"project_service_inputs"
+				}
 			}
+
 		},
 		"project_services" : {
 			 "table_name" : "project_services",
@@ -18042,7 +19935,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"project_service"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"project_services"
+				}
 			}
+
 		},
 		"project_tasks" : {
 			 "table_name" : "project_tasks",
@@ -18191,7 +20095,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"project_task"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"project_tasks"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["task_name"]
+				}
 			}
+
 		},
 		"project_template_tasks" : {
 			 "table_name" : "project_template_tasks",
@@ -18304,7 +20223,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"project_template_stage"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"project_template_tasks"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["task_name"]
+				}
 			}
+
 		},
 		"project_templates" : {
 			 "table_name" : "project_templates",
@@ -18405,7 +20339,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"project_template"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"project_templates"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["project_template_name"]
+				}
 			}
+
 		},
 		"project_visits" : {
 			 "table_name" : "project_visits",
@@ -18554,7 +20503,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"project_visit"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"project_visits"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["visitor_name"]
+				}
 			}
+
 		},
 		"projects" : {
 			 "table_name" : "projects",
@@ -18802,7 +20766,25 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_projects"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_projects"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"project"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"projects"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["project_name"]
+				}
+			}
+
 		},
 		"purchase_commercial_invoice_documents" : {
 			 "table_name" : "purchase_commercial_invoice_documents",
@@ -18861,7 +20843,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_commercial_invoice_document"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_commercial_invoice_documents"
+				}
 			}
+
 		},
 		"purchase_commercial_invoice_expenses" : {
 			 "table_name" : "purchase_commercial_invoice_expenses",
@@ -18900,7 +20893,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_commercial_invoice_expense"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_commercial_invoice_expenses"
+				}
 			}
+
 		},
 		"purchase_commercial_invoice_items" : {
 			 "table_name" : "purchase_commercial_invoice_items",
@@ -19238,7 +21242,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_commercial_invoice_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_commercial_invoice_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_commercial_invoice_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_commercial_invoice_items"
+				}
+			}
+
 		},
 		"purchase_commercial_invoice_payments" : {
 			 "table_name" : "purchase_commercial_invoice_payments",
@@ -19277,7 +21295,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_commercial_invoice_payment"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_commercial_invoice_payments"
+				}
 			}
+
 		},
 		"purchase_commercial_invoices" : {
 			 "table_name" : "purchase_commercial_invoices",
@@ -19605,7 +21634,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_commercial_invoices"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "commercial_invoice_date", "order" : "DESC" },
+						{ "field_name" : "commercial_invoice_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_commercial_invoices"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_commercial_invoice"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_commercial_invoices"
+				}
+			}
+
 		},
 		"purchase_commercial_invoices_purchase_invoices_link_items" : {
 			 "table_name" : "purchase_commercial_invoices_purchase_invoices_link_items",
@@ -19673,7 +21723,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_commercial_invoices_purchase_invoices_link_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_commercial_invoices_purchase_invoices_link_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_commercial_invoices_purchase_invoices_link_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_commercial_invoices_purchase_invoices_link_items"
+				}
+			}
+
 		},
 		"purchase_commercial_invoices_purchase_invoices_links" : {
 			 "table_name" : "purchase_commercial_invoices_purchase_invoices_links",
@@ -19720,7 +21784,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_commercial_invoices_purchase_invoices_link"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_commercial_invoices_purchase_invoices_links"
+				}
 			}
+
 		},
 		"purchase_container_documents" : {
 			 "table_name" : "purchase_container_documents",
@@ -19819,7 +21894,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_container_document"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_container_documents"
+				}
 			}
+
 		},
 		"purchase_container_expenses" : {
 			 "table_name" : "purchase_container_expenses",
@@ -19858,7 +21944,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_container_expense"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_container_expenses"
+				}
 			}
+
 		},
 		"purchase_container_items" : {
 			 "table_name" : "purchase_container_items",
@@ -20156,7 +22253,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_container_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_container_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_container_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_container_items"
+				}
+			}
+
 		},
 		"purchase_containers" : {
 			 "table_name" : "purchase_containers",
@@ -20690,7 +22801,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_containers"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "container_date", "order" : "DESC" },
+						{ "field_name" : "container_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_containers"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_container"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_containers"
+				}
+			}
+
 		},
 		"purchase_containers_purchase_packing_lists_link_items" : {
 			 "table_name" : "purchase_containers_purchase_packing_lists_link_items",
@@ -20914,7 +23046,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_containers_purchase_packing_lists_link_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_containers_purchase_packing_lists_link_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_containers_purchase_packing_lists_link_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_containers_purchase_packing_lists_link_items"
+				}
+			}
+
 		},
 		"purchase_containers_purchase_packing_lists_links" : {
 			 "table_name" : "purchase_containers_purchase_packing_lists_links",
@@ -21068,7 +23214,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_containers_purchase_packing_lists_links"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_containers_purchase_packing_lists_links"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_containers_purchase_packing_lists_link"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_containers_purchase_packing_lists_links"
+				}
+			}
+
 		},
 		"purchase_invoice_expenses" : {
 			 "table_name" : "purchase_invoice_expenses",
@@ -21107,7 +23267,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_invoice_expense"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_invoice_expenses"
+				}
 			}
+
 		},
 		"purchase_invoice_items" : {
 			 "table_name" : "purchase_invoice_items",
@@ -21449,7 +23620,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_invoice_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_invoice_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_invoice_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_invoice_items"
+				}
+			}
+
 		},
 		"purchase_invoice_landing_links" : {
 			 "table_name" : "purchase_invoice_landing_links",
@@ -21519,7 +23704,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_invoice_landing_links"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_invoice_landing_links"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_invoice_landing_link"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_invoice_landing_links"
+				}
+			}
+
 		},
 		"purchase_invoice_payments" : {
 			 "table_name" : "purchase_invoice_payments",
@@ -21558,7 +23757,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_invoice_payment"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_invoice_payments"
+				}
 			}
+
 		},
 		"purchase_invoices" : {
 			 "table_name" : "purchase_invoices",
@@ -21912,7 +24122,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_invoices"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "invoice_date", "order" : "DESC" },
+						{ "field_name" : "invoice_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_invoices"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_invoice"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_invoices"
+				}
+			}
+
 		},
 		"purchase_order_expenses" : {
 			 "table_name" : "purchase_order_expenses",
@@ -21951,7 +24182,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_order_expense"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_order_expenses"
+				}
 			}
+
 		},
 		"purchase_order_items" : {
 			 "table_name" : "purchase_order_items",
@@ -22283,7 +24525,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_order_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_order_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_order_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_order_items"
+				}
+			}
+
 		},
 		"purchase_order_payments" : {
 			 "table_name" : "purchase_order_payments",
@@ -22322,7 +24578,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_order_payment"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_order_payments"
+				}
 			}
+
 		},
 		"purchase_orders" : {
 			 "table_name" : "purchase_orders",
@@ -22714,7 +24981,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_orders"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "order_date", "order" : "DESC" },
+						{ "field_name" : "order_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_orders"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_order"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_orders"
+				}
+			}
+
 		},
 		"purchase_orders_purchase_proformas_link_items" : {
 			 "table_name" : "purchase_orders_purchase_proformas_link_items",
@@ -22782,7 +25070,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_orders_purchase_proformas_link_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_orders_purchase_proformas_link_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_orders_purchase_proformas_link_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_orders_purchase_proformas_link_items"
+				}
+			}
+
 		},
 		"purchase_orders_purchase_proformas_links" : {
 			 "table_name" : "purchase_orders_purchase_proformas_links",
@@ -22829,7 +25131,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_orders_purchase_proformas_link"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_orders_purchase_proformas_links"
+				}
 			}
+
 		},
 		"purchase_packing_list_expenses" : {
 			 "table_name" : "purchase_packing_list_expenses",
@@ -22868,7 +25181,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_packing_list_expense"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_packing_list_expenses"
+				}
 			}
+
 		},
 		"purchase_packing_list_items" : {
 			 "table_name" : "purchase_packing_list_items",
@@ -23146,7 +25470,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_packing_list_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_packing_list_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_packing_list_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_packing_list_items"
+				}
+			}
+
 		},
 		"purchase_packing_lists" : {
 			 "table_name" : "purchase_packing_lists",
@@ -23402,7 +25740,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_packing_lists"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "packing_list_date", "order" : "DESC" },
+						{ "field_name" : "packing_list_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_packing_lists"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_packing_list"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_packing_lists"
+				}
+			}
+
 		},
 		"purchase_proforma_expenses" : {
 			 "table_name" : "purchase_proforma_expenses",
@@ -23441,7 +25800,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_proforma_expense"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_proforma_expenses"
+				}
 			}
+
 		},
 		"purchase_proforma_items" : {
 			 "table_name" : "purchase_proforma_items",
@@ -23799,7 +26169,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_proforma_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_proforma_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_proforma_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_proforma_items"
+				}
+			}
+
 		},
 		"purchase_proforma_payments" : {
 			 "table_name" : "purchase_proforma_payments",
@@ -23838,7 +26222,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_proforma_payment"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_proforma_payments"
+				}
 			}
+
 		},
 		"purchase_proformas" : {
 			 "table_name" : "purchase_proformas",
@@ -24212,7 +26607,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_proformas"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "proforma_date", "order" : "DESC" },
+						{ "field_name" : "proforma_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_proformas"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_proforma"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_proformas"
+				}
+			}
+
 		},
 		"purchase_proformas_purchase_commercial_invoices_link_items" : {
 			 "table_name" : "purchase_proformas_purchase_commercial_invoices_link_items",
@@ -24280,7 +26696,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_proformas_purchase_commercial_invoices_link_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_proformas_purchase_commercial_invoices_link_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_proformas_purchase_commercial_invoices_link_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_proformas_purchase_commercial_invoices_link_items"
+				}
+			}
+
 		},
 		"purchase_proformas_purchase_commercial_invoices_links" : {
 			 "table_name" : "purchase_proformas_purchase_commercial_invoices_links",
@@ -24327,7 +26757,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_proformas_purchase_commercial_invoices_link"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_proformas_purchase_commercial_invoices_links"
+				}
 			}
+
 		},
 		"purchase_proformas_purchase_containers_link_items" : {
 			 "table_name" : "purchase_proformas_purchase_containers_link_items",
@@ -24395,7 +26836,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_proformas_purchase_containers_link_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_proformas_purchase_containers_link_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_proformas_purchase_containers_link_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_proformas_purchase_containers_link_items"
+				}
+			}
+
 		},
 		"purchase_proformas_purchase_containers_links" : {
 			 "table_name" : "purchase_proformas_purchase_containers_links",
@@ -24442,7 +26897,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_proformas_purchase_containers_link"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_proformas_purchase_containers_links"
+				}
 			}
+
 		},
 		"purchase_proformas_purchase_packing_lists_link_items" : {
 			 "table_name" : "purchase_proformas_purchase_packing_lists_link_items",
@@ -24509,7 +26975,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_proformas_purchase_packing_lists_link_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_proformas_purchase_packing_lists_link_items"
+				}
 			}
+
 		},
 		"purchase_proformas_purchase_packing_lists_links" : {
 			 "table_name" : "purchase_proformas_purchase_packing_lists_links",
@@ -24556,7 +27033,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_proformas_purchase_packing_lists_link"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_proformas_purchase_packing_lists_links"
+				}
 			}
+
 		},
 		"purchase_quote_items" : {
 			 "table_name" : "purchase_quote_items",
@@ -24730,7 +27218,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_quote_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_quote_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_quote_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_quote_items"
+				}
+			}
+
 		},
 		"purchase_quote_vendor_items" : {
 			 "table_name" : "purchase_quote_vendor_items",
@@ -24854,7 +27356,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_quote_vendor_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_quote_vendor_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_quote_vendor_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_quote_vendor_items"
+				}
+			}
+
 		},
 		"purchase_quote_vendors" : {
 			 "table_name" : "purchase_quote_vendors",
@@ -25008,7 +27524,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_quote_vendors"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_quote_vendors"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_quote_vendor"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_quote_vendors"
+				}
+			}
+
 		},
 		"purchase_quote_vendors_purchase_orders_link_items" : {
 			 "table_name" : "purchase_quote_vendors_purchase_orders_link_items",
@@ -25076,7 +27606,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_quote_vendors_purchase_orders_link_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_quote_vendors_purchase_orders_link_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_quote_vendors_purchase_orders_link_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_quote_vendors_purchase_orders_link_items"
+				}
+			}
+
 		},
 		"purchase_quote_vendors_purchase_orders_links" : {
 			 "table_name" : "purchase_quote_vendors_purchase_orders_links",
@@ -25123,7 +27667,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_quote_vendors_purchase_orders_link"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_quote_vendors_purchase_orders_links"
+				}
 			}
+
 		},
 		"purchase_quotes" : {
 			 "table_name" : "purchase_quotes",
@@ -25339,7 +27894,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_quotes"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "quote_date", "order" : "DESC" },
+						{ "field_name" : "quote_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_quotes"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_quote"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_quotes"
+				}
+			}
+
 		},
 		"purchase_request_items" : {
 			 "table_name" : "purchase_request_items",
@@ -25513,7 +28089,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_request_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_request_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_request_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_request_items"
+				}
+			}
+
 		},
 		"purchase_requests" : {
 			 "table_name" : "purchase_requests",
@@ -25759,7 +28349,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_requests"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "request_date", "order" : "DESC" },
+						{ "field_name" : "request_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_requests"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_request"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_requests"
+				}
+			}
+
 		},
 		"purchase_requests_purchase_quotes_link_items" : {
 			 "table_name" : "purchase_requests_purchase_quotes_link_items",
@@ -25839,7 +28450,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_purchase_requests_purchase_quotes_link_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_purchase_requests_purchase_quotes_link_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_requests_purchase_quotes_link_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_requests_purchase_quotes_link_items"
+				}
+			}
+
 		},
 		"purchase_requests_purchase_quotes_links" : {
 			 "table_name" : "purchase_requests_purchase_quotes_links",
@@ -25886,7 +28511,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_requests_purchase_quotes_link"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_requests_purchase_quotes_links"
+				}
 			}
+
 		},
 		"purchase_return_items" : {
 			 "table_name" : "purchase_return_items",
@@ -26189,7 +28825,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_return_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_return_items"
+				}
 			}
+
 		},
 		"purchase_returns" : {
 			 "table_name" : "purchase_returns",
@@ -26392,7 +29039,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_return"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_returns"
+				}
 			}
+
 		},
 		"purchase_terms" : {
 			 "table_name" : "purchase_terms",
@@ -26499,7 +29157,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "purchase_term_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"purchase_term"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"purchase_terms"
+				}
 			}
+
 		},
 		"record_versions" : {
 			 "table_name" : "record_versions",
@@ -26580,7 +29255,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"record_version"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"record_versions"
+				}
 			}
+
 		},
 		"recurring_trips" : {
 			 "table_name" : "recurring_trips",
@@ -26743,7 +29429,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"recurring_trip"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"recurring_trips"
+				}
 			}
+
 		},
 		"reminders" : {
 			 "table_name" : "reminders",
@@ -26890,7 +29587,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"reminder"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"reminders"
+				}
 			}
+
 		},
 		"reports" : {
 			 "table_name" : "reports",
@@ -27051,7 +29759,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"report"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"reports"
+				}
 			}
+
 		},
 		"sale_appointments" : {
 			 "table_name" : "sale_appointments",
@@ -27241,7 +29960,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_sale_appointments"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "start_time", "order" : "DESC" },
+						{ "field_name" : "sale_appointment_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_sale_appointments"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_appointment"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_appointments"
+				}
+			}
+
 		},
 		"sale_container_items" : {
 			 "table_name" : "sale_container_items",
@@ -27435,7 +30175,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_sale_container_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_sale_container_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_container_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_container_items"
+				}
+			}
+
 		},
 		"sale_containers" : {
 			 "table_name" : "sale_containers",
@@ -27729,7 +30483,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_sale_containers"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "sale_container_date", "order" : "DESC" },
+						{ "field_name" : "sale_container_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_sale_containers"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_container"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_containers"
+				}
+			}
+
 		},
 		"sale_invoice_items" : {
 			 "table_name" : "sale_invoice_items",
@@ -28055,7 +30830,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_sale_invoice_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_sale_invoice_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_invoice_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_invoice_items"
+				}
+			}
+
 		},
 		"sale_invoice_services" : {
 			 "table_name" : "sale_invoice_services",
@@ -28194,7 +30983,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_invoice_service"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_invoice_services"
+				}
 			}
+
 		},
 		"sale_invoices" : {
 			 "table_name" : "sale_invoices",
@@ -28486,7 +31286,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_sale_invoices"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "sale_invoice_date", "order" : "DESC" },
+						{ "field_name" : "sale_invoice_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_sale_invoices"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_invoice"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_invoices"
+				}
+			}
+
 		},
 		"sale_maintenance" : {
 			 "table_name" : "sale_maintenance",
@@ -28707,7 +31528,25 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "sale_maintenance_date", "order" : "DESC" },
+						{ "field_name" : "sale_maintenance_number", "order" : "DESC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_maintenance"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_maintenance"
+				}
 			}
+
 		},
 		"sale_maintenance_expenses" : {
 			 "table_name" : "sale_maintenance_expenses",
@@ -28776,7 +31615,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_maintenance_expense"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_maintenance_expenses"
+				}
 			}
+
 		},
 		"sale_maintenance_items" : {
 			 "table_name" : "sale_maintenance_items",
@@ -29093,7 +31943,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_maintenance_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_maintenance_items"
+				}
 			}
+
 		},
 		"sale_packing_list_items" : {
 			 "table_name" : "sale_packing_list_items",
@@ -29286,7 +32147,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_packing_list_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_packing_list_items"
+				}
 			}
+
 		},
 		"sale_packing_lists" : {
 			 "table_name" : "sale_packing_lists",
@@ -29474,7 +32346,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_sale_packing_lists"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "sale_packing_list_date", "order" : "DESC" },
+						{ "field_name" : "sale_packing_list_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_sale_packing_lists"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_packing_list"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_packing_lists"
+				}
+			}
+
 		},
 		"sale_proforma_items" : {
 			 "table_name" : "sale_proforma_items",
@@ -29692,7 +32585,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_sale_proforma_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_sale_proforma_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_proforma_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_proforma_items"
+				}
+			}
+
 		},
 		"sale_proformas" : {
 			 "table_name" : "sale_proformas",
@@ -29942,7 +32849,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_sale_proformas"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "sale_proforma_date", "order" : "DESC" },
+						{ "field_name" : "sale_proforma_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_sale_proformas"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_proforma"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_proformas"
+				}
+			}
+
 		},
 		"sale_quote_items" : {
 			 "table_name" : "sale_quote_items",
@@ -30240,7 +33168,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_sale_quote_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_sale_quote_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_quote_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_quote_items"
+				}
+			}
+
 		},
 		"sale_quote_services" : {
 			 "table_name" : "sale_quote_services",
@@ -30379,7 +33321,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_quote_service"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_quote_services"
+				}
 			}
+
 		},
 		"sale_quotes" : {
 			 "table_name" : "sale_quotes",
@@ -30683,7 +33636,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_sale_quotes"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "sale_quote_date", "order" : "DESC" },
+						{ "field_name" : "sale_quote_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_sale_quotes"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_quote"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_quotes"
+				}
+			}
+
 		},
 		"sale_quotes_sale_invoices_link_items" : {
 			 "table_name" : "sale_quotes_sale_invoices_link_items",
@@ -30751,7 +33725,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_sale_quotes_sale_invoices_link_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_sale_quotes_sale_invoices_link_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_quotes_sale_invoices_link_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_quotes_sale_invoices_link_items"
+				}
+			}
+
 		},
 		"sale_quotes_sale_invoices_links" : {
 			 "table_name" : "sale_quotes_sale_invoices_links",
@@ -30798,7 +33786,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_quotes_sale_invoices_link"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_quotes_sale_invoices_links"
+				}
 			}
+
 		},
 		"sale_return_items" : {
 			 "table_name" : "sale_return_items",
@@ -31141,7 +34140,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_return_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_return_items"
+				}
 			}
+
 		},
 		"sale_returns" : {
 			 "table_name" : "sale_returns",
@@ -31386,7 +34396,25 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "sale_return_date", "order" : "DESC" },
+						{ "field_name" : "sale_return_number", "order" : "DESC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_return"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_returns"
+				}
 			}
+
 		},
 		"sale_terms" : {
 			 "table_name" : "sale_terms",
@@ -31493,7 +34521,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "sale_term_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sale_term"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sale_terms"
+				}
 			}
+
 		},
 		"services" : {
 			 "table_name" : "services",
@@ -31672,7 +34717,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"service"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"services"
+				}
 			}
+
 		},
 		"settings" : {
 			 "table_name" : "settings",
@@ -31759,7 +34815,22 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"setting"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"settings"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["setting_name"]
+				}
 			}
+
 		},
 		"shipping_companies" : {
 			 "table_name" : "shipping_companies",
@@ -31981,7 +35052,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_shipping_companies"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "shipping_company_name", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_shipping_companies"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"shipping_company"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"shipping_companies"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["shipping_company_name"]
+				}
+			}
+
 		},
 		"sidebar_menus" : {
 			 "table_name" : "sidebar_menus",
@@ -32038,7 +35133,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"sidebar_menu"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"sidebar_menus"
+				}
 			}
+
 		},
 		"signatures" : {
 			 "table_name" : "signatures",
@@ -32163,7 +35269,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"signature"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"signatures"
+				}
 			}
+
 		},
 		"stock_audit_item_storage_locations" : {
 			 "table_name" : "stock_audit_item_storage_locations",
@@ -32282,7 +35399,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"stock_audit_item_storage_location"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"stock_audit_item_storage_locations"
+				}
 			}
+
 		},
 		"stock_audit_items" : {
 			 "table_name" : "stock_audit_items",
@@ -32426,7 +35554,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_stock_audit_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_stock_audit_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"stock_audit_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"stock_audit_items"
+				}
+			}
+
 		},
 		"stock_audits" : {
 			 "table_name" : "stock_audits",
@@ -32570,7 +35712,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_stock_audits"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "stock_audit_date", "order" : "DESC" },
+						{ "field_name" : "stock_audit_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_stock_audits"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"stock_audit"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"stock_audits"
+				}
+			}
+
 		},
 		"stock_transfer_items" : {
 			 "table_name" : "stock_transfer_items",
@@ -32964,7 +36127,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_stock_transfer_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_stock_transfer_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"stock_transfer_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"stock_transfer_items"
+				}
+			}
+
 		},
 		"stock_transfer_packing_items" : {
 			 "table_name" : "stock_transfer_packing_items",
@@ -33023,7 +36200,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"stock_transfer_packing_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"stock_transfer_packing_items"
+				}
 			}
+
 		},
 		"stock_transfer_packings" : {
 			 "table_name" : "stock_transfer_packings",
@@ -33212,7 +36400,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"stock_transfer_packing"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"stock_transfer_packings"
+				}
 			}
+
 		},
 		"stock_transfers" : {
 			 "table_name" : "stock_transfers",
@@ -33484,7 +36683,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_stock_transfers"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "stock_transfer_date", "order" : "DESC" },
+						{ "field_name" : "stock_transfer_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_stock_transfers"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"stock_transfer"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"stock_transfers"
+				}
+			}
+
 		},
 		"stock_update_items" : {
 			 "table_name" : "stock_update_items",
@@ -33668,7 +36888,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_stock_update_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_stock_update_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"stock_update_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"stock_update_items"
+				}
+			}
+
 		},
 		"stock_updates" : {
 			 "table_name" : "stock_updates",
@@ -33826,7 +37060,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_stock_updates"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "stock_update_date", "order" : "DESC" },
+						{ "field_name" : "stock_update_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_stock_updates"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"stock_update"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"stock_updates"
+				}
+			}
+
 		},
 		"storage_location_items" : {
 			 "table_name" : "storage_location_items",
@@ -33936,7 +37191,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_storage_location_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_storage_location_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"storage_location_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"storage_location_items"
+				}
+			}
+
 		},
 		"storage_locations" : {
 			 "table_name" : "storage_locations",
@@ -34081,7 +37350,28 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "storage_location_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"storage_location"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"storage_locations"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["storage_location_name"]
+				}
 			}
+
 		},
 		"task_comments" : {
 			 "table_name" : "task_comments",
@@ -34174,7 +37464,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"task_comment"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"task_comments"
+				}
 			}
+
 		},
 		"task_contras" : {
 			 "table_name" : "task_contras",
@@ -34251,7 +37552,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"task_contra"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"task_contras"
+				}
 			}
+
 		},
 		"task_histories" : {
 			 "table_name" : "task_histories",
@@ -34320,7 +37632,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"task_history"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"task_histories"
+				}
 			}
+
 		},
 		"task_time_entries" : {
 			 "table_name" : "task_time_entries",
@@ -34369,7 +37692,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "start_time", "order" : "DESC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"task_time_entry"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"task_time_entries"
+				}
 			}
+
 		},
 		"tasks" : {
 			 "table_name" : "tasks",
@@ -34590,7 +37930,29 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "due_datetime", "order" : "DESC" },
+						{ "field_name" : "task_number", "order" : "DESC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"task"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"tasks"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["task_title"]
+				}
 			}
+
 		},
 		"taxes" : {
 			 "table_name" : "taxes",
@@ -34721,7 +38083,28 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "tax_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"tax"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"taxes"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["tax_name"]
+				}
 			}
+
 		},
 		"transactions" : {
 			 "table_name" : "transactions",
@@ -34995,7 +38378,28 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_transactions"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "transaction_date", "order" : "DESC" },
+						{ "field_name" : "transaction_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_transactions"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"transaction"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"transactions"
+				}
+			}
+
 		},
 		"trigger_controls" : {
 			 "table_name" : "trigger_controls",
@@ -35044,7 +38448,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"trigger_control"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"trigger_controls"
+				}
 			}
+
 		},
 		"trip_equipments" : {
 			 "table_name" : "trip_equipments",
@@ -35153,7 +38568,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"trip_equipment"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"trip_equipments"
+				}
 			}
+
 		},
 		"trip_order_items" : {
 			 "table_name" : "trip_order_items",
@@ -35262,7 +38688,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"trip_order_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"trip_order_items"
+				}
 			}
+
 		},
 		"trip_passengers" : {
 			 "table_name" : "trip_passengers",
@@ -35371,7 +38808,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"trip_passenger"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"trip_passengers"
+				}
 			}
+
 		},
 		"trip_updates" : {
 			 "table_name" : "trip_updates",
@@ -35464,7 +38912,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"trip_update"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"trip_updates"
+				}
 			}
+
 		},
 		"trips" : {
 			 "table_name" : "trips",
@@ -35607,7 +39066,18 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"trip"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"trips"
+				}
 			}
+
 		},
 		"user_expenses" : {
 			 "table_name" : "user_expenses",
@@ -35825,7 +39295,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_user_expenses"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_user_expenses"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"user_expense"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"user_expenses"
+				}
+			}
+
 		},
 		"user_group_users" : {
 			 "table_name" : "user_group_users",
@@ -35885,7 +39369,21 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_user_group_users"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_user_group_users"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"user_group_user"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"user_group_users"
+				}
+			}
+
 		},
 		"user_groups" : {
 			 "table_name" : "user_groups",
@@ -35956,7 +39454,24 @@
 						}
 					}
 				}			
+			},
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "user_group_name", "order" : "ASC" }
+					]
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"user_group"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"user_groups"
+				}
 			}
+
 		},
 		"users" : {
 			 "table_name" : "users",
@@ -36154,7 +39669,27 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_users"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "employee_name", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_users"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"user"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"users"
+				}
+			}
+
 		},
 		"vendor_contracts" : {
 			 "table_name" : "vendor_contracts",
@@ -36326,7 +39861,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_vendor_contracts"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "vendor_contract_number", "order" : "DESC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_vendor_contracts"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"vendor_contract"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"vendor_contracts"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["vendor_contract_name"]
+				}
+			}
+
 		},
 		"vendor_items" : {
 			 "table_name" : "vendor_items",
@@ -36454,11 +40013,35 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_vendor_items"
+			"table_properties" : {
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_vendor_items"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"vendor_item"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"vendor_items"
+				}
+			}
+
 		},
 		"vendors" : {
 			 "table_name" : "vendors",
 			 "table_fields" : {
+				"account_balance" : {
+					"field_name" : "account_balance",
+					"field_type" : "double",
+					"field_properties" : {
+						"field_title" : {
+							"property_name" : "field_title",
+							"property_value" : "Balance"
+						}
+					}
+				},
 				"account_id" : {
 					"field_name" : "account_id",
 					"field_type" : "string",
@@ -36796,7 +40379,31 @@
 					}
 				}			
 			},
-			"select_view_name" : "vw_vendors"
+			"table_properties" : {
+				"order_by" : {
+					"property_name" : "order_by",
+					"property_value" : [
+						{ "field_name" : "vendor_name", "order" : "ASC" }
+					]
+				},
+				"select_view_name" : {
+					"property_name" : "select_view_name",
+					"property_value" :"vw_vendors"
+				},
+				"singular_name" : {
+					"property_name" : "singular_name",
+					"property_value" :"vendor"
+				},
+				"plural_name" : {
+					"property_name" : "plural_name",
+					"property_value" :"vendors"
+				},
+				"select_query_fields" : {
+					"property_name" : "select_query_fields",
+					"property_value" : ["vendor_name"]
+				}
+			}
+
 		}
 	},
 	"views" : {
@@ -36862,6 +40469,32 @@
 				}			
 			},
 			"view_query" : "SELECT companies.* FROM companies"		},
+		"vw_account_transactions_summary" : {
+			"view_name" : "vw_account_transactions_summary",
+			"view_fields" : {
+				"account_balance" : {
+					"field_name" : "account_balance"
+				},
+				"total_amount_debit" : {
+					"field_name" : "total_amount_debit"
+				},
+				"total_amount_credit" : {
+					"field_name" : "total_amount_credit"
+				},
+				"total_transactions" : {
+					"field_name" : "total_transactions"
+				},
+				"total_debit_transactions" : {
+					"field_name" : "total_debit_transactions"
+				},
+				"total_credit_transactions" : {
+					"field_name" : "total_credit_transactions"
+				},
+				"account_id" : {
+					"field_name" : "account_id"
+				}			
+			},
+			"view_query" : "SELECT (IFNULL(total_amount_debit,0) - IFNULL(total_amount_credit,0)) AS account_balance, IFNULL(total_amount_debit,0) AS total_amount_debit, IFNULL(total_amount_credit,0) AS total_amount_credit, (IFNULL(total_debit_transactions,0) + IFNULL(total_credit_transactions,0)) AS total_transactions, IFNULL(total_debit_transactions,0) AS total_debit_transactions, IFNULL(total_credit_transactions,0) AS total_credit_transactions, account_id FROM accounts LEFT JOIN (SELECT SUM(transaction_amount) AS total_amount_credit,COUNT(transaction_id) AS total_credit_transactions,account_credit_id FROM transactions GROUP BY account_credit_id) AS credit_summary ON accounts.account_id = credit_summary.account_credit_id LEFT JOIN (SELECT SUM(transaction_amount) AS total_amount_debit,COUNT(transaction_id) AS total_debit_transactions,account_debit_id FROM transactions GROUP BY account_debit_id) AS debit_summary ON accounts.account_id = debit_summary.account_debit_id"		},
 		"vw_automated_task_logs" : {
 			"view_name" : "vw_automated_task_logs",
 			"view_fields" : {
@@ -36915,6 +40548,12 @@
 		"vw_budget_accounts" : {
 			"view_name" : "vw_budget_accounts",
 			"view_fields" : {
+				"budget_min_amount" : {
+					"field_name" : "budget_min_amount"
+				},
+				"remarks" : {
+					"field_name" : "remarks"
+				},
 				"account_name" : {
 					"field_name" : "account_name"
 				},
@@ -36941,12 +40580,6 @@
 				},
 				"budget_max_amount" : {
 					"field_name" : "budget_max_amount"
-				},
-				"budget_min_amount" : {
-					"field_name" : "budget_min_amount"
-				},
-				"remarks" : {
-					"field_name" : "remarks"
 				}			
 			},
 			"view_query" : "SELECT accounts.account_name,accounts.account_type,accounts.account_category, budget_accounts.* FROM budget_accounts LEFT JOIN accounts ON budget_accounts.account_id = accounts.account_id"		},
@@ -37135,9 +40768,6 @@
 		"vw_customer_contracts" : {
 			"view_name" : "vw_customer_contracts",
 			"view_fields" : {
-				"remarks" : {
-					"field_name" : "remarks"
-				},
 				"days_count" : {
 					"field_name" : "days_count"
 				},
@@ -37188,12 +40818,18 @@
 				},
 				"customer_id" : {
 					"field_name" : "customer_id"
+				},
+				"remarks" : {
+					"field_name" : "remarks"
 				}			
 			},
 			"view_query" : "SELECT DATEDIFF(customer_contract_end_date, customer_contract_start_date) AS days_count, IF( DATEDIFF(customer_contract_end_date,NOW()) > 0, DATEDIFF(customer_contract_end_date,NOW()),0) AS valid_days,vw_customers.customer_name,vw_customers.phone_details,vw_customers.phone_values,vw_customers.email_details,vw_customers.email_values,customer_contracts.* FROM customer_contracts LEFT JOIN vw_customers ON customer_contracts.customer_id = vw_customers.customer_id"		},
 		"vw_customers" : {
 			"view_name" : "vw_customers",
 			"view_fields" : {
+				"account_balance" : {
+					"field_name" : "account_balance"
+				},
 				"account_id" : {
 					"field_name" : "account_id"
 				},
@@ -37560,6 +41196,9 @@
 				"employee_name" : {
 					"field_name" : "employee_name"
 				},
+				"account_balance" : {
+					"field_name" : "account_balance"
+				},
 				"account_id" : {
 					"field_name" : "account_id"
 				},
@@ -37868,33 +41507,6 @@
 		"vw_items" : {
 			"view_name" : "vw_items",
 			"view_fields" : {
-				"category_name" : {
-					"field_name" : "category_name"
-				},
-				"master_category_id" : {
-					"field_name" : "master_category_id"
-				},
-				"vendor_name" : {
-					"field_name" : "vendor_name"
-				},
-				"attachments" : {
-					"field_name" : "attachments"
-				},
-				"barcode_value" : {
-					"field_name" : "barcode_value"
-				},
-				"company_id" : {
-					"field_name" : "company_id"
-				},
-				"default_vendor_id" : {
-					"field_name" : "default_vendor_id"
-				},
-				"dimension_purchase" : {
-					"field_name" : "dimension_purchase"
-				},
-				"dimension_sale" : {
-					"field_name" : "dimension_sale"
-				},
 				"hsnsac_code" : {
 					"field_name" : "hsnsac_code"
 				},
@@ -38002,6 +41614,33 @@
 				},
 				"warranty_expiration_details" : {
 					"field_name" : "warranty_expiration_details"
+				},
+				"category_name" : {
+					"field_name" : "category_name"
+				},
+				"master_category_id" : {
+					"field_name" : "master_category_id"
+				},
+				"vendor_name" : {
+					"field_name" : "vendor_name"
+				},
+				"attachments" : {
+					"field_name" : "attachments"
+				},
+				"barcode_value" : {
+					"field_name" : "barcode_value"
+				},
+				"company_id" : {
+					"field_name" : "company_id"
+				},
+				"default_vendor_id" : {
+					"field_name" : "default_vendor_id"
+				},
+				"dimension_purchase" : {
+					"field_name" : "dimension_purchase"
+				},
+				"dimension_sale" : {
+					"field_name" : "dimension_sale"
 				}			
 			},
 			"view_query" : "SELECT item_categories.category_name, item_categories.master_category_id,vendors.vendor_name,items.attachments, items.barcode_value,items.company_id,items.default_vendor_id,items.dimension_purchase,items.dimension_sale, items.hsnsac_code,items.item_code,items.is_saleable,items.item_category_id,items.item_description_full,items.item_description_quick,items.item_id,items.item_images,items.item_name,items.item_short_name,items.item_number,items.item_uoms,items.item_attributes,items.remarks,IFNULL(item_price_mrp,0) AS item_price_mrp,IFNULL(item_price_purchase,0) AS item_price_purchase,IFNULL(item_price_sale,0) AS item_price_sale,item_sku,IFNULL(item_status,'ACTIVE') AS item_status,item_type,IFNULL(item_unit_purchase,'NOS') AS item_unit_purchase,IFNULL(item_unit_sale,'NOS') AS item_unit_sale,IFNULL(item_unit_stock,'NOS') AS item_unit_stock,IFNULL(minimum_stock_quantity,1) AS minimum_stock_quantity,IFNULL(minimum_stock_unit_quantity,1) AS minimum_stock_unit_quantity,IFNULL(minimum_stock_unit,'NOS') AS minimum_stock_unit,IFNULL(maximum_stock_quantity,0) AS maximum_stock_quantity,IFNULL(maximum_stock_unit_quantity,1) AS maximum_stock_unit_quantity,IFNULL(maximum_stock_unit,'NOS') AS maximum_stock_unit,IFNULL(minimum_order_quantity,0) AS minimum_order_quantity,IFNULL(minimum_order_unit_quantity,1) AS minimum_order_unit_quantity,IFNULL(minimum_order_unit,'NOS') AS minimum_order_unit,IFNULL(threshold_stock_quantity,0) AS threshold_stock_quantity,IFNULL(threshold_stock_unit_quantity,1) AS threshold_stock_unit_quantity,IFNULL(threshold_stock_unit,'NOS') AS threshold_stock_unit,warranty_expiration_details FROM items LEFT JOIN item_categories ON items.item_category_id = item_categories.category_id LEFT JOIN vendors ON items.default_vendor_id = vendors.vendor_id"		},
@@ -38275,11 +41914,11 @@
 		"vw_linked_purchase_orders_with_proforma_items" : {
 			"view_name" : "vw_linked_purchase_orders_with_proforma_items",
 			"view_fields" : {
-				"linked_purchase_orders" : {
-					"field_name" : "linked_purchase_orders"
-				},
 				"proforma_item_id" : {
 					"field_name" : "proforma_item_id"
+				},
+				"linked_purchase_orders" : {
+					"field_name" : "linked_purchase_orders"
 				}			
 			},
 			"view_query" : "SELECT GROUP_CONCAT(DISTINCT purchase_order_items.order_number ORDER BY purchase_order_items.order_number ASC) AS linked_purchase_orders,purchase_proforma_items.proforma_item_id FROM purchase_orders_purchase_proformas_link_items AS items_link LEFT JOIN (SELECT purchase_order_items.order_id,purchase_order_items.order_item_id,purchase_orders.order_number FROM purchase_order_items LEFT JOIN purchase_orders ON purchase_order_items.order_id = purchase_orders.order_id) AS purchase_order_items ON items_link.purchase_order_item_id = purchase_order_items.order_item_id LEFT JOIN purchase_proforma_items ON items_link.purchase_proforma_item_id = purchase_proforma_items.proforma_item_id GROUP BY purchase_proforma_items.proforma_item_id"		},
@@ -38341,11 +41980,11 @@
 		"vw_linked_purchase_proformas_with_commercial_items" : {
 			"view_name" : "vw_linked_purchase_proformas_with_commercial_items",
 			"view_fields" : {
-				"commercial_invoice_item_id" : {
-					"field_name" : "commercial_invoice_item_id"
-				},
 				"linked_purchase_proformas" : {
 					"field_name" : "linked_purchase_proformas"
+				},
+				"commercial_invoice_item_id" : {
+					"field_name" : "commercial_invoice_item_id"
 				}			
 			},
 			"view_query" : "SELECT GROUP_CONCAT(DISTINCT purchase_proforma_items.proforma_number ORDER BY purchase_proforma_items.proforma_number ASC) AS linked_purchase_proformas,purchase_commercial_invoice_items.commercial_invoice_item_id FROM purchase_proformas_purchase_commercial_invoices_link_items AS items_link LEFT JOIN (SELECT purchase_proforma_items.proforma_id,purchase_proforma_items.proforma_item_id,purchase_proformas.proforma_number FROM purchase_proforma_items LEFT JOIN purchase_proformas ON purchase_proforma_items.proforma_id = purchase_proformas.proforma_id) AS purchase_proforma_items ON items_link.purchase_proforma_item_id = purchase_proforma_items.proforma_item_id LEFT JOIN purchase_commercial_invoice_items ON items_link.purchase_commercial_invoice_item_id = purchase_commercial_invoice_items.commercial_invoice_item_id GROUP BY purchase_commercial_invoice_items.commercial_invoice_item_id"		},
@@ -39584,48 +43223,6 @@
 		"vw_purchase_container_items" : {
 			"view_name" : "vw_purchase_container_items",
 			"view_fields" : {
-				"arrived_quantity" : {
-					"field_name" : "arrived_quantity"
-				},
-				"attachments" : {
-					"field_name" : "attachments"
-				},
-				"commercials_linked" : {
-					"field_name" : "commercials_linked"
-				},
-				"container_id" : {
-					"field_name" : "container_id"
-				},
-				"container_item_id" : {
-					"field_name" : "container_item_id"
-				},
-				"container_item_status" : {
-					"field_name" : "container_item_status"
-				},
-				"details" : {
-					"field_name" : "details"
-				},
-				"inventory_tracking_id" : {
-					"field_name" : "inventory_tracking_id"
-				},
-				"item_cost" : {
-					"field_name" : "item_cost"
-				},
-				"item_description" : {
-					"field_name" : "item_description"
-				},
-				"item_id" : {
-					"field_name" : "item_id"
-				},
-				"item_quantity" : {
-					"field_name" : "item_quantity"
-				},
-				"item_unit" : {
-					"field_name" : "item_unit"
-				},
-				"item_unit_quantity" : {
-					"field_name" : "item_unit_quantity"
-				},
 				"packings_linked" : {
 					"field_name" : "packings_linked"
 				},
@@ -39676,12 +43273,111 @@
 				},
 				"container_number" : {
 					"field_name" : "container_number"
+				},
+				"arrived_quantity" : {
+					"field_name" : "arrived_quantity"
+				},
+				"attachments" : {
+					"field_name" : "attachments"
+				},
+				"commercials_linked" : {
+					"field_name" : "commercials_linked"
+				},
+				"container_id" : {
+					"field_name" : "container_id"
+				},
+				"container_item_id" : {
+					"field_name" : "container_item_id"
+				},
+				"container_item_status" : {
+					"field_name" : "container_item_status"
+				},
+				"details" : {
+					"field_name" : "details"
+				},
+				"inventory_tracking_id" : {
+					"field_name" : "inventory_tracking_id"
+				},
+				"item_cost" : {
+					"field_name" : "item_cost"
+				},
+				"item_description" : {
+					"field_name" : "item_description"
+				},
+				"item_id" : {
+					"field_name" : "item_id"
+				},
+				"item_quantity" : {
+					"field_name" : "item_quantity"
+				},
+				"item_unit" : {
+					"field_name" : "item_unit"
+				},
+				"item_unit_quantity" : {
+					"field_name" : "item_unit_quantity"
 				}			
 			},
 			"view_query" : "SELECT purchase_container_items.*,items.dimension_purchase,items.item_uoms,items.item_code,items.item_name,purchase_containers.container_number FROM purchase_container_items LEFT JOIN items ON purchase_container_items.item_id = items.item_id LEFT JOIN purchase_containers ON purchase_container_items.container_id = purchase_containers.container_id"		},
 		"vw_purchase_containers" : {
 			"view_name" : "vw_purchase_containers",
 			"view_fields" : {
+				"arrival_attachments" : {
+					"field_name" : "arrival_attachments"
+				},
+				"arrival_audio_recordings" : {
+					"field_name" : "arrival_audio_recordings"
+				},
+				"arrival_date_est" : {
+					"field_name" : "arrival_date_est"
+				},
+				"arrival_datetime_dock" : {
+					"field_name" : "arrival_datetime_dock"
+				},
+				"arrival_datetime_location" : {
+					"field_name" : "arrival_datetime_location"
+				},
+				"arrival_remarks" : {
+					"field_name" : "arrival_remarks"
+				},
+				"arrival_signature_id" : {
+					"field_name" : "arrival_signature_id"
+				},
+				"attachments" : {
+					"field_name" : "attachments"
+				},
+				"checklist_id" : {
+					"field_name" : "checklist_id"
+				},
+				"commercials_linked" : {
+					"field_name" : "commercials_linked"
+				},
+				"company_id" : {
+					"field_name" : "company_id"
+				},
+				"container_color" : {
+					"field_name" : "container_color"
+				},
+				"container_date" : {
+					"field_name" : "container_date"
+				},
+				"container_details" : {
+					"field_name" : "container_details"
+				},
+				"container_id" : {
+					"field_name" : "container_id"
+				},
+				"container_number" : {
+					"field_name" : "container_number"
+				},
+				"container_status" : {
+					"field_name" : "container_status"
+				},
+				"container_type" : {
+					"field_name" : "container_type"
+				},
+				"cost_split_method" : {
+					"field_name" : "cost_split_method"
+				},
 				"default_storage_location_id" : {
 					"field_name" : "default_storage_location_id"
 				},
@@ -39774,63 +43470,6 @@
 				},
 				"location_name" : {
 					"field_name" : "location_name"
-				},
-				"arrival_attachments" : {
-					"field_name" : "arrival_attachments"
-				},
-				"arrival_audio_recordings" : {
-					"field_name" : "arrival_audio_recordings"
-				},
-				"arrival_date_est" : {
-					"field_name" : "arrival_date_est"
-				},
-				"arrival_datetime_dock" : {
-					"field_name" : "arrival_datetime_dock"
-				},
-				"arrival_datetime_location" : {
-					"field_name" : "arrival_datetime_location"
-				},
-				"arrival_remarks" : {
-					"field_name" : "arrival_remarks"
-				},
-				"arrival_signature_id" : {
-					"field_name" : "arrival_signature_id"
-				},
-				"attachments" : {
-					"field_name" : "attachments"
-				},
-				"checklist_id" : {
-					"field_name" : "checklist_id"
-				},
-				"commercials_linked" : {
-					"field_name" : "commercials_linked"
-				},
-				"company_id" : {
-					"field_name" : "company_id"
-				},
-				"container_color" : {
-					"field_name" : "container_color"
-				},
-				"container_date" : {
-					"field_name" : "container_date"
-				},
-				"container_details" : {
-					"field_name" : "container_details"
-				},
-				"container_id" : {
-					"field_name" : "container_id"
-				},
-				"container_number" : {
-					"field_name" : "container_number"
-				},
-				"container_status" : {
-					"field_name" : "container_status"
-				},
-				"container_type" : {
-					"field_name" : "container_type"
-				},
-				"cost_split_method" : {
-					"field_name" : "cost_split_method"
 				}			
 			},
 			"view_query" : "SELECT purchase_containers.*,items_summary.items_count,shipping_companies.shipping_company_name,vw_checklists.total_checklist_items ,vw_checklists.pending_checklist_items,vw_checklists.completed_checklist_items,locations.location_name  FROM purchase_containers LEFT JOIN (SELECT COUNT(container_id) as items_count,container_id FROM purchase_container_items GROUP BY container_id) AS items_summary ON purchase_containers.container_id = items_summary.container_id LEFT JOIN shipping_companies ON purchase_containers.shipping_company_id = shipping_companies.shipping_company_id LEFT JOIN vw_checklists ON purchase_containers.checklist_id=vw_checklists.checklist_id LEFT JOIN locations ON purchase_containers.empty_location_id = locations.location_id"		},
@@ -40497,6 +44136,48 @@
 		"vw_purchase_packing_list_items" : {
 			"view_name" : "vw_purchase_packing_list_items",
 			"view_fields" : {
+				"attachments" : {
+					"field_name" : "attachments"
+				},
+				"commercials_linked" : {
+					"field_name" : "commercials_linked"
+				},
+				"containers_linked" : {
+					"field_name" : "containers_linked"
+				},
+				"details" : {
+					"field_name" : "details"
+				},
+				"item_cost" : {
+					"field_name" : "item_cost"
+				},
+				"item_description" : {
+					"field_name" : "item_description"
+				},
+				"item_id" : {
+					"field_name" : "item_id"
+				},
+				"item_quantity" : {
+					"field_name" : "item_quantity"
+				},
+				"item_unit" : {
+					"field_name" : "item_unit"
+				},
+				"item_unit_quantity" : {
+					"field_name" : "item_unit_quantity"
+				},
+				"packing_list_id" : {
+					"field_name" : "packing_list_id"
+				},
+				"packing_list_item_id" : {
+					"field_name" : "packing_list_item_id"
+				},
+				"packing_list_item_status" : {
+					"field_name" : "packing_list_item_status"
+				},
+				"proformas_linked" : {
+					"field_name" : "proformas_linked"
+				},
 				"project_id" : {
 					"field_name" : "project_id"
 				},
@@ -40541,54 +44222,30 @@
 				},
 				"packing_list_number" : {
 					"field_name" : "packing_list_number"
-				},
-				"attachments" : {
-					"field_name" : "attachments"
-				},
-				"commercials_linked" : {
-					"field_name" : "commercials_linked"
-				},
-				"containers_linked" : {
-					"field_name" : "containers_linked"
-				},
-				"details" : {
-					"field_name" : "details"
-				},
-				"item_cost" : {
-					"field_name" : "item_cost"
-				},
-				"item_description" : {
-					"field_name" : "item_description"
-				},
-				"item_id" : {
-					"field_name" : "item_id"
-				},
-				"item_quantity" : {
-					"field_name" : "item_quantity"
-				},
-				"item_unit" : {
-					"field_name" : "item_unit"
-				},
-				"item_unit_quantity" : {
-					"field_name" : "item_unit_quantity"
-				},
-				"packing_list_id" : {
-					"field_name" : "packing_list_id"
-				},
-				"packing_list_item_id" : {
-					"field_name" : "packing_list_item_id"
-				},
-				"packing_list_item_status" : {
-					"field_name" : "packing_list_item_status"
-				},
-				"proformas_linked" : {
-					"field_name" : "proformas_linked"
 				}			
 			},
 			"view_query" : "SELECT purchase_packing_list_items.*,items.dimension_purchase,items.item_uoms,items.item_code,items.item_name,purchase_packing_lists.packing_list_number FROM purchase_packing_list_items LEFT JOIN items ON purchase_packing_list_items.item_id = items.item_id LEFT JOIN purchase_packing_lists ON purchase_packing_list_items.packing_list_id = purchase_packing_lists.packing_list_id"		},
 		"vw_purchase_packing_lists" : {
 			"view_name" : "vw_purchase_packing_lists",
 			"view_fields" : {
+				"unloading_attachments" : {
+					"field_name" : "unloading_attachments"
+				},
+				"unloading_audio_recordings" : {
+					"field_name" : "unloading_audio_recordings"
+				},
+				"unloading_end_time" : {
+					"field_name" : "unloading_end_time"
+				},
+				"unloading_remarks" : {
+					"field_name" : "unloading_remarks"
+				},
+				"unloading_start_time" : {
+					"field_name" : "unloading_start_time"
+				},
+				"items_count" : {
+					"field_name" : "items_count"
+				},
 				"attachments" : {
 					"field_name" : "attachments"
 				},
@@ -40630,24 +44287,6 @@
 				},
 				"total_cost" : {
 					"field_name" : "total_cost"
-				},
-				"unloading_attachments" : {
-					"field_name" : "unloading_attachments"
-				},
-				"unloading_audio_recordings" : {
-					"field_name" : "unloading_audio_recordings"
-				},
-				"unloading_end_time" : {
-					"field_name" : "unloading_end_time"
-				},
-				"unloading_remarks" : {
-					"field_name" : "unloading_remarks"
-				},
-				"unloading_start_time" : {
-					"field_name" : "unloading_start_time"
-				},
-				"items_count" : {
-					"field_name" : "items_count"
 				}			
 			},
 			"view_query" : "SELECT purchase_packing_lists.*,items_summary.items_count FROM purchase_packing_lists LEFT JOIN  (SELECT COUNT(packing_list_id) as items_count,packing_list_id FROM purchase_packing_list_items GROUP BY packing_list_id) AS items_summary ON purchase_packing_lists.packing_list_id = items_summary.packing_list_id"		},
@@ -41106,9 +44745,6 @@
 		"vw_purchase_quote_vendors_purchase_orders_link_items" : {
 			"view_name" : "vw_purchase_quote_vendors_purchase_orders_link_items",
 			"view_fields" : {
-				"quote_vendor_id" : {
-					"field_name" : "quote_vendor_id"
-				},
 				"item_link_id" : {
 					"field_name" : "item_link_id"
 				},
@@ -41132,6 +44768,9 @@
 				},
 				"order_id" : {
 					"field_name" : "order_id"
+				},
+				"quote_vendor_id" : {
+					"field_name" : "quote_vendor_id"
 				}			
 			},
 			"view_query" : "SELECT purchase_quote_vendors_purchase_orders_link_items.*, purchase_quote_vendor_items.quote_item_id, purchase_quote_items.quote_id,purchase_order_items.order_id,purchase_quote_vendor_items.quote_vendor_id FROM purchase_quote_vendors_purchase_orders_link_items LEFT JOIN purchase_quote_vendor_items ON purchase_quote_vendors_purchase_orders_link_items.purchase_quote_vendor_item_id = purchase_quote_vendor_items.quote_vendor_item_id LEFT JOIN purchase_quote_items ON purchase_quote_vendor_items.quote_item_id = purchase_quote_items.quote_item_id LEFT JOIN purchase_order_items ON purchase_quote_vendors_purchase_orders_link_items.purchase_order_item_id = purchase_order_items.order_item_id"		},
@@ -41250,18 +44889,6 @@
 		"vw_purchase_requests" : {
 			"view_name" : "vw_purchase_requests",
 			"view_fields" : {
-				"approval_status" : {
-					"field_name" : "approval_status"
-				},
-				"approval_time" : {
-					"field_name" : "approval_time"
-				},
-				"approved_by" : {
-					"field_name" : "approved_by"
-				},
-				"attachments" : {
-					"field_name" : "attachments"
-				},
 				"company_id" : {
 					"field_name" : "company_id"
 				},
@@ -41303,6 +44930,18 @@
 				},
 				"items_count" : {
 					"field_name" : "items_count"
+				},
+				"approval_status" : {
+					"field_name" : "approval_status"
+				},
+				"approval_time" : {
+					"field_name" : "approval_time"
+				},
+				"approved_by" : {
+					"field_name" : "approved_by"
+				},
+				"attachments" : {
+					"field_name" : "attachments"
 				}			
 			},
 			"view_query" : "SELECT purchase_requests.*,vw_employees.employee_name,items_summary.items_count FROM purchase_requests LEFT JOIN vw_employees ON purchase_requests.requested_by=vw_employees.employee_id LEFT JOIN (SELECT COUNT(request_id) as items_count,request_id FROM purchase_request_items GROUP BY request_id) AS items_summary ON purchase_requests.request_id = items_summary.request_id"		},
@@ -41941,39 +45580,6 @@
 		"vw_sale_proformas" : {
 			"view_name" : "vw_sale_proformas",
 			"view_fields" : {
-				"payment_terms_id" : {
-					"field_name" : "payment_terms_id"
-				},
-				"remarks" : {
-					"field_name" : "remarks"
-				},
-				"sale_proforma_amount" : {
-					"field_name" : "sale_proforma_amount"
-				},
-				"sale_proforma_date" : {
-					"field_name" : "sale_proforma_date"
-				},
-				"sale_proforma_id" : {
-					"field_name" : "sale_proforma_id"
-				},
-				"sale_proforma_number" : {
-					"field_name" : "sale_proforma_number"
-				},
-				"sale_proforma_status" : {
-					"field_name" : "sale_proforma_status"
-				},
-				"sale_term_id" : {
-					"field_name" : "sale_term_id"
-				},
-				"tax_id" : {
-					"field_name" : "tax_id"
-				},
-				"total_cost" : {
-					"field_name" : "total_cost"
-				},
-				"transaction_id" : {
-					"field_name" : "transaction_id"
-				},
 				"paid_amount" : {
 					"field_name" : "paid_amount"
 				},
@@ -42018,6 +45624,39 @@
 				},
 				"is_payable" : {
 					"field_name" : "is_payable"
+				},
+				"payment_terms_id" : {
+					"field_name" : "payment_terms_id"
+				},
+				"remarks" : {
+					"field_name" : "remarks"
+				},
+				"sale_proforma_amount" : {
+					"field_name" : "sale_proforma_amount"
+				},
+				"sale_proforma_date" : {
+					"field_name" : "sale_proforma_date"
+				},
+				"sale_proforma_id" : {
+					"field_name" : "sale_proforma_id"
+				},
+				"sale_proforma_number" : {
+					"field_name" : "sale_proforma_number"
+				},
+				"sale_proforma_status" : {
+					"field_name" : "sale_proforma_status"
+				},
+				"sale_term_id" : {
+					"field_name" : "sale_term_id"
+				},
+				"tax_id" : {
+					"field_name" : "tax_id"
+				},
+				"total_cost" : {
+					"field_name" : "total_cost"
+				},
+				"transaction_id" : {
+					"field_name" : "transaction_id"
 				}			
 			},
 			"view_query" : "SELECT IF(vw_document_paid_amounts.paid_amount IS NULL,0,vw_document_paid_amounts.paid_amount) AS paid_amount,sale_proforma_amount - IF(vw_document_paid_amounts.paid_amount IS NULL,0,vw_document_paid_amounts.paid_amount) AS pending_amount,customers.customer_name,sale_terms.sale_term_name,vw_employees.employee_name,items_summary.items_count,sale_proformas.* FROM sale_proformas LEFT JOIN vw_employees ON sale_proformas.assigned_to=vw_employees.employee_id LEFT JOIN (SELECT COUNT(sale_proforma_id) as items_count,sale_proforma_id FROM sale_proforma_items GROUP BY sale_proforma_id) AS items_summary ON sale_proformas.sale_proforma_id = items_summary.sale_proforma_id LEFT JOIN customers ON sale_proformas.customer_id = customers.customer_id LEFT JOIN sale_terms ON sale_proformas.payment_terms_id = sale_terms.sale_term_id LEFT JOIN vw_document_paid_amounts ON vw_document_paid_amounts.document_id = sale_proformas.sale_proforma_id AND vw_document_paid_amounts.document_type = 'sale_proformas'"		},
@@ -42116,36 +45755,6 @@
 		"vw_sale_quotes" : {
 			"view_name" : "vw_sale_quotes",
 			"view_fields" : {
-				"customer_name" : {
-					"field_name" : "customer_name"
-				},
-				"sale_term_name" : {
-					"field_name" : "sale_term_name"
-				},
-				"employee_name" : {
-					"field_name" : "employee_name"
-				},
-				"items_count" : {
-					"field_name" : "items_count"
-				},
-				"additional_costs_amount" : {
-					"field_name" : "additional_costs_amount"
-				},
-				"assigned_to" : {
-					"field_name" : "assigned_to"
-				},
-				"attachments" : {
-					"field_name" : "attachments"
-				},
-				"company_id" : {
-					"field_name" : "company_id"
-				},
-				"contact_person" : {
-					"field_name" : "contact_person"
-				},
-				"currency_code" : {
-					"field_name" : "currency_code"
-				},
 				"currency_rate" : {
 					"field_name" : "currency_rate"
 				},
@@ -42196,6 +45805,36 @@
 				},
 				"transaction_id" : {
 					"field_name" : "transaction_id"
+				},
+				"customer_name" : {
+					"field_name" : "customer_name"
+				},
+				"sale_term_name" : {
+					"field_name" : "sale_term_name"
+				},
+				"employee_name" : {
+					"field_name" : "employee_name"
+				},
+				"items_count" : {
+					"field_name" : "items_count"
+				},
+				"additional_costs_amount" : {
+					"field_name" : "additional_costs_amount"
+				},
+				"assigned_to" : {
+					"field_name" : "assigned_to"
+				},
+				"attachments" : {
+					"field_name" : "attachments"
+				},
+				"company_id" : {
+					"field_name" : "company_id"
+				},
+				"contact_person" : {
+					"field_name" : "contact_person"
+				},
+				"currency_code" : {
+					"field_name" : "currency_code"
 				}			
 			},
 			"view_query" : "SELECT customers.customer_name,sale_terms.sale_term_name,vw_employees.employee_name,items_summary.items_count,sale_quotes.* FROM sale_quotes LEFT JOIN vw_employees ON sale_quotes.assigned_to=vw_employees.employee_id LEFT JOIN (SELECT COUNT(sale_quote_id) as items_count,sale_quote_id FROM sale_quote_items GROUP BY sale_quote_id) AS items_summary ON sale_quotes.sale_quote_id = items_summary.sale_quote_id LEFT JOIN customers ON sale_quotes.customer_id = customers.customer_id LEFT JOIN sale_terms ON sale_quotes.sale_term_id = sale_terms.sale_term_id"		},
@@ -42551,6 +46190,75 @@
 		"vw_stock_location" : {
 			"view_name" : "vw_stock_location",
 			"view_fields" : {
+				"location_id" : {
+					"field_name" : "location_id"
+				},
+				"location_name" : {
+					"field_name" : "location_name"
+				},
+				"stock_quantity" : {
+					"field_name" : "stock_quantity"
+				},
+				"category_name" : {
+					"field_name" : "category_name"
+				},
+				"master_category_id" : {
+					"field_name" : "master_category_id"
+				},
+				"vendor_name" : {
+					"field_name" : "vendor_name"
+				},
+				"attachments" : {
+					"field_name" : "attachments"
+				},
+				"barcode_value" : {
+					"field_name" : "barcode_value"
+				},
+				"company_id" : {
+					"field_name" : "company_id"
+				},
+				"default_vendor_id" : {
+					"field_name" : "default_vendor_id"
+				},
+				"dimension_purchase" : {
+					"field_name" : "dimension_purchase"
+				},
+				"dimension_sale" : {
+					"field_name" : "dimension_sale"
+				},
+				"hsnsac_code" : {
+					"field_name" : "hsnsac_code"
+				},
+				"item_code" : {
+					"field_name" : "item_code"
+				},
+				"is_saleable" : {
+					"field_name" : "is_saleable"
+				},
+				"item_category_id" : {
+					"field_name" : "item_category_id"
+				},
+				"item_description_full" : {
+					"field_name" : "item_description_full"
+				},
+				"item_description_quick" : {
+					"field_name" : "item_description_quick"
+				},
+				"item_id" : {
+					"field_name" : "item_id"
+				},
+				"item_images" : {
+					"field_name" : "item_images"
+				},
+				"item_name" : {
+					"field_name" : "item_name"
+				},
+				"item_short_name" : {
+					"field_name" : "item_short_name"
+				},
+				"item_number" : {
+					"field_name" : "item_number"
+				},
 				"item_uoms" : {
 					"field_name" : "item_uoms"
 				},
@@ -42625,75 +46333,6 @@
 				},
 				"warranty_expiration_details" : {
 					"field_name" : "warranty_expiration_details"
-				},
-				"location_id" : {
-					"field_name" : "location_id"
-				},
-				"location_name" : {
-					"field_name" : "location_name"
-				},
-				"stock_quantity" : {
-					"field_name" : "stock_quantity"
-				},
-				"category_name" : {
-					"field_name" : "category_name"
-				},
-				"master_category_id" : {
-					"field_name" : "master_category_id"
-				},
-				"vendor_name" : {
-					"field_name" : "vendor_name"
-				},
-				"attachments" : {
-					"field_name" : "attachments"
-				},
-				"barcode_value" : {
-					"field_name" : "barcode_value"
-				},
-				"company_id" : {
-					"field_name" : "company_id"
-				},
-				"default_vendor_id" : {
-					"field_name" : "default_vendor_id"
-				},
-				"dimension_purchase" : {
-					"field_name" : "dimension_purchase"
-				},
-				"dimension_sale" : {
-					"field_name" : "dimension_sale"
-				},
-				"hsnsac_code" : {
-					"field_name" : "hsnsac_code"
-				},
-				"item_code" : {
-					"field_name" : "item_code"
-				},
-				"is_saleable" : {
-					"field_name" : "is_saleable"
-				},
-				"item_category_id" : {
-					"field_name" : "item_category_id"
-				},
-				"item_description_full" : {
-					"field_name" : "item_description_full"
-				},
-				"item_description_quick" : {
-					"field_name" : "item_description_quick"
-				},
-				"item_id" : {
-					"field_name" : "item_id"
-				},
-				"item_images" : {
-					"field_name" : "item_images"
-				},
-				"item_name" : {
-					"field_name" : "item_name"
-				},
-				"item_short_name" : {
-					"field_name" : "item_short_name"
-				},
-				"item_number" : {
-					"field_name" : "item_number"
 				}			
 			},
 			"view_query" : "SELECT vw_item_stock_quantity_locations.location_id,locations.location_name,IFNULL(vw_item_stock_quantity_locations.stock_quantity,0) AS stock_quantity,vw_items.* FROM vw_items LEFT JOIN vw_item_stock_quantity_locations ON vw_item_stock_quantity_locations.item_id = vw_items.item_id LEFT JOIN locations ON vw_item_stock_quantity_locations.location_id = locations.location_id"		},
@@ -43468,6 +47107,12 @@
 		"vw_user_expenses" : {
 			"view_name" : "vw_user_expenses",
 			"view_fields" : {
+				"employee_name" : {
+					"field_name" : "employee_name"
+				},
+				"employee_images" : {
+					"field_name" : "employee_images"
+				},
 				"employee_number" : {
 					"field_name" : "employee_number"
 				},
@@ -43518,12 +47163,6 @@
 				},
 				"transaction_id" : {
 					"field_name" : "transaction_id"
-				},
-				"employee_name" : {
-					"field_name" : "employee_name"
-				},
-				"employee_images" : {
-					"field_name" : "employee_images"
 				}			
 			},
 			"view_query" : "SELECT vw_employees.employee_name,vw_employees.employee_images,vw_employees.employee_number,user_expenses.* FROM user_expenses LEFt JOIN vw_employees ON user_expenses.employee_id = vw_employees.employee_id"		},
@@ -43576,6 +47215,9 @@
 				},
 				"employee_name" : {
 					"field_name" : "employee_name"
+				},
+				"account_balance" : {
+					"field_name" : "account_balance"
 				},
 				"account_id" : {
 					"field_name" : "account_id"
@@ -43720,6 +47362,18 @@
 				"credit_amount" : {
 					"field_name" : "credit_amount"
 				},
+				"vendor_contract_number" : {
+					"field_name" : "vendor_contract_number"
+				},
+				"vendor_contract_start_date" : {
+					"field_name" : "vendor_contract_start_date"
+				},
+				"vendor_contract_status" : {
+					"field_name" : "vendor_contract_status"
+				},
+				"vendor_id" : {
+					"field_name" : "vendor_id"
+				},
 				"credit_days" : {
 					"field_name" : "credit_days"
 				},
@@ -43734,18 +47388,6 @@
 				},
 				"vendor_contract_name" : {
 					"field_name" : "vendor_contract_name"
-				},
-				"vendor_contract_number" : {
-					"field_name" : "vendor_contract_number"
-				},
-				"vendor_contract_start_date" : {
-					"field_name" : "vendor_contract_start_date"
-				},
-				"vendor_contract_status" : {
-					"field_name" : "vendor_contract_status"
-				},
-				"vendor_id" : {
-					"field_name" : "vendor_id"
 				}			
 			},
 			"view_query" : "SELECT vendors.vendor_name,vendors.vendor_number,vendors.vendor_images,vendors.vendor_category,vendor_contracts.* FROM vendor_contracts LEFT JOIN vendors ON vendor_contracts.vendor_id = vendors.vendor_id"		},
@@ -43822,6 +47464,9 @@
 			"view_fields" : {
 				"purchase_term_name" : {
 					"field_name" : "purchase_term_name"
+				},
+				"account_balance" : {
+					"field_name" : "account_balance"
 				},
 				"account_id" : {
 					"field_name" : "account_id"
@@ -43971,6 +47616,9 @@
 			"view_fields" : {
 				"purchase_term_name" : {
 					"field_name" : "purchase_term_name"
+				},
+				"account_balance" : {
+					"field_name" : "account_balance"
 				},
 				"account_id" : {
 					"field_name" : "account_id"
@@ -44140,6 +47788,27 @@
 			"view_query" : "SELECT SUM(proforma_amount) AS total_proforma_amount,SUM(paid_amount) AS total_proforma_paid_amount,SUM(pending_amount) AS total_proforma_pending_amount,COUNT(proforma_id) as proformas_count,vendor_id FROM vw_purchase_proformas WHERE is_payable = 1 GROUP BY vendor_id"		}
 	},
 	"triggers" : {
+		"trg_set_account_balance_on_transaction_delete" : {
+			"trigger_name" : "trg_set_account_balance_on_transaction_delete",
+			"trigger_execution" : "AFTER",
+			"table_name" : "transactions",
+			"row_operation" : "DELETE",
+			"trigger_code" : "DECLARE triggerControlName TEXT;  SET triggerControlName = 'stop_triggers_on_trg_set_account_balance_on_transaction_delete';  INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('accounts',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('assets',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('customers',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('employees',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('vendors',triggerControlName,'NO');  UPDATE accounts SET account_balance = IFNULL(account_balance,0) - IFNULL(OLD.transaction_amount,0) WHERE account_id=OLD.account_debit_id; UPDATE accounts SET account_balance = IFNULL(account_balance,0) + IFNULL(OLD.transaction_amount,0) WHERE account_id=OLD.account_credit_id; UPDATE assets JOIN accounts ON assets.account_id = accounts.account_id AND accounts.account_id IN (OLD.account_debit_id,OLD.account_credit_id) SET assets.account_balance = accounts.account_balance; UPDATE employees JOIN accounts ON employees.account_id = accounts.account_id AND accounts.account_id IN (OLD.account_debit_id,OLD.account_credit_id) SET employees.account_balance = accounts.account_balance; UPDATE customers JOIN accounts ON customers.account_id = accounts.account_id AND accounts.account_id IN (OLD.account_debit_id,OLD.account_credit_id) SET customers.account_balance = accounts.account_balance; UPDATE vendors JOIN accounts ON vendors.account_id = accounts.account_id AND accounts.account_id IN (OLD.account_debit_id,OLD.account_credit_id) SET vendors.account_balance = accounts.account_balance;  DELETE FROM trigger_controls WHERE trigger_control_name = triggerControlName;"
+		},
+		"trg_set_account_balance_on_transaction_insert" : {
+			"trigger_name" : "trg_set_account_balance_on_transaction_insert",
+			"trigger_execution" : "AFTER",
+			"table_name" : "transactions",
+			"row_operation" : "INSERT",
+			"trigger_code" : "DECLARE triggerControlName TEXT;  SET triggerControlName = 'stop_triggers_on_trg_set_account_balance_on_transaction_insert';  INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('accounts',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('assets',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('customers',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('employees',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('vendors',triggerControlName,'NO');  UPDATE accounts SET account_balance = IFNULL(account_balance,0) + IFNULL(NEW.transaction_amount,0) WHERE account_id=NEW.account_debit_id; UPDATE accounts SET account_balance = IFNULL(account_balance,0) - IFNULL(NEW.transaction_amount,0) WHERE account_id=NEW.account_credit_id; UPDATE assets JOIN accounts ON assets.account_id = accounts.account_id AND accounts.account_id IN (NEW.account_debit_id,NEW.account_credit_id) SET assets.account_balance = accounts.account_balance; UPDATE employees JOIN accounts ON employees.account_id = accounts.account_id AND accounts.account_id IN (NEW.account_debit_id,NEW.account_credit_id) SET employees.account_balance = accounts.account_balance; UPDATE customers JOIN accounts ON customers.account_id = accounts.account_id AND accounts.account_id IN (NEW.account_debit_id,NEW.account_credit_id) SET customers.account_balance = accounts.account_balance; UPDATE vendors JOIN accounts ON vendors.account_id = accounts.account_id AND accounts.account_id IN (NEW.account_debit_id,NEW.account_credit_id) SET vendors.account_balance = accounts.account_balance;  DELETE FROM trigger_controls WHERE trigger_control_name = triggerControlName;"
+		},
+		"trg_set_account_balance_on_transaction_update" : {
+			"trigger_name" : "trg_set_account_balance_on_transaction_update",
+			"trigger_execution" : "AFTER",
+			"table_name" : "transactions",
+			"row_operation" : "UPDATE",
+			"trigger_code" : "DECLARE triggerControlName TEXT;  SET triggerControlName = 'stop_triggers_on_trg_set_account_balance_on_transaction_update';  INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('accounts',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('assets',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('customers',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('employees',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('vendors',triggerControlName,'NO');  UPDATE accounts SET account_balance = IFNULL(account_balance,0) - IFNULL(OLD.transaction_amount,0) WHERE account_id=OLD.account_debit_id; UPDATE accounts SET account_balance = IFNULL(account_balance,0) + IFNULL(OLD.transaction_amount,0) WHERE account_id=OLD.account_credit_id; UPDATE accounts SET account_balance = IFNULL(account_balance,0) + IFNULL(NEW.transaction_amount,0) WHERE account_id=NEW.account_debit_id; UPDATE accounts SET account_balance = IFNULL(account_balance,0) - IFNULL(NEW.transaction_amount,0) WHERE account_id=NEW.account_credit_id; UPDATE assets JOIN accounts ON assets.account_id = accounts.account_id AND accounts.account_id IN (OLD.account_debit_id,OLD.account_credit_id,NEW.account_debit_id,NEW.account_credit_id) SET assets.account_balance = accounts.account_balance; UPDATE employees JOIN accounts ON employees.account_id = accounts.account_id AND accounts.account_id IN (OLD.account_debit_id,OLD.account_credit_id,NEW.account_debit_id,NEW.account_credit_id) SET employees.account_balance = accounts.account_balance; UPDATE customers JOIN accounts ON customers.account_id = accounts.account_id AND accounts.account_id IN (OLD.account_debit_id,OLD.account_credit_id,NEW.account_debit_id,NEW.account_credit_id) SET customers.account_balance = accounts.account_balance; UPDATE vendors JOIN accounts ON vendors.account_id = accounts.account_id AND accounts.account_id IN (OLD.account_debit_id,OLD.account_credit_id,NEW.account_debit_id,NEW.account_credit_id) SET vendors.account_balance = accounts.account_balance;  DELETE FROM trigger_controls WHERE trigger_control_name = triggerControlName;"
+		},
 		"trg_set_amount_on_purchase_commercial_items_delete" : {
 			"trigger_name" : "trg_set_amount_on_purchase_commercial_items_delete",
 			"trigger_execution" : "AFTER",
@@ -44286,6 +47955,27 @@
 			"table_name" : "sale_quote_items",
 			"row_operation" : "UPDATE",
 			"trigger_code" : "DECLARE triggersEnabled BOOLEAN; DECLARE triggerControlName TEXT; SET triggersEnabled = TRUE;  SELECT CASE WHEN trigger_enabled = 'NO' THEN FALSE ELSE TRUE END INTO triggersEnabled FROM trigger_controls WHERE table_name = 'sale_quote_items' AND trigger_enabled = 'NO' LIMIT 1;  IF triggersEnabled THEN   SET triggerControlName = 'stop_triggers_on_trg_set_amount_on_sale_quote_items_update';  INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('sale_quotes',triggerControlName,'NO');  UPDATE sale_quotes SET sale_quote_amount = (SELECT SUM(item_amount) FROM vw_sale_quote_items WHERE sale_quote_id = OLD.sale_quote_id) WHERE sale_quote_id = OLD.sale_quote_id;  UPDATE sale_quotes SET sale_quote_amount = (SELECT SUM(item_amount) FROM vw_sale_quote_items WHERE sale_quote_id = NEW.sale_quote_id) WHERE sale_quote_id = NEW.sale_quote_id;  DELETE FROM trigger_controls WHERE trigger_control_name = triggerControlName;  END IF;"
+		},
+		"trg_set_item_stock_on_inventory_tracking_quantities_delete" : {
+			"trigger_name" : "trg_set_item_stock_on_inventory_tracking_quantities_delete",
+			"trigger_execution" : "AFTER",
+			"table_name" : "inventory_tracking_quantities",
+			"row_operation" : "DELETE",
+			"trigger_code" : "DECLARE triggersEnabled BOOLEAN; DECLARE triggerControlName TEXT; DECLARE inventoryMultiplier INT; DECLARE itemId TEXT; DECLARE itemQuantityLocationId TEXT; DECLARE itemQuantityStorageLocationId TEXT;  SET triggersEnabled = TRUE;  SELECT CASE WHEN trigger_enabled = 'NO' THEN FALSE ELSE TRUE END INTO triggersEnabled FROM trigger_controls WHERE table_name = 'items' AND trigger_enabled = 'NO' LIMIT 1;  IF triggersEnabled THEN   SET triggerControlName = 'stop_triggers_on_trg_set_item_stock_on_inventory_tracking_quantities_delete';  INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('items',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('item_quantity_locations',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('item_quantity_storage_locations',triggerControlName,'NO');  SELECT inventory_multiplier,item_id INTO inventoryMultiplier,itemId FROM inventory_trackings WHERE inventory_tracking_id = OLD.inventory_tracking_id LIMIT 1;  SELECT item_quantity_location_id INTO itemQuantityLocationId FROM item_quantity_locations WHERE item_id = itemId AND location_id = OLD.location_id LIMIT 1;  SELECT item_quantity_storage_location_id INTO itemQuantityStorageLocationId FROM item_quantity_storage_locations WHERE item_id = itemId AND storage_location_id = OLD.storage_location_id LIMIT 1;  UPDATE items SET stock_quantity = IFNULL(stock_quantity,0)  - (IFNULL(OLD.item_quantity,0) * inventoryMultiplier),modified_on = NOW() WHERE item_id = itemId;  IF ISNULL(itemQuantityLocationId) THEN     INSERT INTO item_quantity_locations (item_quantity_location_id,item_id,location_id,stock_quantity,created_on,modified_on) VALUES(UUID(),itemId,OLD.location_id,IFNULL(stock_quantity,0)  - (IFNULL(OLD.item_quantity,0) * inventoryMultiplier),NOW(),NOW()); ELSE     UPDATE item_quantity_locations SET stock_quantity = IFNULL(stock_quantity,0)  - (IFNULL(OLD.item_quantity,0) * inventoryMultiplier),modified_on = NOW() WHERE item_quantity_location_id = itemQuantityLocationId; END IF;  IF ISNULL(itemQuantityStorageLocationId) THEN     INSERT INTO item_quantity_storage_locations (item_quantity_storage_location_id,item_id,storage_location_id,stock_quantity,created_on,modified_on) VALUES(UUID(),itemId,OLD.storage_location_id,IFNULL(stock_quantity,0)  - (IFNULL(OLD.item_quantity,0) * inventoryMultiplier),NOW(),NOW()); ELSE     UPDATE item_quantity_storage_locations SET stock_quantity = IFNULL(stock_quantity,0)  - (IFNULL(OLD.item_quantity,0) * inventoryMultiplier),modified_on = NOW() WHERE item_quantity_storage_location_id = itemQuantityStorageLocationId; END IF;  DELETE FROM trigger_controls WHERE trigger_control_name = triggerControlName;  END IF;"
+		},
+		"trg_set_item_stock_on_inventory_tracking_quantities_insert" : {
+			"trigger_name" : "trg_set_item_stock_on_inventory_tracking_quantities_insert",
+			"trigger_execution" : "AFTER",
+			"table_name" : "inventory_tracking_quantities",
+			"row_operation" : "INSERT",
+			"trigger_code" : "DECLARE triggersEnabled BOOLEAN; DECLARE triggerControlName TEXT; DECLARE inventoryMultiplier INT; DECLARE itemId TEXT; DECLARE itemQuantityLocationId TEXT; DECLARE itemQuantityStorageLocationId TEXT;  SET triggersEnabled = TRUE;  SELECT CASE WHEN trigger_enabled = 'NO' THEN FALSE ELSE TRUE END INTO triggersEnabled FROM trigger_controls WHERE table_name = 'items' AND trigger_enabled = 'NO' LIMIT 1;  IF triggersEnabled THEN   SET triggerControlName = 'stop_triggers_on_trg_set_item_stock_on_inventory_tracking_quantities_insert';  INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('items',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('item_quantity_locations',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('item_quantity_storage_locations',triggerControlName,'NO');  SELECT inventory_multiplier,item_id INTO inventoryMultiplier,itemId FROM inventory_trackings WHERE inventory_tracking_id = NEW.inventory_tracking_id LIMIT 1;  SELECT item_quantity_location_id INTO itemQuantityLocationId FROM item_quantity_locations WHERE item_id = itemId AND location_id = NEW.location_id LIMIT 1;  SELECT item_quantity_storage_location_id INTO itemQuantityStorageLocationId FROM item_quantity_storage_locations WHERE item_id = itemId AND storage_location_id = NEW.storage_location_id LIMIT 1;  UPDATE items SET stock_quantity = IFNULL(stock_quantity,0)  + (IFNULL(NEW.item_quantity,0) * inventoryMultiplier),modified_on = NOW() WHERE item_id = itemId;  IF ISNULL(itemQuantityLocationId) THEN     INSERT INTO item_quantity_locations (item_quantity_location_id,item_id,location_id,stock_quantity,created_on,modified_on) VALUES(UUID(),itemId,NEW.location_id,IFNULL(NEW.item_quantity,0),NOW(),NOW()); ELSE     UPDATE item_quantity_locations SET stock_quantity = IFNULL(stock_quantity,0)  + (IFNULL(NEW.item_quantity,0) * inventoryMultiplier),modified_on = NOW() WHERE item_quantity_location_id = itemQuantityLocationId; END IF;  IF ISNULL(itemQuantityStorageLocationId) THEN     INSERT INTO item_quantity_storage_locations (item_quantity_storage_location_id,item_id,storage_location_id,stock_quantity,created_on,modified_on) VALUES(UUID(),itemId,NEW.storage_location_id,IFNULL(NEW.item_quantity,0),NOW(),NOW()); ELSE     UPDATE item_quantity_storage_locations SET stock_quantity = IFNULL(stock_quantity,0) + (IFNULL(NEW.item_quantity,0) * inventoryMultiplier),modified_on = NOW() WHERE item_quantity_storage_location_id = itemQuantityStorageLocationId; END IF;  DELETE FROM trigger_controls WHERE trigger_control_name = triggerControlName;  END IF;"
+		},
+		"trg_set_item_stock_on_inventory_tracking_quantities_update" : {
+			"trigger_name" : "trg_set_item_stock_on_inventory_tracking_quantities_update",
+			"trigger_execution" : "AFTER",
+			"table_name" : "inventory_tracking_quantities",
+			"row_operation" : "UPDATE",
+			"trigger_code" : "DECLARE triggersEnabled BOOLEAN; DECLARE triggerControlName TEXT; DECLARE inventoryMultiplier INT; DECLARE itemId TEXT; DECLARE itemQuantityLocationId TEXT; DECLARE itemQuantityStorageLocationId TEXT;  SET triggersEnabled = TRUE;  SELECT CASE WHEN trigger_enabled = 'NO' THEN FALSE ELSE TRUE END INTO triggersEnabled FROM trigger_controls WHERE table_name = 'items' AND trigger_enabled = 'NO' LIMIT 1;  IF triggersEnabled THEN   SET triggerControlName = 'stop_triggers_on_trg_set_item_stock_on_inventory_tracking_quantities_update';  INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('items',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('item_quantity_locations',triggerControlName,'NO'); INSERT INTO trigger_controls (table_name,trigger_control_name,trigger_enabled) VALUES('item_quantity_storage_locations',triggerControlName,'NO');  SELECT inventory_multiplier,item_id INTO inventoryMultiplier,itemId FROM inventory_trackings WHERE inventory_tracking_id = NEW.inventory_tracking_id LIMIT 1;  SELECT item_quantity_location_id INTO itemQuantityLocationId FROM item_quantity_locations WHERE item_id = itemId AND location_id = NEW.location_id LIMIT 1;  SELECT item_quantity_storage_location_id INTO itemQuantityStorageLocationId FROM item_quantity_storage_locations WHERE item_id = itemId AND storage_location_id = NEW.storage_location_id LIMIT 1;  UPDATE items SET stock_quantity = IFNULL(stock_quantity,IFNULL(OLD.item_quantity,0))  + (IFNULL(NEW.item_quantity,0) * inventoryMultiplier) - (IFNULL(OLD.item_quantity,0) * inventoryMultiplier),modified_on = NOW() WHERE item_id = itemId;  IF ISNULL(itemQuantityLocationId) THEN     INSERT INTO item_quantity_locations (item_quantity_location_id,item_id,location_id,stock_quantity,created_on,modified_on) VALUES(UUID(),itemId,NEW.location_id,IFNULL(NEW.item_quantity,0),NOW(),NOW()); ELSE     UPDATE item_quantity_locations SET stock_quantity = IFNULL(stock_quantity,IFNULL(OLD.item_quantity,0))  + (IFNULL(NEW.item_quantity,0) * inventoryMultiplier) - (IFNULL(OLD.item_quantity,0) * inventoryMultiplier),modified_on = NOW() WHERE item_stock_locaitem_quantity_location_idtion_id = itemQuantityLocationId; END IF;  IF ISNULL(itemQuantityStorageLocationId) THEN     INSERT INTO item_quantity_storage_locations (item_quantity_storage_location_id,item_id,storage_location_id,stock_quantity,created_on,modified_on) VALUES(UUID(),itemId,NEW.storage_location_id,IFNULL(NEW.item_quantity,0),NOW(),NOW()); ELSE     UPDATE item_quantity_storage_locations SET stock_quantity = IFNULL(stock_quantity,IFNULL(OLD.item_quantity,0)) + (IFNULL(NEW.item_quantity,0) * inventoryMultiplier) - (IFNULL(OLD.item_quantity,0) * inventoryMultiplier),modified_on = NOW() WHERE item_quantity_storage_location_id = itemQuantityStorageLocationId; END IF;  DELETE FROM trigger_controls WHERE trigger_control_name = triggerControlName;  END IF;"
 		},
 		"trg_set_purchase_commercial_and_invoice_numbers_on_delete" : {
 			"trigger_name" : "trg_set_purchase_commercial_and_invoice_numbers_on_delete",
@@ -45863,6 +49553,50 @@
 				}
 			}
 		},
+		"item_quantity_locations" : {
+			"item_id" : {
+				"items" : {
+					"item_id" : {
+						"destination_field" : "item_id",
+						"destination_table" : "item_quantity_locations",
+						"source_field" : "item_id",
+						"source_table" : "items"
+					}
+				}
+			},
+			"location_id" : {
+				"locations" : {
+					"location_id" : {
+						"destination_field" : "location_id",
+						"destination_table" : "item_quantity_locations",
+						"source_field" : "location_id",
+						"source_table" : "locations"
+					}
+				}
+			}
+		},
+		"item_quantity_storage_locations" : {
+			"storage_location_id" : {
+				"storage_locations" : {
+					"storage_location_id" : {
+						"destination_field" : "storage_location_id",
+						"destination_table" : "item_quantity_storage_locations",
+						"source_field" : "storage_location_id",
+						"source_table" : "storage_locations"
+					}
+				}
+			},
+			"item_id" : {
+				"master_items" : {
+					"item_id" : {
+						"destination_field" : "item_id",
+						"destination_table" : "item_quantity_storage_locations",
+						"source_field" : "item_id",
+						"source_table" : "master_items"
+					}
+				}
+			}
+		},
 		"item_raw_materials" : {
 			"item_id" : {
 				"items" : {
@@ -45881,50 +49615,6 @@
 						"destination_table" : "item_raw_materials",
 						"source_field" : "item_id",
 						"source_table" : "items"
-					}
-				}
-			}
-		},
-		"item_stock_location" : {
-			"item_id" : {
-				"items" : {
-					"item_id" : {
-						"destination_field" : "item_id",
-						"destination_table" : "item_stock_location",
-						"source_field" : "item_id",
-						"source_table" : "items"
-					}
-				}
-			},
-			"location_id" : {
-				"locations" : {
-					"location_id" : {
-						"destination_field" : "location_id",
-						"destination_table" : "item_stock_location",
-						"source_field" : "location_id",
-						"source_table" : "locations"
-					}
-				}
-			}
-		},
-		"item_stock_storage_location" : {
-			"storage_location_id" : {
-				"storage_locations" : {
-					"storage_location_id" : {
-						"destination_field" : "storage_location_id",
-						"destination_table" : "item_stock_storage_location",
-						"source_field" : "storage_location_id",
-						"source_table" : "storage_locations"
-					}
-				}
-			},
-			"item_id" : {
-				"master_items" : {
-					"item_id" : {
-						"destination_field" : "item_id",
-						"destination_table" : "item_stock_storage_location",
-						"source_field" : "item_id",
-						"source_table" : "master_items"
 					}
 				}
 			}

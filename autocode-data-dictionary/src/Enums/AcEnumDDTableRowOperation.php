@@ -9,6 +9,7 @@ class AcEnumDDTableRowOperation {
     const SAVE = "save";
     const SELECT = "select";
     const UPDATE = "update";
+    const UNKNOWN = "unknown";
 }
 
 ?>

@@ -1,0 +1,11 @@
+{
+    "name": "ac_packages/autocode-web",
+    "description": "Web Request Response operations",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "AcWeb\\": "src/"            
+        }
+    },
+    "require": {}
+}

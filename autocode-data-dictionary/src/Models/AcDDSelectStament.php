@@ -6,14 +6,14 @@ require_once __DIR__ . './../AcDataDictionary.php';
 require_once 'AcDDTableField.php';
 require_once 'AcDDTableProperty.php';
 use AcDataDictionary\AcDataDictionary;
-use AcDataDictionary\Enums\AcEnumDDTableProperty;
 use AcDataDictionary\Models\AcDDTableField;
 use AcDataDictionary\Models\AcDDTableProperty;
 
-class AcDDTable {
-    const KEY_TABLE_FIELDS = "table_fields";
-    const KEY_TABLE_NAME = "table_name";
-    const KEY_TABLE_PROPERTIES = "table_properties";
+class AcDDSelectStatement {
+
+    const KEY_EXCLUDE_FIELDS = "exclude_fields";
+    const KEY_INCLUDE_FIELDS = "include_fields";
+    const KEY_FILTERS = "filters";
 
     public string $tableName = "";
     public array $tableFields = []; // Associative array of AcDDTableField
@@ -83,26 +83,6 @@ class AcDDTable {
         foreach ($this->tableFields as $tableField) {
             if ($tableField->foreignKey) {
                 $result[] = $tableField;
-            }
-        }
-        return $result;
-    }
-
-    public function getPluralName(): string {
-        $result = $this->tableName;
-        foreach ($this->tableProperties as $property) {
-            if($property->propertyName == AcEnumDDTableProperty::PLURAL_NAME){
-                $result = $property->propertyValue;
-            }
-        }
-        return $result;
-    }
-
-    public function getSingularName(): string {
-        $result = $this->tableName;
-        foreach ($this->tableProperties as $property) {
-            if($property->propertyName == AcEnumDDTableProperty::SINGULAR_NAME){
-                $result = $property->propertyValue;
             }
         }
         return $result;

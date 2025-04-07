@@ -3,7 +3,7 @@
 namespace AcDataDictionary\Enums;
 
 class AcEnumDDTableProperty {
-    const DEFAULT_ORDER_BY = "default_order_by";
+    const ORDER_BY = "order_by";
     const INDEX = "index";
     const PLURAL_NAME = "plural_name";
     const SELECT_QUERY_FIELDS = "select_query_fields";
