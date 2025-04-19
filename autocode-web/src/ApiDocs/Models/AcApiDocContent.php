@@ -1,5 +1,5 @@
 <?php
-namespace AcWeb\ApiDocs\Model;
+namespace AcWeb\ApiDocs\Models;
 
 class AcApiDocContent {
     const KEY_SCHEMA = 'schema';
@@ -8,7 +8,7 @@ class AcApiDocContent {
 
     public array $schema = [];
     public array $examples = [];
-    public array $encoding = [];
+    public string $encoding = "";
 
     public static function fromJson(array $jsonData): AcApiDocContent {
         $instance = new AcApiDocContent();

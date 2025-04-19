@@ -1,7 +1,7 @@
 <?php
-namespace AcWeb\ApiDocs\Model;
+namespace AcWeb\ApiDocs\Models;
 
-use AcWeb\ApiDocs\Model\AcApiDocSchema;
+use AcWeb\ApiDocs\Models\AcApiDocSchema;
 
 class AcApiDocComponents {
     const KEY_SCHEMAS = 'schemas';
@@ -19,13 +19,21 @@ class AcApiDocComponents {
     }
 
     public function toJson(): array {
-        $schemas = [];
-        foreach ($this->schemas as $name => $schema) {
-            $schemas[$name] = $schema->toJson();
-        }
-        return [
-            self::KEY_SCHEMAS => $schemas,
-        ];
+        $result = [];    
+        if (!empty($this->schemas)) {
+            $schemas = [];
+            foreach ($this->schemas as $name => $schema) {
+                $schemaJson = $schema->toJson();
+                if (!empty($schemaJson)) {
+                    $schemas[$name] = $schemaJson;
+                }
+            }
+    
+            if (!empty($schemas)) {
+                $result[self::KEY_SCHEMAS] = $schemas;
+            }
+        }    
+        return $result;
     }
 
     public function __toString(): string {

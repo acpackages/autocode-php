@@ -1,14 +1,14 @@
 <?php
-namespace AcWeb\ApiDocs\Model;
+namespace AcWeb\ApiDocs\Models;
 class AcApiDocContact {
     const KEY_EMAIL = "email";
     const KEY_NAME = "name";
     const KEY_URL = "url";
 
     
-    public ?string $email = null;
-    public ?string $name = null;
-    public ?string $url = null;
+    public string $email = "";
+    public string $name = "";
+    public string $url = "";
     
     public static function fromJson(array $jsonData): AcApiDocContact {
         $instance = new AcApiDocContact();
@@ -30,12 +30,20 @@ class AcApiDocContact {
     }
 
     public function toJson(): array {
-        return [
-            self::KEY_EMAIL => $this->email,
-            self::KEY_NAME => $this->name,
-            self::KEY_URL => $this->url,
-        ];
+        $result = [];    
+        if (!empty($this->email)) {
+            $result[self::KEY_EMAIL] = $this->email;
+        }
+        if (!empty($this->name)) {
+            $result[self::KEY_NAME] = $this->name;
+        }
+        if (!empty($this->url)) {
+            $result[self::KEY_URL] = $this->url;
+        }
+    
+        return $result;
     }
+    
 
     public function __toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);

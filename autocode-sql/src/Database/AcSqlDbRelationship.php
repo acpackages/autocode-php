@@ -2,11 +2,11 @@
 
 namespace AcSql\Database;
 
-require_once '../../autocode/vendor/autoload.php';
-require_once '../../autocode-data-dictionary/vendor/autoload.php';
+require_once __DIR__.'./../../../autocode/vendor/autoload.php';
+require_once __DIR__.'./../../../autocode-data-dictionary/vendor/autoload.php';
 
 use AcDataDictionary\Models\AcDDFunction;
-use AcDataDictionary\AcDataDictionary;
+use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Models\AcDDRelationship;
 use Exception;
 

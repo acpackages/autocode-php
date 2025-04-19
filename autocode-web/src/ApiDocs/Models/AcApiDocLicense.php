@@ -1,5 +1,5 @@
 <?php
-namespace AcWeb\ApiDocs\Models;
+namespace AcWeb\ApiDocs\Modelss;
 
 class AcApiDocLicense {
     const KEY_NAME = "name";

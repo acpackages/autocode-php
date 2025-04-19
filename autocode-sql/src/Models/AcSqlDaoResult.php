@@ -3,8 +3,11 @@ namespace AcSql\Models;
 
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 require_once __DIR__.'./../Enums/AcEnumRowOperation.php';
-use Autocode\AcResult;
+use Autocode\Models\AcJsonBindConfig;
+use Autocode\Models\AcResult;
+use Autocode\Utils\AcUtilsJson;
 use AcSql\Enums\AcEnumRowOperation;
+
 
 class AcSqlDaoResult extends AcResult {
     const KEY_ROWS = 'rows';
@@ -14,6 +17,7 @@ class AcSqlDaoResult extends AcResult {
     const KEY_PRIMARY_KEY_FIELD = 'primary_key_field';
     const KEY_PRIMARY_KEY_VALUE = 'primary_key_value';
 
+    public AcJsonBindConfig $acJsonBindConfig;
     public array $rows = [];
     public int $affectedRowsCount = 0;
     public mixed $lastInsertedId = null;
@@ -22,9 +26,16 @@ class AcSqlDaoResult extends AcResult {
     public ?string $primaryKeyField = "";
     public mixed $primaryKeyValue = null;
 
-    public function __construct(?string $operation = AcEnumRowOperation::UNKNOWN) {
-        $this->operation = $operation;
+    public function __construct(?string $operation = AcEnumRowOperation::UNKNOWN) {        
         parent::__construct();
+        $this->acJsonBindConfig->propertyBindings["rows"]="rows";
+        $this->acJsonBindConfig->propertyBindings["affected_rows_count"]="affectedRowsCount";
+        $this->acJsonBindConfig->propertyBindings["last_inserted_id"]="affectedRowsCount";
+        $this->acJsonBindConfig->propertyBindings["operation"]="operation";
+        $this->acJsonBindConfig->propertyBindings["primary_key_field"]="primaryKeyField";
+        $this->acJsonBindConfig->propertyBindings["primary_key_value"]="primaryKeyValue";
+        $this->operation = $operation;
+       
     }
 
     public function hasAffectedRows(): bool {
@@ -37,18 +48,7 @@ class AcSqlDaoResult extends AcResult {
     }
 
     public function rowsCount(): int {
-        return count($this->rows);
-    }
-
-    public function toJson(): array {
-        $result = parent::toJson();
-        $result[self::KEY_AFFECTED_ROWS_COUNT] = $this->affectedRowsCount;
-        $result[self::KEY_LAST_INSERTED_ID] = $this->lastInsertedId;
-        $result[self::KEY_OPERATION] = $this->operation;
-        $result[self::KEY_PRIMARY_KEY_FIELD] = $this->primaryKeyField;
-        $result[self::KEY_PRIMARY_KEY_VALUE] = $this->primaryKeyValue;
-        $result[self::KEY_ROWS] = $this->rows;   
-        return $result;
+        return count(value: $this->rows);
     }
 }
 

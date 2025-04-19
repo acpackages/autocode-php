@@ -1,8 +1,8 @@
 Database Tests<br><br>
 <?php 
-require_once '../../autocode-sql/vendor/autoload.php';
-require '../../autocode-data-dictionary/vendor/autoload.php';
-use AcDataDictionary\AcDataDictionary;
+require_once __DIR__.'./../../autocode-sql/vendor/autoload.php';
+require __DIR__.'./../../autocode-data-dictionary/vendor/autoload.php';
+use AcDataDictionary\Models\AcDataDictionary;
 use AcSql\Database\AcSqlDatabase;
 use AcSql\Database\AcSqlDbSchemaManager;
 use AcSql\Daos\AcBaseSqlDao;

@@ -2,18 +2,19 @@
 
 namespace AcSql\Database;
 
-require_once '../../autocode/vendor/autoload.php';
-require_once '../../autocode-data-dictionary/vendor/autoload.php';
+require_once __DIR__ . './../../../autocode/vendor/autoload.php';
+require_once __DIR__ . './../../../autocode-data-dictionary/vendor/autoload.php';
 
 use AcDataDictionary\Enums\AcEnumDDFieldFormat;
 use AcDataDictionary\Enums\AcEnumDDTableRowEvent;
+use AcDataDictionary\Enums\AcEnumDDTableRowOperation;
 use AcSql\Enums\AcEnumFieldType;
 use AcSql\Enums\AcEnumRowOperation;
 use AcSql\Enums\AcEnumSelectMode;
 use AcSql\Models\AcSqlDaoResult;
 use Autocode\AcLogger;
-use Autocode\AcResult;
-use AcDataDictionary\AcDataDictionary;
+use Autocode\Models\AcResult;
+use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Enums\AcEnumDDFieldType;
 use AcDataDictionary\Models\AcDDTable;
 use AcSql\Enums\AcEnumSqlDatabaseType;
@@ -23,17 +24,20 @@ use Autocode\Autocode;
 use DateTime;
 use Exception;
 
-class AcSqlDbTable extends AcSqlDbBase {
+class AcSqlDbTable extends AcSqlDbBase
+{
     public string $tableName = "";
     public AcDDTable $acDDTable;
 
-    public function __construct(string $tableName, string $dataDictionaryName = "default"){
+    public function __construct(string $tableName, string $dataDictionaryName = "default")
+    {
         parent::__construct(dataDictionaryName: $dataDictionaryName);
         $this->tableName = $tableName;
         $this->acDDTable = AcDataDictionary::getTable(tableName: $tableName, dataDictionaryName: $dataDictionaryName);
     }
 
-    public static function getDropTableStatement(string $tableName,?string $databaseType = AcEnumSqlDatabaseType::UNKNOWN): string{
+    public static function getDropTableStatement(string $tableName, ?string $databaseType = AcEnumSqlDatabaseType::UNKNOWN): string
+    {
         $result = "DROP TABLE IF EXISTS $tableName;";
         return $result;
     }
@@ -46,16 +50,16 @@ class AcSqlDbTable extends AcSqlDbBase {
             $this->logger->log("Checking cascade delete for table {$this->tableName}");
             $tableRelationships = AcDataDictionary::getTableRelationships(tableName: $this->tableName, dataDictionaryName: $this->dataDictionaryName);
             $primaryKeyField = $this->acDDTable->getPrimaryKeyFieldName();
-            $this->logger->log("Table relationships : ",$tableRelationships);
+            $this->logger->log("Table relationships : ", $tableRelationships);
             foreach ($rows as $row) {
-                $this->logger->log("Checking cascade delete for table row :",$row);
+                $this->logger->log("Checking cascade delete for table row :", $row);
                 if ($continueOperation) {
                     foreach ($tableRelationships as $acRelationship) {
                         if ($continueOperation) {
                             $deleteTableName = "";
                             $deleteFieldName = "";
                             $deleteFieldValue = null;
-                            $this->logger->log("Checking cascade delete for relationship : ",$acRelationship);
+                            $this->logger->log("Checking cascade delete for relationship : ", $acRelationship);
                             if ($acRelationship->sourceTable == $this->tableName && $acRelationship->cascadeDeleteDestination == true) {
                                 $deleteTableName = $acRelationship->destinationTable;
                                 $deleteFieldName = $acRelationship->destinationField;
@@ -72,7 +76,7 @@ class AcSqlDbTable extends AcSqlDbBase {
                             }
                             $this->logger->log("Performing cascade delete with related table $deleteTableName and field $deleteFieldName with value $deleteFieldValue");
                             if (!empty($deleteTableName) && !empty($deleteFieldName)) {
-                                if(Autocode::validPrimaryKey($deleteFieldValue)) {
+                                if (Autocode::validPrimaryKey($deleteFieldValue)) {
                                     $this->logger->log("Deleting related rows for primary key value : $deleteFieldValue");
                                     $deleteCondition = "$deleteFieldName = :deleteFieldValue";
                                     $deleteAcTable = new AcSqlDbTable($deleteTableName, $this->dataDictionaryName);
@@ -83,18 +87,16 @@ class AcSqlDbTable extends AcSqlDbBase {
                                         $result->setFromResult(result: $deleteResult, message: "Error in cascade delete: " . $deleteResult->message, logger: $this->logger);
                                         $continueOperation = false;
                                     }
-                                }
-                                else{
+                                } else {
                                     $this->logger->log("No value for cascade delete records");
                                 }
-                            }
-                            else{
+                            } else {
                                 $this->logger->log("No table & field for cascade delete records");
                             }
                         }
                     }
                 }
-                if($continueOperation){
+                if ($continueOperation) {
                     $result->setSuccess();
                 }
             }
@@ -240,7 +242,7 @@ class AcSqlDbTable extends AcSqlDbBase {
 
     public function deleteRows(?string $condition = "", ?string $primaryKeyValue = "", ?array $parameters = [], ?bool $executeAfterEvent = true, ?bool $executeBeforeEvent = true): AcSqlDaoResult
     {
-        $this->logger->log("Deleting record with condition : $condition & primaryKeyValue $primaryKeyValue");
+        $this->logger->log("Deleting row with condition : $condition & primaryKeyValue $primaryKeyValue");
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::DELETE);
         try {
             $continueOperation = true;
@@ -277,37 +279,36 @@ class AcSqlDbTable extends AcSqlDbBase {
                 $getResult = $this->getRows(condition: $condition, parameters: $parameters);
                 if ($getResult->isSuccess()) {
                     $result->rows = $getResult->rows;
-                    $setNullResult = $this->setValuesNullBeforeDelete(condition:$condition,parameters: $parameters);
+                    $setNullResult = $this->setValuesNullBeforeDelete(condition: $condition, parameters: $parameters);
                     if ($setNullResult->isFailure()) {
-                        $this->logger->error('Error setting null before delete',$setNullResult);
+                        $this->logger->error('Error setting null before delete', $setNullResult);
                         $continueOperation = false;
                         $result->setFromResult($setNullResult);
                     }
                     if ($continueOperation) {
                         $cascadeDeleteResult = $this->cascadeDeleteRows($result->rows);
                         if ($cascadeDeleteResult->isFailure()) {
-                            $this->logger->error('Error cascade deleting record',$cascadeDeleteResult);
+                            $this->logger->error('Error cascade deleting row', $cascadeDeleteResult);
                             $continueOperation = false;
-                            $result->setFromResult($setNullResult,logger:$this->logger);
-                        }
-                        else{
-                            $this->logger->log('Cascade delete result',$cascadeDeleteResult);
+                            $result->setFromResult($setNullResult, logger: $this->logger);
+                        } else {
+                            $this->logger->log('Cascade delete result', $cascadeDeleteResult);
                         }
                     }
                     if ($continueOperation) {
-                        $deleteResult = $this->dao->deleteRows(tableName:$this->tableName,condition: $condition, parameters: $parameters);
+                        $deleteResult = $this->dao->deleteRows(tableName: $this->tableName, condition: $condition, parameters: $parameters);
                         if ($deleteResult->isSuccess()) {
                             $result->affectedRowsCount = $deleteResult->affectedRowsCount;
                             $result->setSuccess(message: "$result->affectedRowsCount row(s) deleted successfully");
                         } else {
                             $result->setFromResult($deleteResult);
                             if (strpos($deleteResult->message, "foreign key") !== false) {
-                                $result->message = "Cannot delete record! Foreign key constraint is preventing form deleting rows!";
+                                $result->message = "Cannot delete row! Foreign key constraint is preventing form deleting rows!";
                             }
                         }
                     }
                 } else {
-                    $result->setFromResult($getResult,logger:$this->logger);
+                    $result->setFromResult($getResult, logger: $this->logger);
                 }
             }
             if ($continueOperation && $executeAfterEvent) {
@@ -404,11 +405,12 @@ class AcSqlDbTable extends AcSqlDbBase {
         return $result;
     }
 
-    public function getCreateTableStatement(): string{
+    public function getCreateTableStatement(): string
+    {
         $tableFields = $this->acDDTable->tableFields;
         $columnDefinitions = [];
         foreach ($tableFields as $fieldName => $fieldDetails) {
-            $acSqlDbTableField = new AcSqlDbTableField(tableName:$this->tableName,fieldName:$fieldName,dataDictionaryName:$this->dataDictionaryName);
+            $acSqlDbTableField = new AcSqlDbTableField(tableName: $this->tableName, fieldName: $fieldName, dataDictionaryName: $this->dataDictionaryName);
             $columnDefinition = $acSqlDbTableField->getFieldDefinitionForStatement();
             if ($columnDefinition != "") {
                 $columnDefinitions[] = $columnDefinition;
@@ -418,7 +420,8 @@ class AcSqlDbTable extends AcSqlDbBase {
         return $result;
     }
 
-    public function getSelectStatement(?array $includeFields = [], ?array $excludeFields = []): string{
+    public function getSelectStatement(?array $includeFields = [], ?array $excludeFields = []): string
+    {
         $result = "SELECT * FROM $this->tableName";
         $fields = [];
         if (empty($includeFields) && empty($excludeFields)) {
@@ -434,7 +437,8 @@ class AcSqlDbTable extends AcSqlDbBase {
         return $result;
     }
 
-    public function getDistinctFieldValues(string $fieldName = "", ?string $condition = "", ?string $orderBy = "", ?string $mode = AcEnumSelectMode::LIST , ?int $startIndex = -1, ?int $rowCount = -1, ?array $parameters = []): AcSqlDaoResult{
+    public function getDistinctFieldValues(string $fieldName = "", ?string $condition = "", ?string $orderBy = "", ?string $mode = AcEnumSelectMode::LIST , ?int $startIndex = -1, ?int $rowCount = -1, ?array $parameters = []): AcSqlDaoResult
+    {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::SELECT);
         try {
             if (empty($orderBy)) {
@@ -444,16 +448,19 @@ class AcSqlDbTable extends AcSqlDbBase {
             $statement = "SELECT DISTINCT $fieldName FROM ($selectStatement) AS recordsList";
             if (!empty($condition)) {
                 $condition .= " AND $fieldName IS NOT NULL AND $fieldName != ''";
+            } else {
+                $condition = " $fieldName IS NOT NULL AND $fieldName != ''";
             }
             $this->logger->log(["", "", "Executing getDistinctFieldValues select statement"]);
-            $result = $this->dao->getRows(statement: $statement, mode: $mode, startIndex: $startIndex, rowCount: $rowCount, parameters: $parameters);
+            $result = $this->dao->getRows(statement: $statement, condition: $condition, mode: $mode, startIndex: $startIndex, rowCount: $rowCount, parameters: $parameters);
         } catch (Exception $ex) {
             $result->setException(exception: $ex, logger: $this->logger, logException: true);
         }
         return $result;
     }
 
-    public function getFieldDefinitionForStatement(string $fieldName): string{
+    public function getFieldDefinitionForStatement(string $fieldName): string
+    {
         $result = "";
         $acDDTableField = $this->acDDTable->tableFields[$fieldName];
         $fieldType = $acDDTableField->fieldType;
@@ -613,12 +620,12 @@ class AcSqlDbTable extends AcSqlDbBase {
     {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::INSERT);
         try {
-            $this->logger->log("Inserting record with data : ",$row);
+            $this->logger->log("Inserting row with data : ", $row);
             $continueOperation = true;
             if ($validateResult == null) {
                 $validateResult = $this->validateValues(row: $row, isInsert: true);
             }
-            $this->logger->log("Validation result : ",$validateResult);           
+            $this->logger->log("Validation result : ", $validateResult);
             if ($validateResult->isSuccess()) {
                 foreach ($this->acDDTable->tableFields as $field) {
                     if (($field->fieldType == AcEnumFieldType::GUID || ($field->fieldType == AcEnumFieldType::STRING && $field->isPrimaryKey())) && !isset($row[$field->fieldName])) {
@@ -638,7 +645,7 @@ class AcSqlDbTable extends AcSqlDbBase {
                             $rowEvent->row = $row;
                             $rowEvent->eventType = AcEnumDDTableRowEvent::BEFORE_INSERT;
                             $eventResult = $rowEvent->execute();
-                            $this->logger->log("Before insert result",$eventResult);
+                            $this->logger->log("Before insert result", $eventResult);
                             if ($eventResult->isSuccess()) {
                                 $row = $rowEvent->row;
                             } else {
@@ -648,7 +655,7 @@ class AcSqlDbTable extends AcSqlDbBase {
                         }
                     }
                     if ($continueOperation) {
-                        $this->logger->log("Inserting data : ",$row);
+                        $this->logger->log("Inserting data : ", $row);
                         $insertResult = $this->dao->insertRow(tableName: $this->tableName, row: $row);
                         if ($insertResult->isSuccess()) {
                             $this->logger->log($insertResult);
@@ -661,10 +668,10 @@ class AcSqlDbTable extends AcSqlDbBase {
                                 }
                             }
                             $result->lastInsertedId = $primaryKeyValue;
-                            $this->logger->log(message: "Getting inserted record from database");
+                            $this->logger->log(message: "Getting inserted row from database");
                             $condition = "$primaryKeyField = :primaryKeyValue";
                             $parameters = [":primaryKeyValue" => $primaryKeyValue];
-                            $this->logger->log( "Select condition",$condition,$parameters);
+                            $this->logger->log("Select condition", $condition, $parameters);
                             $selectResult = $this->getRows(condition: $condition, parameters: $parameters);
                             if ($selectResult->isSuccess()) {
                                 if ($selectResult->hasRows()) {
@@ -704,20 +711,20 @@ class AcSqlDbTable extends AcSqlDbBase {
     {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::INSERT);
         try {
-            $this->logger->log("Inserting rows : ",$rows);
+            $this->logger->log("Inserting rows : ", $rows);
             $continueOperation = true;
             $rowsToInsert = [];
             $primaryKeyValues = [];
             $primaryKeyField = $this->acDDTable->getPrimaryKeyFieldName();
             foreach ($rows as $row) {
-                if($continueOperation){
+                if ($continueOperation) {
                     $validateResult = $this->validateValues(row: $row, isInsert: true);
                     if ($validateResult->isSuccess()) {
                         foreach ($this->acDDTable->tableFields as $field) {
                             if (($field->fieldType == AcEnumFieldType::GUID || ($field->fieldType == AcEnumFieldType::STRING && $field->isPrimaryKey())) && !isset($row[$field->fieldName])) {
                                 $row[$field->fieldName] = Autocode::guid();
                             }
-                        }                        
+                        }
                         if (isset($row[$primaryKeyField])) {
                             $primaryKeyValues[] = $row[$primaryKeyField];
                         }
@@ -729,7 +736,7 @@ class AcSqlDbTable extends AcSqlDbBase {
                                     $rowEvent->row = $row;
                                     $rowEvent->eventType = AcEnumDDTableRowEvent::BEFORE_INSERT;
                                     $eventResult = $rowEvent->execute();
-                                    $this->logger->log("Before insert result",$eventResult);
+                                    $this->logger->log("Before insert result", $eventResult);
                                     if ($eventResult->isSuccess()) {
                                         $row = $rowEvent->row;
                                     } else {
@@ -748,18 +755,18 @@ class AcSqlDbTable extends AcSqlDbBase {
                         $result = $validateResult;
                     }
                 }
-                
+
             }
             if ($continueOperation) {
-                $this->logger->log("Inserting ".sizeof($rows)." rows");
+                $this->logger->log("Inserting " . sizeof($rows) . " rows");
                 $insertResult = $this->dao->insertRows(tableName: $this->tableName, rows: $rowsToInsert);
                 if ($insertResult->isSuccess()) {
                     $this->logger->log($insertResult);
                     $result->lastInsertedIds = $primaryKeyValues;
-                    $this->logger->log(message: "Getting inserted record from database");
-                    $condition = "$primaryKeyField IN (:primaryKeyValue_";
+                    $this->logger->log(message: "Getting inserted row from database");
+                    $condition = "$primaryKeyField IN (:primaryKeyValue)";
                     $parameters = [":primaryKeyValue" => $primaryKeyValues];
-                    $this->logger->log( "Select condition",$condition,$parameters);
+                    $this->logger->log("Select condition", $condition, $parameters);
                     $selectResult = $this->getRows(condition: $condition, parameters: $parameters);
                     if ($selectResult->isSuccess()) {
                         if ($selectResult->hasRows()) {
@@ -779,14 +786,14 @@ class AcSqlDbTable extends AcSqlDbBase {
                             } else {
                                 $continueOperation = false;
                             }
-                        }                        
+                        }
                     }
                 } else {
                     $continueOperation = false;
                     $result->setFromResult($insertResult);
                 }
             }
-            if($continueOperation){
+            if ($continueOperation) {
                 $result->setSuccess(message: "Rows inserted successfully");
             }
         } catch (Exception $ex) {
@@ -800,15 +807,20 @@ class AcSqlDbTable extends AcSqlDbBase {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::UNKNOWN);
         try {
             $continueOperation = true;
+            $operation = AcEnumDDTableRowOperation::UNKNOWN;
             $primaryKeyField = $this->acDDTable->getPrimaryKeyFieldName();
             $primaryKeyValue = null;
             if (isset($row[$primaryKeyField])) {
                 $primaryKeyValue = $row[$primaryKeyField];
             }
-            $validateResult = $this->validateValues($row);
-            $checkInSaveFields = [];
-
-            if ($validateResult->isSuccess()) {
+            $condition = "";
+            $conditionParameters = [];
+            if (Autocode::validPrimaryKey($primaryKeyValue)) {
+                $this->logger->log("Found primary key value so primary key value will be used");
+                $condition = $primaryKeyField . " = @primaryKeyValue";
+                $conditionParameters["@primaryKeyValue"] = $primaryKeyValue;
+            } else {
+                $checkInSaveFields = [];
                 foreach ($this->acDDTable->tableFields as $field) {
                     if ($field->checkInSave()) {
                         $checkInSaveFields[$field->fieldName] = null;
@@ -817,75 +829,204 @@ class AcSqlDbTable extends AcSqlDbBase {
                         }
                     }
                 }
-                if (!Autocode::validPrimaryKey($primaryKeyValue)) {
-                    $this->logger->log("Not found primary key value so checking for unique values");
-                    if (!empty($checkInSaveFields)) {
-                        $checkConditions = [];
-                        $checkParameters = [];
-                        foreach ($checkInSaveFields as $key => $value) {
-                            $checkConditions[] = "$key = :$key";
-                            $checkParameters[":$key"] = $value;
+                $this->logger->log("Not found primary key value so checking for fields while saving");
+                if (!empty($checkInSaveFields)) {
+                    $checkConditions = [];
+                    $checkParameters = [];
+                    foreach ($checkInSaveFields as $key => $value) {
+                        $checkConditions[] = "$key = :$key";
+                        $conditionParameters[":$key"] = $value;
+                    }
+                    $condition = implode(" AND ", $checkConditions);
+                } else {
+                    $continueOperation = false;
+                    $result->setFailure(message: "No values to check in save", logger: $this->logger);
+                }
+            }
+            if ($condition != "") {
+                $getResult = $this->getRows(condition: $condition, parameters: $conditionParameters);
+                if ($getResult->isSuccess()) {
+                    if ($getResult->hasRows()) {
+                        $existingRecord = $getResult->rows[0];
+                        if (isset($existingRecord[$primaryKeyField])) {
+                            $primaryKeyValue = $existingRecord[$primaryKeyField];
+                            $row[$primaryKeyField] = $primaryKeyValue;
+                            $operation = AcEnumDDTableRowOperation::UPDATE;
+                        } else {
+                            $continueOperation = false;
+                            $result->message = "Row does not have primary key value";
                         }
-                        $this->logger->log(["Checking for values in save record", $checkConditions, $checkParameters]);
-                        $getResult = $this->getRows(condition: implode(" AND ", $checkConditions), parameters: $checkParameters);
+                    } else {
+                        $operation = AcEnumDDTableRowOperation::INSERT;
+                    }
+                } else {
+                    $continueOperation = false;
+                    $result->setFromResult($getResult);
+                }
+            } else {
+                $operation = AcEnumDDTableRowOperation::INSERT;
+            }
+            if ($operation != AcEnumDDTableRowOperation::INSERT && $operation != AcEnumDDTableRowOperation::UPDATE) {
+                $result->message = "Invalid Operation";
+                $continueOperation = false;
+            }
+            if ($continueOperation) {
+                $this->logger->log("Executing operation $operation in save.");
+                if ($executeBeforeEvent) {
+                    $rowEvent = new AcSqlDbTableRowEvent(tableName: $this->tableName, dataDictionaryName: $this->dataDictionaryName);
+                    $rowEvent->row = $row;
+                    $rowEvent->eventType = AcEnumDDTableRowEvent::BEFORE_SAVE;
+                    $eventResult = $rowEvent->execute();
+                    if ($eventResult->isSuccess()) {
+                        $row = $rowEvent->row;
+                    } else {
+                        $continueOperation = false;
+                        $result->setFromResult($eventResult, message: "Aborted from before update row events", logger: $this->logger);
+                    }
+                }
+                if ($operation == AcEnumDDTableRowOperation::INSERT) {
+                    $result = $this->insertRow(row: $row);
+                } else if ($operation == AcEnumDDTableRowOperation::UPDATE) {
+                    $result = $this->updateRow(row: $row, );
+                } else {
+                    $continueOperation = false;
+                }
+                if ($continueOperation && $executeAfterEvent) {
+                    $rowEvent = new AcSqlDbTableRowEvent(tableName: $this->tableName, dataDictionaryName: $this->dataDictionaryName);
+                    $rowEvent->eventType = AcEnumDDTableRowEvent::AFTER_SAVE;
+                    $rowEvent->result = $result;
+                    $eventResult = $rowEvent->execute();
+                    if ($eventResult->isSuccess()) {
+                        $result = $rowEvent->result;
+                    } else {
+                        $result->setFromResult($eventResult);
+                    }
+                }
+            }
+        } catch (Exception $ex) {
+            $result->setException(exception: $ex, logger: $this->logger, logException: true);
+        }
+        return $result;
+    }
+
+    public function saveRows(array $rows, bool $executeAfterEvent = true, bool $executeBeforeEvent = true): AcSqlDaoResult
+    {
+        $result = new AcSqlDaoResult(operation: AcEnumRowOperation::UNKNOWN);
+        try {
+            $continueOperation = true;
+            $primaryKeyField = $this->acDDTable->getPrimaryKeyFieldName();
+            $rowsToInsert = [];
+            $rowsToUpdate = [];
+            foreach ($rows as $row) {
+                if ($continueOperation) {
+                    $primaryKeyValue = null;
+                    if (isset($row[$primaryKeyField])) {
+                        $primaryKeyValue = $row[$primaryKeyField];
+                    }
+                    $condition = "";
+                    $conditionParameters = [];
+                    if (Autocode::validPrimaryKey($primaryKeyValue)) {
+                        $this->logger->log("Found primary key value so primary key value will be used");
+                        $condition = $primaryKeyField . " = @primaryKeyValue";
+                        $conditionParameters["@primaryKeyValue"] = $primaryKeyValue;
+                    } else {
+                        $checkInSaveFields = [];
+                        foreach ($this->acDDTable->tableFields as $field) {
+                            if ($field->checkInSave()) {
+                                $checkInSaveFields[$field->fieldName] = null;
+                                if (isset($row[$field->fieldName])) {
+                                    $checkInSaveFields[$field->fieldName] = $row[$field->fieldName];
+                                }
+                            }
+                        }
+                        $this->logger->log("Not found primary key value so checking for fields while saving");
+                        if (!empty($checkInSaveFields)) {
+                            $checkConditions = [];
+                            $checkParameters = [];
+                            foreach ($checkInSaveFields as $key => $value) {
+                                $checkConditions[] = "$key = :$key";
+                                $conditionParameters[":$key"] = $value;
+                            }
+                            $condition = implode(" AND ", $checkConditions);
+                        } else {
+                            $continueOperation = false;
+                            $result->setFailure(message: "No values to check in save", logger: $this->logger);
+                        }
+                    }
+                    if ($condition != "") {
+                        $getResult = $this->getRows(condition: $condition, parameters: $conditionParameters);
                         if ($getResult->isSuccess()) {
                             if ($getResult->hasRows()) {
-                                $checkRecord = $getResult->rows[0];
-                                if (isset($checkRecord[$primaryKeyField])) {
-                                    $primaryKeyValue = $checkRecord[$primaryKeyField];
+                                $existingRecord = $getResult->rows[0];
+                                if (isset($existingRecord[$primaryKeyField])) {
+                                    $primaryKeyValue = $existingRecord[$primaryKeyField];
                                     $row[$primaryKeyField] = $primaryKeyValue;
+                                    $rowsToUpdate[] = $row;
+                                } else {
+                                    $continueOperation = false;
+                                    $result->message = "Row does not have primary key value";
                                 }
+                            } else {
+                                $rowsToInsert[] = $row;
                             }
                         } else {
                             $continueOperation = false;
                             $result->setFromResult($getResult);
                         }
                     } else {
-                        $continueOperation = false;
-                        $result->setFailure(message: "No values to check in save", logger: $this->logger);
+                        $rowsToInsert[] = $row;
+                    }
+                }
+            }
+            if ($continueOperation) {
+                if ($executeBeforeEvent) {
+                    foreach ($rowsToInsert as $row) {
+                        if ($continueOperation) {
+                            $rowEvent = new AcSqlDbTableRowEvent(tableName: $this->tableName, dataDictionaryName: $this->dataDictionaryName);
+                            $rowEvent->row = $row;
+                            $rowEvent->eventType = AcEnumDDTableRowEvent::BEFORE_SAVE;
+                            $eventResult = $rowEvent->execute();
+                            if ($eventResult->isSuccess()) {
+                                $row = $rowEvent->row;
+                            } else {
+                                $continueOperation = false;
+                                $result->setFromResult(result: $eventResult, message: "Aborted from before save row events", logger: $this->logger);
+                            }
+                        }
+                    }
+                    foreach ($rowsToUpdate as $row) {
+                        if ($continueOperation) {
+                            $rowEvent = new AcSqlDbTableRowEvent(tableName: $this->tableName, dataDictionaryName: $this->dataDictionaryName);
+                            $rowEvent->row = $row;
+                            $rowEvent->eventType = AcEnumDDTableRowEvent::BEFORE_SAVE;
+                            $eventResult = $rowEvent->execute();
+                            if ($eventResult->isSuccess()) {
+                                $row = $rowEvent->row;
+                            } else {
+                                $continueOperation = false;
+                                $result->setFromResult(result: $eventResult, message: "Aborted from before save row events", logger: $this->logger);
+                            }
+                        }
                     }
                 }
                 if ($continueOperation) {
-                    $this->logger->log("Primary Key value for Save $primaryKeyField: $primaryKeyValue");
-                    if ($executeBeforeEvent) {
-                        $rowEvent = new AcSqlDbTableRowEvent(tableName: $this->tableName, dataDictionaryName: $this->dataDictionaryName);
-                        $rowEvent->row = $row;
-                        $rowEvent->eventType = AcEnumDDTableRowEvent::BEFORE_SAVE;
-                        $eventResult = $rowEvent->execute();
-                        if ($eventResult->isSuccess()) {
-                            $row = $rowEvent->row;
-                        } else {
+                    $insertResult = $this->insertRows(rows: $rowsToInsert);
+                    if ($insertResult->isFailure()) {
+                        $continueOperation = false;
+                        $result->setFromResult(result: $insertResult);
+                    }
+                    if ($continueOperation) {
+                        $updateResult = $this->updateRows(rows: $rowsToUpdate);
+                        if ($updateResult->isFailure()) {
                             $continueOperation = false;
-                            $result->setFromResult($eventResult, message: "Aborted from before update row events", logger: $this->logger);
+                            $result->setFromResult(result: $updateResult);
                         }
-                    }
-                    if (Autocode::validPrimaryKey($primaryKeyValue)) {
-                        $result = $this->updateRow($row, validateResult: $validateResult);
-                        if ($result->isSuccess()) {
-                            if ($result->rowsCount() <= 0) {
-                                $selectResponse = $this->getRows(condition: "$primaryKeyField = :PrimaryKeyValue", parameters: ["@:rimaryKeyValue" => $primaryKeyValue], mode: AcEnumSelectMode::COUNT);
-                                if ($selectResponse->isSuccess() && $selectResponse->rowsCount() > 0) {
-                                    $result = $this->insertRow(row: $row, validateResult: $validateResult);
-                                }
-                            }
-                        }
-                    } else {
-                        $result = $this->insertRow(row: $row, validateResult: $validateResult);
-                    }
-                    if ($continueOperation && $executeAfterEvent) {
-                        $rowEvent = new AcSqlDbTableRowEvent(tableName: $this->tableName, dataDictionaryName: $this->dataDictionaryName);
-                        $rowEvent->eventType = AcEnumDDTableRowEvent::AFTER_SAVE;
-                        $rowEvent->result = $result;
-                        $eventResult = $rowEvent->execute();
-                        if ($eventResult->isSuccess()) {
-                            $result = $rowEvent->result;
-                        } else {
-                            $result->setFromResult($eventResult);
+                        if ($continueOperation) {
+                            $result->setSuccess(true, message: "Rows updated successfully");
+                            $result->rows = [...$insertResult->rows, ...$updateResult->rows];
                         }
                     }
                 }
-            } else {
-                $result = $validateResult;
             }
         } catch (Exception $ex) {
             $result->setException(exception: $ex, logger: $this->logger, logException: true);
@@ -933,67 +1074,63 @@ class AcSqlDbTable extends AcSqlDbBase {
 
     public function updateRow(array $row, ?string $condition = "", ?array $parameters = [], ?AcResult $validateResult = null, bool $executeAfterEvent = true, bool $executeBeforeEvent = true): AcSqlDaoResult
     {
-        $this->logger->log("Updating record with data : ",$row);
+        $this->logger->log("Updating row with data : ", $row);
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::UPDATE);
         try {
             $continueOperation = true;
             if ($validateResult == null) {
                 $validateResult = $this->validateValues(row: $row, isInsert: false);
             }
-            if ($validateResult->isSuccess() && $continueOperation) {                
-                $this->logger->log( "Validation result : ",$validateResult);
+            if ($validateResult->isSuccess() && $continueOperation) {
+                $this->logger->log("Validation result : ", $validateResult);
                 $primaryKeyField = $this->acDDTable->getPrimaryKeyFieldName();
                 $primaryKeyValue = null;
                 if (isset($row[$primaryKeyField])) {
                     $primaryKeyValue = $row[$primaryKeyField];
                 }
                 $formatResult = $this->formatValues($row);
-                if($formatResult->isSuccess()){
+                if ($formatResult->isSuccess()) {
                     $row = $formatResult->value;
-                }
-                else{
+                } else {
                     $continueOperation = false;
                 }
-                $this->logger->log("Formatted data : ",$row);
+                $this->logger->log("Formatted data : ", $row);
                 if (empty($condition) && Autocode::validPrimaryKey($primaryKeyValue)) {
                     $condition = "$primaryKeyField = :primaryKeyValue";
                     $parameters = [":primaryKeyValue" => $primaryKeyValue];
                 }
-                $this->logger->log( "Update condition : $condition",$parameters);
+                $this->logger->log("Update condition : $condition", $parameters);
                 if (!empty($row)) {
                     if ($continueOperation) {
                         if ($executeBeforeEvent) {
-                            $this->logger->log( "Executing before update event");
+                            $this->logger->log("Executing before update event");
                             $rowEvent = new AcSqlDbTableRowEvent(tableName: $this->tableName, dataDictionaryName: $this->dataDictionaryName);
                             $rowEvent->row = $row;
                             $rowEvent->eventType = AcEnumDDTableRowEvent::BEFORE_UPDATE;
                             $eventResult = $rowEvent->execute();
                             if ($eventResult->isSuccess()) {
-                                $this->logger->log( "Before event result",$eventResult);
+                                $this->logger->log("Before event result", $eventResult);
                                 $row = $rowEvent->row;
                             } else {
-                                $this->logger->error( "Before event result",$eventResult);
+                                $this->logger->error("Before event result", $eventResult);
                                 $continueOperation = false;
                                 $result->setFromResult($eventResult, message: "Aborted from before update row events");
                             }
-                        }
-                        else{
-                            $this->logger->log( "Skipping before update event");
+                        } else {
+                            $this->logger->log("Skipping before update event");
                         }
                     }
                     if ($continueOperation) {
                         $updateResult = $this->dao->updateRow(tableName: $this->tableName, row: $row, condition: $condition, parameters: $parameters);
                         if ($updateResult->isSuccess()) {
-                            $result->setSuccess(message: "Row updated successfully",logger:$this->logger);
+                            $result->setSuccess(message: "Row updated successfully", logger: $this->logger);
                             $result->primaryKeyField = $primaryKeyField;
                             $result->primaryKeyValue = $primaryKeyValue;
                             $selectResult = $this->getRows(condition: $condition, parameters: $parameters);
                             if ($selectResult->isSuccess()) {
-                                if ($selectResult->hasRows()) {
-                                    $result->rows = $selectResult->rows;
-                                }
+                                $result->rows = $selectResult->rows;
                             } else {
-                                $this->logger->error('Error getting updated row : ' . $selectResult->message,$selectResult);
+                                $this->logger->error('Error getting updated row : ' . $selectResult->message, $selectResult);
                                 $result->message = 'Error getting updated row : ' . $selectResult->message;
                             }
                             if ($continueOperation && $executeAfterEvent) {
@@ -1002,23 +1139,23 @@ class AcSqlDbTable extends AcSqlDbBase {
                                 $rowEvent->result = $result;
                                 $eventResult = $rowEvent->execute();
                                 if ($eventResult->isSuccess()) {
-                                    $this->logger->log( "After event result",$eventResult);
+                                    $this->logger->log("After event result", $eventResult);
                                     $result = $rowEvent->result;
                                 } else {
-                                    $this->logger->error( "After event result",$eventResult);
+                                    $this->logger->error("After event result", $eventResult);
                                     $result->setFromResult($eventResult);
                                 }
                             }
                         } else {
-                            $result->setFromResult($updateResult,logger:$this->logger);
+                            $result->setFromResult($updateResult, logger: $this->logger);
                         }
                     }
                 } else {
-                    $this->logger->log( "No data to update");
+                    $this->logger->log("No data to update");
                     $result->message = 'No values to update row';
                 }
             } else {
-                $this->logger->error( "Validation result : ",$validateResult);
+                $this->logger->error("Validation result : ", $validateResult);
                 $result = $validateResult;
             }
         } catch (Exception $ex) {
@@ -1026,6 +1163,114 @@ class AcSqlDbTable extends AcSqlDbBase {
         }
         return $result;
     }
+
+    public function updateRows(array $rows, bool $executeAfterEvent = true, bool $executeBeforeEvent = true): AcSqlDaoResult
+    {
+        $result = new AcSqlDaoResult(operation: AcEnumRowOperation::UPDATE);
+        try {
+            $continueOperation = true;
+            $rowsWithConditions = [];
+            $primaryKeyValues = [];
+            $index = -1;
+            foreach ($rows as $row) {
+                $index++;
+                if ($continueOperation) {
+                    $this->logger->log("Updating row with data : ", $row);
+                    $validateResult = $this->validateValues(row: $row, isInsert: false);
+                    if ($validateResult->isSuccess() && $continueOperation) {
+                        $this->logger->log("Validation result : ", $validateResult);
+                        $primaryKeyField = $this->acDDTable->getPrimaryKeyFieldName();
+                        $primaryKeyValue = null;
+                        if (isset($row[$primaryKeyField])) {
+                            $primaryKeyValue = $row[$primaryKeyField];
+                        }
+                        $formatResult = $this->formatValues($row);
+                        if ($formatResult->isSuccess()) {
+                            $row = $formatResult->value;
+                        } else {
+                            $continueOperation = false;
+                        }
+                        $this->logger->log("Formatted data : ", $row);
+                        if (!empty($row) && Autocode::validPrimaryKey($primaryKeyValue)) {
+                            $condition = "$primaryKeyField = :primaryKeyValue$index";
+                            $parameters = [":primaryKeyValue$index" => $primaryKeyValue];
+                            $primaryKeyValues[] = $primaryKeyValue;
+                            $rowsWithConditions[] = ["row" => $row, "condition" => $condition, "parameters" => $parameters];
+                        }
+                    } else {
+                        $this->logger->error("Validation result : ", $validateResult);
+                        $result = $validateResult;
+                        $continueOperation = false;
+                    }
+                }
+            }
+            if ($continueOperation) {
+                if (count($rowsWithConditions) > 0) {
+                    if ($executeBeforeEvent) {
+                        if ($continueOperation) {
+                            foreach ($rowsWithConditions as $rowDetails) {
+                                $this->logger->log("Executing before update event");
+                                $rowEvent = new AcSqlDbTableRowEvent(tableName: $this->tableName, dataDictionaryName: $this->dataDictionaryName);
+                                $rowEvent->row = $rowDetails["row"];
+                                $rowEvent->condition = $rowDetails["condition"];
+                                $rowEvent->parameters = $rowDetails["parameters"];
+                                $rowEvent->eventType = AcEnumDDTableRowEvent::BEFORE_UPDATE;
+                                $eventResult = $rowEvent->execute();
+                                if ($eventResult->isSuccess()) {
+                                    $this->logger->log("Before event result", $eventResult);
+                                    $row = $rowEvent->row;
+                                } else {
+                                    $this->logger->error("Before event result", $eventResult);
+                                    $continueOperation = false;
+                                    $result->setFromResult($eventResult, message: "Aborted from before update row events");
+                                }
+                            }
+                        }
+                    } else {
+                        $this->logger->log("Skipping before update event");
+                    }
+                    if ($continueOperation) {
+                        $updateResult = $this->dao->updateRows(tableName: $this->tableName, rowsWithConditions:$rowsWithConditions);
+                        if ($updateResult->isSuccess()) {
+                            $result->setSuccess(message: "Rows updated successfully", logger: $this->logger);
+                            $selectResult = $this->getRows(condition: "$primaryKeyField IN (@primaryKeyValues)", parameters: ["@primaryKeyValues" => $primaryKeyValues]);
+                            if ($selectResult->isSuccess()) {
+                                $result->rows = $selectResult->rows;
+                            } else {
+                                $continueOperation = false;
+                                $this->logger->error('Error getting updated row : ' . $selectResult->message, $selectResult);
+                                $result->message = 'Error getting updated row : ' . $selectResult->message;
+                            }
+                            if ($continueOperation && $executeAfterEvent) {
+                                $rowEvent = new AcSqlDbTableRowEvent(tableName: $this->tableName, dataDictionaryName: $this->dataDictionaryName);
+                                $rowEvent->eventType = AcEnumDDTableRowEvent::AFTER_UPDATE;
+                                $rowEvent->result = $result;
+                                $eventResult = $rowEvent->execute();
+                                if ($eventResult->isSuccess()) {
+                                    $this->logger->log("After event result", $eventResult);
+                                    $result = $rowEvent->result;
+                                } else {
+                                    $this->logger->error("After event result", $eventResult);
+                                    $continueOperation = false;
+                                    $result->setFromResult($eventResult);
+                                }
+                            }
+                        } else {
+                            $result->setFromResult($updateResult, logger: $this->logger);
+                        }
+                    }
+
+                } else {
+                    $result->message = "Nothing to update";
+                }
+
+            }
+        } catch (Exception $ex) {
+            $result->setException(exception: $ex, logger: $this->logger, logException: true);
+        }
+        return $result;
+    }
+
 
     public function updateValueLengthWithChars(string $value, string $char, int $length): string
     {
@@ -1039,8 +1284,7 @@ class AcSqlDbTable extends AcSqlDbBase {
         return $result;
     }
 
-    public function validateValues(array $row, ?bool $isInsert = false): AcResult
-    {
+    public function validateValues(array $row, ?bool $isInsert = false): AcResult {
         $result = new AcResult();
         try {
             $continueOperation = true;

@@ -10,11 +10,10 @@ require_once __DIR__.'./../Models/AcSqlConnection.php';
 require_once __DIR__.'./../Models/AcSqlDaoResult.php';
 
 use Autocode\AcLogger;
-use Autocode\AcResult;
+use Autocode\Models\AcResult;
 use Autocode\Enums\AcEnumLogType;
 use AcSql\Enums\AcEnumRowOperation;
 use AcSql\Enums\AcEnumSelectMode;
-use AcSql\Enums\AcEnumTableFieldFormat;
 use AcSql\Models\AcSqlConnection;
 use AcSql\Models\AcSqlDaoResult;
 
@@ -193,7 +192,7 @@ class AcBaseSqlDao {
         return $result;
     }
 
-    public function updateRows(string $tableName, array $rows, string $condition = "", array $parameters = []): AcSqlDaoResult {
+    public function updateRows(string $tableName, array $rowsWithConditions): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         return $result;
     }

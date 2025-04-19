@@ -3,6 +3,7 @@
 namespace AcExtensions;
 
 trait AcFileExtensions {
+
     public static function toBlobObject(string $filePath): array {
         if (!file_exists($filePath)) {
             throw new Exception("File not found: $filePath");

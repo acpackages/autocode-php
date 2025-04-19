@@ -1,137 +1,55 @@
 <?php
-namespace AcSql\Models;
+namespace AcWeb\Models;
+
+use AcWeb\Enums\AcEnumWebResponseType;
+use Autocode\Enums\AcEnumHttpResponseCode;
+use Autocode\Utils\AcUtilsJson;
 
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
-require_once __DIR__.'./../Enums/AcEnumRowOperation.php';
-use Autocode\AcLogger;
-use Autocode\AcResult;
-use Autocode\Enums\AcEnumHttpResponseCode;
 
-class AcWebResponse {
-    const KEY_CODE = "code";
-    const KEY_STATUS = "status";
-    const KEY_VALUE = "value";
+class AcWebResponse {    
+    const KEY_COOKIES = 'cookies';
+    const KEY_DATA = 'data';
+    const KEY_HEADERS = 'headers';
+    const KEY_RESPONSE_CODE = 'response_code';
+    const KEY_RESPONSE_TYPE = 'response_type';
+    const KEY_SESSION = 'session';
+    public array $cookies=[];  
+    public mixed $data;
+    public array $headers = [];
+    public int $responseCode = 0;
+    public string $responseType = AcEnumWebResponseType::TEXT;
+    public array $session=[];
+    
 
-    public $exception = null;
-    public $stackTrace = null;
-    public ?AcLogger $logger = null;
-    public int $code = AcEnumHttpResponseCode::NOT_IMPLEMENTED;
-    public $message = "Nothing executed";
-    public string $status = "failure";
-    public $value = null;
-    public $previousResult = null;
-    public array $otherDetails = [];
-    public array $log = [];
-
-    public static function fromJson(array $mapData): AcResult {
-        $instance = new AcResult();
-        $instance->setValuesFromMap($mapData);
-        return $instance;
+    public static function json(mixed $data, ?int $responseCode = AcEnumHttpResponseCode::OK): AcWebResponse {
+        $response = new AcWebResponse();
+        $response->responseCode = $responseCode;
+        $response->responseType = AcEnumWebResponseType::JSON;
+        $response->data = $data;
+        $response->headers['Content-Type'] = "application/json";
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        return $response;
     }
 
-    public function __construct(?string $message = "Nothing executed") {
-        $this->message = $message;
+    public static function view(string $template, array $vars = []): AcWebResponse {
+        extract($vars);
+        include __DIR__ . "/views/$template.php";
+        return new AcWebResponse();
     }
 
-    public function isException(): bool {
-        return $this->status === "failure" && $this->code === AcEnumHttpResponseCode::INTERNAL_SERVER_ERROR;
+    public static function redirect(string $url, ?int $responseCode = AcEnumHttpResponseCode::TEMPORARY_REDIRECT): AcWebResponse {
+        header("Location: $url");
+        return new AcWebResponse();
     }
 
-    public function isFailure(): bool {
-        return $this->status === "failure";
-    }
-
-    public function isSuccess(): bool {
-        return $this->status === "success";
-    }
-
-    public function setFromResult(AcResult $result,?string $message = null,?AcLogger $logger = null) {
-        $this->status = $result->status;
-        $this->message = $result->message;
-        $this->code = $result->code;
-        $this->previousResult = $result;
-
-        if ($this->isException()) {
-            $this->exception = $result->exception;
-            $this->message = $result->message;
-        } elseif ($this->isSuccess()) {
-            $this->value = $result->value;
-        }
-    }
-
-    public function setSuccess(mixed $value = null,?string $message = null,?AcLogger $logger = null) {
-        $this->status = "success";
-        $this->code = AcEnumHttpResponseCode::OK;
-
-        if ($value!=null) {
-            $this->value = $value;
-        }
-        if(isset($message)) {
-            $this->message = $message;
-            if (isset($logger)) {
-                $logger->success($this->message);
-            }
-            if ($this->logger) {
-                $this->logger->success($this->message);
-            }
-        }
-    }
-
-    public function setFailure(mixed $value = null,?string $message = null,?AcLogger $logger = null) {
-        $this->status = "failure";
-        $this->code = AcEnumHttpResponseCode::OK;
-
-        if(isset($message)) {
-            $this->message = $message;
-            if (isset($logger)) {
-                $logger->error($this->message);
-            }
-            if ($this->logger) {
-                $this->logger->error($this->message);
-            }
-        }
-    }
-
-    public function setException($exception = null, ?string $message = null,?AcLogger $logger = null,?bool $logException = false,?string $stackTrace = null) {
-        $this->code = AcEnumHttpResponseCode::INTERNAL_SERVER_ERROR;
-        $this->exception = $exception;
-        $this->stackTrace = $stackTrace ?? null;
-        $this->message = $message ?? $exception->getMessage();
-
-        if ($logException && isset($logger)) {
-            $logger->error([$exception->getMessage(), $this->stackTrace]);
-        }
-        if ($logException && $this->logger) {
-            $this->logger->error([$exception->getMessage(), $this->stackTrace]);
-        }
-    }
-
-    public function setValuesFromMap(array $mapData) {
-        if (isset($mapData[self::KEY_CODE])) {
-            $this->code = $mapData[self::KEY_CODE];
-        }
-        if (isset($mapData[self::KEY_MESSAGE])) {
-            $this->message = $mapData[self::KEY_MESSAGE];
-        }
-        if (isset($mapData[self::KEY_OTHER_DETAILS])) {
-            $this->otherDetails = $mapData[self::KEY_OTHER_DETAILS];
-        }
-        if (isset($mapData[self::KEY_STATUS])) {
-            $this->status = $mapData[self::KEY_STATUS];
-        }
-        if (isset($mapData[self::KEY_VALUE])) {
-            $this->value = $mapData[self::KEY_VALUE];
-        }
+    public function setValuesFromJson(array $jsonData = []): void {
+        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
     }
 
     public function toJson(): array {
-        return [
-            self::KEY_CODE => $this->code,
-            self::KEY_MESSAGE => $this->message,
-            self::KEY_OTHER_DETAILS => $this->otherDetails,
-            self::KEY_STATUS => $this->status,
-            self::KEY_VALUE => $this->value,
-        ];
+        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
     }
 
     public function __toString(): string {

@@ -19,7 +19,7 @@ use AcDataDictionary\Models\AcDDView;
 use AcDataDictionary\Models\AcDDViewField;
 use PDO;
 use PDOException;
-use Autocode\AcResult;
+use Autocode\Models\AcResult;
 use AcSql\Daos\AcBaseSqlDao;
 use AcSql\Enums\AcEnumRowOperation;
 use AcSql\Enums\AcEnumSelectMode;
@@ -450,28 +450,47 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function updateRows(string $tableName, array $rows, string $condition = "", array $parameters = []): AcSqlDaoResult
+    public function updateRows(string $tableName, array $rowsWithConditions): AcSqlDaoResult
     {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::UPDATE);
         try {
             $statements = [];
             $index = -1;
-            foreach ($rows as $row) {
-                $setValues = [];
-                foreach ($row as $key => $value) {
-                    $index++;
-                    while (in_array("@$index", array_keys($parameters))) {
+            $parameters = [];
+            foreach ($rowsWithConditions as $rowWithCondition) {                
+                if(isset($rowWithCondition['row']) && isset($rowWithCondition['condition'])) {
+                    $setValues = [];
+                    foreach ($rowWithCondition['row'] as $key => $value) {
                         $index++;
+                        while (in_array("@$index", array_keys($parameters))) {
+                            $index++;
+                        }
+                        $parameters["@$index"] = $value;
+                        $setValues[] = "$key = @$index";
                     }
-                    $parameters["@$index"] = $value;
-                    $setValues[] = "$key = @$index";
+                    $setClause = implode(", ", $setValues);
+                    $condition = $rowWithCondition["condition"];
+                    if(isset($rowWithCondition["parameters"])){
+                        $rowConditionParameters = $rowWithCondition["parameters"];
+                        foreach ($rowConditionParameters as $key => $value) {
+                            $conditionParameterKey = $key;
+                            if(isset($parameters[$conditionParameterKey])) {
+                                while (in_array("@$index", array_keys($parameters))) {
+                                    $index++;
+                                }
+                                $conditionParameterKey = "@$index";
+                                $condition = str_replace($key,$conditionParameterKey,$condition);
+                            }
+                            $parameters[$conditionParameterKey] = $value;
+                        }
+                    }
+                    $statement = "UPDATE {$tableName} SET {$setClause} " . ($condition ? "WHERE {$condition}" : "").";";
+                    $statements[] = $statement;
                 }
-                $setClause = implode(", ", $setValues);
-                $statement = "UPDATE {$tableName} SET {$setClause} " . ($condition ? "WHERE {$condition}" : "");
-                $statements[] = $statement;
             }
             $parameterValues = [];
             $statement = implode("", $statements);
+            // echo $statement;
             $parameterValues = [];
             $setParametersResult = $this->setSqlStatementParameters($statement, statementParameters: $parameterValues,passedParameters: $parameters);
             $statement = $setParametersResult['statement'];

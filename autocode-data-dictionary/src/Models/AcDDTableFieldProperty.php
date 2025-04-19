@@ -1,11 +1,14 @@
 <?php
 
 namespace AcDataDictionary\Models;
+use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
 
 class AcDDTableFieldProperty {
     public const KEY_PROPERTY_NAME = "property_name";
     public const KEY_PROPERTY_VALUE = "property_value";
 
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $propertyName = "";
     public mixed $propertyValue = null;
 
@@ -14,25 +17,30 @@ class AcDDTableFieldProperty {
         $instance->setValuesFromJson($jsonData);
         return $instance;
     }
+    
+    public function __construct() {
+        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_PROPERTY_NAME => "propertyName",
+                self::KEY_PROPERTY_VALUE => "propertyValue",
+            ]        
+        ]);
+    }
 
     public function setValuesFromJson(array $jsonData = []): void {
-        if (array_key_exists(self::KEY_PROPERTY_NAME, $jsonData)) {
-            $this->propertyName = (string) $jsonData[self::KEY_PROPERTY_NAME];
-        }
-        if (array_key_exists(self::KEY_PROPERTY_VALUE, $jsonData)) {
-            $this->propertyValue = $jsonData[self::KEY_PROPERTY_VALUE];
-        }
+        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
     }
 
     public function toJson(): array {
-        return [
-            self::KEY_PROPERTY_NAME => $this->propertyName,
-            self::KEY_PROPERTY_VALUE => $this->propertyValue
-        ];
+        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
     }
 
     public function __toString(): string {
-        return json_encode($this->toJson(), JSON_THROW_ON_ERROR);
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
+    }
+
+    public function toString():string{
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }
 

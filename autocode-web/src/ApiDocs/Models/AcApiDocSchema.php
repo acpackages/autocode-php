@@ -1,5 +1,5 @@
 <?php
-namespace AcWeb\ApiDocs\Model;
+namespace AcWeb\ApiDocs\Models;
 
 class AcApiDocSchema {
     const KEY_TYPE = 'type';

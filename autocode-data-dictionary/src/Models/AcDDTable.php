@@ -2,19 +2,22 @@
 
 namespace AcDataDictionary\Models;
 
-require_once __DIR__ . './../AcDataDictionary.php';
 require_once 'AcDDTableField.php';
 require_once 'AcDDTableProperty.php';
-use AcDataDictionary\AcDataDictionary;
+require_once 'AcDataDictionary.php';
+use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Enums\AcEnumDDTableProperty;
 use AcDataDictionary\Models\AcDDTableField;
 use AcDataDictionary\Models\AcDDTableProperty;
+use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
 
 class AcDDTable {
     const KEY_TABLE_FIELDS = "table_fields";
     const KEY_TABLE_NAME = "table_name";
     const KEY_TABLE_PROPERTIES = "table_properties";
 
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $tableName = "";
     public array $tableFields = []; // Associative array of AcDDTableField
     public array $tableProperties = []; // Associative array of AcDDTableProperty
@@ -34,6 +37,16 @@ class AcDDTable {
         }
         
         return $result;
+    }
+
+    public function __construct() {
+        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_TABLE_FIELDS => "tableFields",
+                self::KEY_TABLE_NAME => "tableName",
+                self::KEY_TABLE_PROPERTIES => "tableProperties"
+            ]        
+        ]);
     }
 
     public function getField(string $fieldName): ?AcDDTableField {
@@ -108,6 +121,16 @@ class AcDDTable {
         return $result;
     }
 
+    public function getSelectDistinctFields(): array {
+        $result = [];
+        foreach ($this->tableFields as $field) {
+            if($field->isSelectDistinct()){
+                $result[] = $field;
+            }
+        }
+        return $result;
+    }
+
     public function setValuesFromJson(array $jsonData = []): void {
         if (isset($jsonData[self::KEY_TABLE_NAME])) {
             $this->tableName = (string) $jsonData[self::KEY_TABLE_NAME];
@@ -129,24 +152,14 @@ class AcDDTable {
     }
 
     public function toJson(): array {
-        $result = [
-            self::KEY_TABLE_NAME => $this->tableName,
-            self::KEY_TABLE_FIELDS => [],
-            self::KEY_TABLE_PROPERTIES => [],
-        ];
-
-        foreach ($this->tableFields as $fieldName => $field) {
-            $result[self::KEY_TABLE_FIELDS][$fieldName] = $field->toJson();
-        }
-
-        foreach ($this->tableProperties as $propertyName => $property) {
-            $result[self::KEY_TABLE_PROPERTIES][$propertyName] = $property->toJson();
-        }
-
-        return $result;
+        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
     }
 
     public function __toString(): string {
-        return json_encode($this->toJson());
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
+    }
+
+    public function toString():string{
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }

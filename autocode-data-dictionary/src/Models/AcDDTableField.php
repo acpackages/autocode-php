@@ -3,21 +3,21 @@
 namespace AcDataDictionary\Models;
 
 require_once __DIR__ . './../../../autocode-extensions/vendor/autoload.php';
-require_once __DIR__ . './../AcDataDictionary.php';
 require_once __DIR__ . './../Enums/AcEnumDDFieldProperty.php';
 require_once __DIR__ . './../Enums/AcEnumDDFieldType.php';
-
 require_once 'AcDDRelationship.php';
 require_once 'AcDDTable.php';
 require_once 'AcDDTableFieldProperty.php';
-
-use AcDataDictionary\AcDataDictionary;
+require_once 'AcDataDictionary.php';
+use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Enums\AcEnumDDFieldProperty;
 use AcDataDictionary\Enums\AcEnumDDFieldType;
 use AcDataDictionary\Models\AcDDRelationship;
 use AcDataDictionary\Models\AcDDTable;
 use AcDataDictionary\Models\AcDDTableFieldProperty;
 use AcExtensions\AcExtensionMethods;
+use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
 
 class AcDDTableField {
     const KEY_FIELD_NAME = "field_name";
@@ -25,6 +25,7 @@ class AcDDTableField {
     const KEY_FIELD_TYPE = "field_type";
     const KEY_FIELD_VALUE = "field_value";
 
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $fieldName = "";
     public array $fieldProperties = [];
     public string $fieldType = "text";
@@ -38,7 +39,15 @@ class AcDDTableField {
     }
 
     public function __construct() {
-        $this->table = new AcDDTable();
+        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_FIELD_NAME => "fieldName",
+                self::KEY_FIELD_PROPERTIES => "fieldProperties",
+                self::KEY_FIELD_TYPE => "fieldType",
+                self::KEY_FIELD_VALUE => "fieldValue"
+            ]        
+        ]);
+        $this->table = new AcDDTable();        
     }
     
     public function checkInAutoNumber(): bool {
@@ -169,6 +178,15 @@ class AcDDTableField {
         return $result;
     }
 
+    public function isSelectDistinct(): bool {
+        $result = false;
+        if(AcExtensionMethods::arrayContainsKey(AcEnumDDFieldProperty::IS_SELECT_DISTINCT,$this->fieldProperties)){
+            $result = ($this->fieldProperties[AcEnumDDFieldProperty::IS_SELECT_DISTINCT]->propertyValue ?? false) === true;
+        }
+        return $result;
+    }
+
+
     public function isSetValuesNullBeforeDelete(): bool {
         $result = false;
         if(AcExtensionMethods::arrayContainsKey(AcEnumDDFieldProperty::SET_NULL_BEFORE_DELETE,$this->fieldProperties)){
@@ -198,21 +216,14 @@ class AcDDTableField {
     }
     
     public function toJson(): array {
-        $result = [
-            self::KEY_FIELD_NAME => $this->fieldName,
-            self::KEY_FIELD_TYPE => $this->fieldType,
-            self::KEY_FIELD_VALUE => $this->fieldValue,
-            self::KEY_FIELD_PROPERTIES => []
-        ];
-
-        foreach ($this->fieldProperties as $key => $property) {
-            $result[self::KEY_FIELD_PROPERTIES][$key] = $property->toJson();
-        }
-
-        return $result;
+        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
     }
 
     public function __toString(): string {
-        return json_encode($this->toJson());
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
+    }
+
+    public function toString():string{
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }

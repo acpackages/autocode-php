@@ -1,8 +1,10 @@
 <?php
 
 namespace AcDataDictionary\Models;
-
-require_once __DIR__ . './../AcDataDictionary.php';
+require_once 'AcDataDictionary.php';
+use AcDataDictionary\Models\AcDataDictionary;
+use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
 
 class AcDDTrigger {
     const KEY_TRIGGER_NAME = "trigger_name";
@@ -11,6 +13,7 @@ class AcDDTrigger {
     const KEY_TRIGGER_EXECUTION = "trigger_execution";
     const KEY_TRIGGER_TABLE_ROW_OPERATION = "row_operation";
 
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $rowOperation = "";
     public string $triggerExecution = "";
     public string $tableName = "";
@@ -34,35 +37,31 @@ class AcDDTrigger {
         return $result;
     }
 
+    public function __construct() {
+        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_TRIGGER_NAME => "triggerName",
+                self::KEY_TRIGGER_CODE => "triggerCode",
+                self::KEY_TRIGGER_TABLE_NAME => "tableName",
+                self::KEY_TRIGGER_EXECUTION => "triggerExecution",
+                self::KEY_TRIGGER_TABLE_ROW_OPERATION => "rowOperation"
+            ]        
+        ]);
+    }
+
     public function setValuesFromJson(array $jsonData = []): void {
-        if (isset($jsonData[self::KEY_TRIGGER_TABLE_ROW_OPERATION])) {
-            $this->rowOperation = (string) $jsonData[self::KEY_TRIGGER_TABLE_ROW_OPERATION];
-        }
-        if (isset($jsonData[self::KEY_TRIGGER_TABLE_NAME])) {
-            $this->tableName = (string) $jsonData[self::KEY_TRIGGER_TABLE_NAME];
-        }
-        if (isset($jsonData[self::KEY_TRIGGER_EXECUTION])) {
-            $this->triggerExecution = (string) $jsonData[self::KEY_TRIGGER_EXECUTION];
-        }
-        if (isset($jsonData[self::KEY_TRIGGER_CODE])) {
-            $this->triggerCode = (string) $jsonData[self::KEY_TRIGGER_CODE];
-        }
-        if (isset($jsonData[self::KEY_TRIGGER_NAME])) {
-            $this->triggerName = (string) $jsonData[self::KEY_TRIGGER_NAME];
-        }
+        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
     }
 
     public function toJson(): array {
-        return [
-            self::KEY_TRIGGER_NAME => $this->triggerName,
-            self::KEY_TRIGGER_CODE => $this->triggerCode,
-            self::KEY_TRIGGER_TABLE_ROW_OPERATION => $this->rowOperation,
-            self::KEY_TRIGGER_EXECUTION => $this->triggerExecution,
-            self::KEY_TRIGGER_TABLE_NAME => $this->tableName,
-        ];
+        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
     }
 
     public function __toString(): string {
-        return json_encode($this->toJson(), JSON_THROW_ON_ERROR);
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
+    }
+
+    public function toString():string{
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }

@@ -6,7 +6,7 @@ use AcDataDictionary\Enums\AcEnumDDFieldType;
 use AcDataDictionary\Enums\AcEnumDDFieldProperty;
 use AcDataDictionary\Models\AcDDTable;
 use AcDataDictionary\Models\AcDDTableField;
-use AcDataDictionary\AcDataDictionary;
+use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Models\AcDDTableFieldProperty; 
 class AcSchemaManagerTables {
     const SCHEMA_DETAILS = "_ac_schema_details";

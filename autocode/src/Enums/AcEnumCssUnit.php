@@ -1,6 +1,6 @@
 <?php
 
-namespace AcDataDictionary\Enums;
+namespace Autocode\Enums;
 
 class AcEnumCssUnit {
     const PX = 'px';

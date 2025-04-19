@@ -7,3 +7,5 @@ Autocode PHP
 <a href='tests/ac-extensions'>Autocode Extensions</a>
 <br>
 <a href='tests/autocode-sql'>Autocode SQL</a>
+<br>
+<a href='tests/autocode-web'>Autocode Web</a>

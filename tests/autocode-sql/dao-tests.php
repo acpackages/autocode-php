@@ -1,5 +1,5 @@
 <?php 
-require_once '../../autocode-sql/vendor/autoload.php';
+require_once __DIR__.'./../../autocode-sql/vendor/autoload.php';
 use AcSql\Models\AcSqlConnection;
 use AcSql\Daos\AcBaseSqlDao;
 use AcSql\Daos\AcMysqlDao;

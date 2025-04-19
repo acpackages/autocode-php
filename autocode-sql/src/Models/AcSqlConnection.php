@@ -2,9 +2,12 @@
 
 namespace AcSql\Models;
 
-require_once '../../autocode/vendor/autoload.php';
+require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 
 use Autocode\AcLogger;
+use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
+
 
 class AcSqlConnection {
     const KEY_CONNECTION_PORT = 'port';
@@ -14,6 +17,7 @@ class AcSqlConnection {
     const KEY_CONNECTION_DATABASE = 'database';
     const KEY_CONNECTION_OPTIONS = 'options';
 
+    public AcJsonBindConfig $acJsonBindConfig;
     public AcLogger $logger;
     public int $port = 0;
     public string $hostname = "";
@@ -23,6 +27,16 @@ class AcSqlConnection {
     public array $options = [];
 
     public function __construct() {
+        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_CONNECTION_PORT => "port",
+                self::KEY_CONNECTION_HOSTNAME => "hostname",
+                self::KEY_CONNECTION_USERNAME => "username",
+                self::KEY_CONNECTION_PASSWORD => "password",
+                self::KEY_CONNECTION_DATABASE => "database",
+                self::KEY_CONNECTION_OPTIONS => "options",
+            ]        
+        ]);
         $this->logger = new AcLogger();
     }
 
@@ -33,39 +47,18 @@ class AcSqlConnection {
     }
 
     public function setValuesFromJson(array $jsonData = []): void {
-        if (isset($jsonData[self::KEY_CONNECTION_PORT])) {
-            $this->port = (int) $jsonData[self::KEY_CONNECTION_PORT];
-        }
-
-        if (isset($jsonData[self::KEY_CONNECTION_HOSTNAME])) {
-            $this->hostname = (string) $jsonData[self::KEY_CONNECTION_HOSTNAME];
-        }
-
-        if (isset($jsonData[self::KEY_CONNECTION_USERNAME])) {
-            $this->username = (string) $jsonData[self::KEY_CONNECTION_USERNAME];
-        }
-
-        if (isset($jsonData[self::KEY_CONNECTION_PASSWORD])) {
-            $this->password = (string) $jsonData[self::KEY_CONNECTION_PASSWORD];
-        }
-
-        if (isset($jsonData[self::KEY_CONNECTION_DATABASE])) {
-            $this->database = (string) $jsonData[self::KEY_CONNECTION_DATABASE];
-        }
-
-        if (isset($jsonData[self::KEY_CONNECTION_OPTIONS])) {
-            $this->options = (array) $jsonData[self::KEY_CONNECTION_OPTIONS];
-        }
+        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
     }
 
     public function toJson(): array {
-        return [
-            self::KEY_CONNECTION_PORT => $this->port,
-            self::KEY_CONNECTION_HOSTNAME => $this->hostname,
-            self::KEY_CONNECTION_USERNAME => $this->username,
-            self::KEY_CONNECTION_PASSWORD => $this->password,
-            self::KEY_CONNECTION_DATABASE => $this->database,
-            self::KEY_CONNECTION_OPTIONS => $this->options,
-        ];
+        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+    }
+
+    public function __toString(): string {
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
+    }
+
+    public function toString():string{
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }

@@ -6,6 +6,8 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Autocode\\Utils\\' => array($baseDir . '/src/Utils'),
+    'Autocode\\Models\\' => array($baseDir . '/src/Models'),
     'Autocode\\Enums\\' => array($baseDir . '/src/Enums'),
     'Autocode\\' => array($baseDir . '/src/Core'),
 );

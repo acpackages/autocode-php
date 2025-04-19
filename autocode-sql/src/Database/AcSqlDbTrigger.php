@@ -2,10 +2,10 @@
 
 namespace AcSql\Database;
 
-require_once '../../autocode/vendor/autoload.php';
+require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 
 use AcDataDictionary\Models\AcDDTrigger;
-use AcDataDictionary\AcDataDictionary;
+use AcDataDictionary\Models\AcDataDictionary;
 use AcSql\Enums\AcEnumSqlDatabaseType;
 use Exception;
 

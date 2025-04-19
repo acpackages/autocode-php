@@ -2,8 +2,9 @@
 
 namespace Autocode;
 
-require_once '../../autocode-extensions/vendor/autoload.php';
+require_once __DIR__.'./../../../autocode-extensions/vendor/autoload.php';
 use AcExtensions\AcExtensionMethods;
+use Autocode\Models\AcEventExecutionResult;
 
 require_once 'AcEventExecutionResult.php';
 require_once 'Autocode.php';
@@ -57,10 +58,10 @@ class AcEvents {
         return $subscriptionId;
     }
 
-    public function unsubscribe(string $subscriptionId): bool {
+    public function unsubscribe(string $subscriptionId): void {
         foreach ($this->events as $eventName => $eventFunctions) {
             if (array_key_exists($subscriptionId, $eventFunctions)) {
-                $this->events[$eventName] = AcExtensionMethods.arrayRemove($eventFunctions,$eventFunctions[$subscriptionId]);
+                $this->events[$eventName] = AcExtensionMethods::arrayRemove($eventFunctions,$eventFunctions[$subscriptionId]);
             }
         }
     }

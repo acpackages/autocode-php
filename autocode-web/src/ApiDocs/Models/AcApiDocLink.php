@@ -1,5 +1,5 @@
 <?php
-namespace AcWeb\ApiDocs\Model;
+namespace AcWeb\ApiDocs\Models;
 
 class AcApiDocLink {
     const KEY_OPERATION_ID = 'operationId';

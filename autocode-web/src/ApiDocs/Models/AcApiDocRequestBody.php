@@ -1,13 +1,13 @@
 <?php
-namespace AcWeb\ApiDocs\Model;
+namespace AcWeb\ApiDocs\Models;
 
 class AcApiDocRequestBody {
     const KEY_DESCRIPTION = 'description';
     const KEY_CONTENT = 'content';
     const KEY_REQUIRED = 'required';
 
-    public ?string $description = null;
-    public ?array $content = null;
+    public ?string $description = "";
+    public array $content = [];
     public bool $required = false;
 
     public static function fromJson(array $jsonData): AcApiDocRequestBody {
@@ -22,12 +22,25 @@ class AcApiDocRequestBody {
         return $instance;
     }
 
+    public function addContent(AcApiDocContent $content): void{
+        $this->content[] = $content;
+    }
+
     public function toJson(): array {
-        return array_filter([
-            self::KEY_DESCRIPTION => $this->description,
-            self::KEY_CONTENT => $this->content,
-            self::KEY_REQUIRED => $this->required,
-        ]);
+        $result = [];
+        if($this->description != ""){
+            $result[self::KEY_DESCRIPTION] = $this->description;
+        }
+        if($this->required){
+            $result[self::KEY_REQUIRED] = $this->required;
+        }
+        if(sizeof($this->content) > 0){
+            $result[self::KEY_CONTENT] = [];
+            foreach ($this->content as $content) {
+                $result[self::KEY_CONTENT][$content->encoding] = $content->toJson();
+            }
+        }
+        return $result;
     }
 
     public function __toString(): string {

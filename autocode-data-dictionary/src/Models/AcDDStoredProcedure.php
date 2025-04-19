@@ -1,13 +1,16 @@
 <?php
 
 namespace AcDataDictionary\Models;
-
-require_once __DIR__ . './../AcDataDictionary.php';
+require_once 'AcDataDictionary.php';
+use AcDataDictionary\Models\AcDataDictionary;
+use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
 
 class AcDDStoredProcedure {
     public const KEY_STORED_PROCEDURE_NAME = "stored_procedure_name";
     public const KEY_STORED_PROCEDURE_CODE = "stored_procedure_code";
 
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $storedProcedureName = "";
     public string $storedProcedureCode = "";
 
@@ -28,24 +31,29 @@ class AcDDStoredProcedure {
         return $result;
     }
 
+    public function __construct() {
+        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_STORED_PROCEDURE_CODE => "storedProcedureCode",
+                self::KEY_STORED_PROCEDURE_NAME => "storedProcedureName"
+            ]        
+        ]);
+    }
+
     public function setValuesFromJson(array $jsonData = []): void {
-        if (array_key_exists(self::KEY_STORED_PROCEDURE_NAME, $jsonData)) {
-            $this->storedProcedureName = (string) $jsonData[self::KEY_STORED_PROCEDURE_NAME];
-        }
-        if (array_key_exists(self::KEY_STORED_PROCEDURE_CODE, $jsonData)) {
-            $this->storedProcedureCode = (string) $jsonData[self::KEY_STORED_PROCEDURE_CODE];
-        }
+        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
     }
 
     public function toJson(): array {
-        return [
-            self::KEY_STORED_PROCEDURE_NAME => $this->storedProcedureName,
-            self::KEY_STORED_PROCEDURE_CODE => $this->storedProcedureCode,
-        ];
+        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
     }
 
     public function __toString(): string {
-        return json_encode($this->toJson(), JSON_THROW_ON_ERROR);
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
+    }
+
+    public function toString():string{
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }
 

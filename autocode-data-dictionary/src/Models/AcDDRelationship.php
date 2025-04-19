@@ -1,8 +1,10 @@
 <?php
 
 namespace AcDataDictionary\Models;
-
-require_once __DIR__ . './../AcDataDictionary.php';
+require_once 'AcDataDictionary.php';
+use AcDataDictionary\Models\AcDataDictionary;
+use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
 
 class AcDDRelationship {
     public const KEY_CASCADE_DELETE_DESTINATION = "cascade_delete_destination";
@@ -12,6 +14,7 @@ class AcDDRelationship {
     public const KEY_SOURCE_FIELD = "source_field";
     public const KEY_SOURCE_TABLE = "source_table";
 
+    public AcJsonBindConfig $acJsonBindConfig;
     public bool $cascadeDeleteDestination = false;
     public bool $cascadeDeleteSource = false;
     public string $destinationField = "";
@@ -40,40 +43,33 @@ class AcDDRelationship {
         return $result;
     }
 
+    public function __construct() {
+        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_CASCADE_DELETE_DESTINATION => "cascadeDeleteDestination",
+                self::KEY_CASCADE_DELETE_SOURCE => "cascadeDeleteSource",
+                self::KEY_DESTINATION_FIELD => "destinationField",
+                self::KEY_DESTINATION_TABLE => "destinationTable",
+                self::KEY_SOURCE_FIELD => "sourceField",
+                self::KEY_SOURCE_TABLE => "sourceTable",
+            ]        
+        ]);
+    }
+
     public function setValuesFromJson(array $jsonData = []): void {
-        if (array_key_exists(self::KEY_CASCADE_DELETE_DESTINATION, $jsonData)) {
-            $this->cascadeDeleteDestination = (bool) $jsonData[self::KEY_CASCADE_DELETE_DESTINATION];
-        }
-        if (array_key_exists(self::KEY_CASCADE_DELETE_SOURCE, $jsonData)) {
-            $this->cascadeDeleteSource = (bool) $jsonData[self::KEY_CASCADE_DELETE_SOURCE];
-        }
-        if (array_key_exists(self::KEY_DESTINATION_FIELD, $jsonData)) {
-            $this->destinationField = (string) $jsonData[self::KEY_DESTINATION_FIELD];
-        }
-        if (array_key_exists(self::KEY_DESTINATION_TABLE, $jsonData)) {
-            $this->destinationTable = (string) $jsonData[self::KEY_DESTINATION_TABLE];
-        }
-        if (array_key_exists(self::KEY_SOURCE_FIELD, $jsonData)) {
-            $this->sourceField = (string) $jsonData[self::KEY_SOURCE_FIELD];
-        }
-        if (array_key_exists(self::KEY_SOURCE_TABLE, $jsonData)) {
-            $this->sourceTable = (string) $jsonData[self::KEY_SOURCE_TABLE];
-        }
+        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
     }
 
     public function toJson(): array {
-        return [
-            self::KEY_CASCADE_DELETE_DESTINATION => $this->cascadeDeleteDestination,
-            self::KEY_CASCADE_DELETE_SOURCE => $this->cascadeDeleteSource,
-            self::KEY_DESTINATION_FIELD => $this->destinationField,
-            self::KEY_DESTINATION_TABLE => $this->destinationTable,
-            self::KEY_SOURCE_FIELD => $this->sourceField,
-            self::KEY_SOURCE_TABLE => $this->sourceTable,
-        ];
+        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
     }
 
     public function __toString(): string {
-        return json_encode($this->toJson(), JSON_THROW_ON_ERROR);
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
+    }
+
+    public function toString():string{
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }
 

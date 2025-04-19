@@ -2,17 +2,19 @@
 
 namespace AcDataDictionary\Models;
 
-require_once __DIR__ . './../AcDataDictionary.php';
 require_once 'AcDDViewField.php';
-
-use AcDataDictionary\AcDataDictionary;
+require_once 'AcDataDictionary.php';
+use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Models\AcDDViewField;
+use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
 
 class AcDDView {
     public const KEY_VIEW_NAME = "view_name";
     public const KEY_VIEW_FIELDS = "view_fields";
     public const KEY_VIEW_QUERY = "view_query";
 
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $viewName = "";
     public string $viewQuery = "";
     public array $viewFields = [];
@@ -32,6 +34,16 @@ class AcDDView {
         return $result;
     }
 
+    public function __construct() {
+        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_VIEW_NAME => "viewName",
+                self::KEY_VIEW_QUERY => "viewQuery",
+                self::KEY_VIEW_FIELDS => "viewFields"
+            ]        
+        ]);
+    }
+
     public function setValuesFromJson(array $jsonData = []): void {
         if (isset($jsonData[self::KEY_VIEW_NAME])) {
             $this->viewName = (string) $jsonData[self::KEY_VIEW_NAME];
@@ -47,20 +59,14 @@ class AcDDView {
     }
 
     public function toJson(): array {
-        $result = [
-            self::KEY_VIEW_NAME => $this->viewName,
-            self::KEY_VIEW_QUERY => $this->viewQuery,
-            self::KEY_VIEW_FIELDS => []
-        ];
-
-        foreach ($this->viewFields as $fieldName => $field) {
-            $result[self::KEY_VIEW_FIELDS][$fieldName] = $field->toJson();
-        }
-
-        return $result;
+        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
     }
 
     public function __toString(): string {
-        return json_encode($this->toJson(), JSON_UNESCAPED_UNICODE);
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
+    }
+
+    public function toString():string{
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }

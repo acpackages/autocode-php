@@ -1,5 +1,5 @@
 <?php
-namespace AcWeb\ApiDocs\Model;
+namespace AcWeb\ApiDocs\Models;
 
 class AcApiDocParameter {
     const KEY_DESCRIPTION = "description"; 
@@ -8,8 +8,8 @@ class AcApiDocParameter {
     const KEY_NAME = "name";
     const KEY_REQUIRED = "required";
     const KEY_SCHEMA = "schema";
-    public string $description;
-    public string $in;    
+    public ?string $description = null;
+    public ?string $in = null;    
     public ?string $name = null;
     public bool $required = false;
     public bool $explode = true;

@@ -7,7 +7,7 @@ require_once __DIR__.'./../../../autocode-data-dictionary/vendor/autoload.php';
 require_once __DIR__.'./../Enums/AcEnumSqlDatabaseType.php';
 require_once 'AcSqlDatabase.php';
 
-use AcDataDictionary\AcDataDictionary;
+use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Models\AcDDTable;
 use AcDataDictionary\Models\AcDDTableField;
 use AcDataDictionary\Models\AcDDTableFieldProperty;
@@ -36,7 +36,7 @@ class AcSqlDbBase {
         $this->dataDictionaryName = $dataDictionaryName;
         $this->sqlConnection = AcSqlDatabase::$sqlConnection;        
         $this->acDataDictionary = AcDataDictionary::getInstance(dataDictionaryName:$dataDictionaryName);
-        $this->logger = new AcLogger(logType:AcEnumLogType::PRINT,logMessages:true);
+        $this->logger = new AcLogger(logType:AcEnumLogType::PRINT,logMessages:false);
         if($this->databaseType == AcEnumSqlDatabaseType::MYSQL){
             $this->dao = new AcMysqlDao();
             $this->dao->setSqlConnection($this->sqlConnection);

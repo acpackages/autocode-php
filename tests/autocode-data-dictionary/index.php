@@ -2,7 +2,7 @@ Autocode SQL
 <br>
 <?php 
 require '../../autocode-data-dictionary/vendor/autoload.php';
-use AcDataDictionary\AcDataDictionary;
+use AcDataDictionary\Models\AcDataDictionary;
 $dataDictionaryJson = file_get_contents('../assets/data_dictionary.json');
 AcDataDictionary::registerDataDictionaryJsonString($dataDictionaryJson);
 $dataDictionary = AcDataDictionary::fromJsonString($dataDictionaryJson);

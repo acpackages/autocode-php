@@ -1,8 +1,9 @@
 <?php
 
 namespace AcDataDictionary\Models;
-
 require_once 'AcDDTableFieldProperty.php';
+use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
 
 class AcDDViewField {
     public const KEY_FIELD_NAME = "field_name";
@@ -12,6 +13,7 @@ class AcDDViewField {
     public const KEY_FIELD_SOURCE = "field_source";
     public const KEY_FIELD_SOURCE_NAME = "field_source_name";
 
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $fieldName = "";
     public array $fieldProperties = [];
     public string $fieldType = "text";
@@ -23,6 +25,19 @@ class AcDDViewField {
         $instance = new self();
         $instance->setValuesFromJson($jsonData);
         return $instance;
+    }
+
+    public function __construct() {
+        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_FIELD_NAME => "fieldName",
+                self::KEY_FIELD_PROPERTIES => "fieldProperties",
+                self::KEY_FIELD_TYPE => "fieldType",
+                self::KEY_FIELD_VALUE => "fieldValue",
+                self::KEY_FIELD_SOURCE => "fieldSource",
+                self::KEY_FIELD_SOURCE_NAME => "fieldSourceName"
+            ]        
+        ]);  
     }
 
     public function setValuesFromJson(array $jsonData = []): void {
@@ -49,22 +64,15 @@ class AcDDViewField {
     }
 
     public function toJson(): array {
-        $result = [
-            self::KEY_FIELD_NAME => $this->fieldName,
-            self::KEY_FIELD_TYPE => $this->fieldType,
-            self::KEY_FIELD_VALUE => $this->fieldValue,
-            self::KEY_FIELD_SOURCE => $this->fieldSource,
-            self::KEY_FIELD_SOURCE_NAME => $this->fieldSourceName,
-            self::KEY_FIELD_PROPERTIES => [],
-        ];
-        foreach ($this->fieldProperties as $propertyName => $property) {
-            $result[self::KEY_FIELD_PROPERTIES][$propertyName] = $property->toJson();
-        }
-        return $result;
+        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
     }
 
     public function __toString(): string {
-        return json_encode($this->toJson(), JSON_UNESCAPED_UNICODE);
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
+    }
+
+    public function toString():string{
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }
 

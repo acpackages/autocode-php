@@ -9,12 +9,22 @@ class ComposerStaticInite53fa7978b5ca5fb9080af3e23f5d1ad
     public static $prefixLengthsPsr4 = array (
         'A' => 
         array (
+            'Autocode\\Utils\\' => 15,
+            'Autocode\\Models\\' => 16,
             'Autocode\\Enums\\' => 15,
             'Autocode\\' => 9,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'Autocode\\Utils\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Utils',
+        ),
+        'Autocode\\Models\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Models',
+        ),
         'Autocode\\Enums\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src/Enums',

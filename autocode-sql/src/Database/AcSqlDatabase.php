@@ -6,7 +6,7 @@ require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 require_once __DIR__.'./../../../autocode-data-dictionary/vendor/autoload.php';
 require_once __DIR__.'./../Enums/AcEnumSqlDatabaseType.php';
 
-use AcDataDictionary\AcDataDictionary;
+use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Models\AcDDTable;
 use AcDataDictionary\Models\AcDDTableField;
 use AcDataDictionary\Models\AcDDTableFieldProperty;

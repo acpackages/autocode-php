@@ -2,7 +2,7 @@
 
 namespace AcSql\Database;
 
-require_once '../../autocode/vendor/autoload.php';
+require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 
 use AcDataDictionary\Models\AcDDView;
 use AcDataDictionary\AcDataDictionary;

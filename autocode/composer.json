@@ -5,7 +5,9 @@
     "autoload": {
         "psr-4": {
             "Autocode\\": "src/Core/",
-            "Autocode\\Enums\\": "src/Enums/"
+            "Autocode\\Enums\\": "src/Enums/",
+            "Autocode\\Models\\": "src/Models/",
+            "Autocode\\Utils\\": "src/Utils/"
         }
     },
     "require": {}

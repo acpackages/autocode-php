@@ -145,4 +145,5 @@ class AcEnumFileExtension {
     const ZIP = 'zip';
     const SEVEN_Z = '7z';
     const THREE_GP = '3gp';
+
 }

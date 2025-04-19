@@ -1,5 +1,5 @@
 <?php
-namespace AcWeb\ApiDocs\Model;
+namespace AcWeb\ApiDocs\Models;
 class AcApiDocServer {
     const KEY_DESCRIPTION = "description";
     const KEY_TITLE = "title";

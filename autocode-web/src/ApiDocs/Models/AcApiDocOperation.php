@@ -1,8 +1,8 @@
 <?php
-namespace AcWeb\ApiDocs\Model;
+namespace AcWeb\ApiDocs\Models;
 
-use AcWeb\ApiDocs\Model\AcApiDocParameter;
-use AcWeb\ApiDocs\Model\AcApiDocResponse;
+use AcWeb\ApiDocs\Models\AcApiDocParameter;
+use AcWeb\ApiDocs\Models\AcApiDocResponse;
 
 class AcApiDocOperation {    
     const KEY_DESCRIPTION = "description";

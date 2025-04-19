@@ -8,9 +8,9 @@ require_once __DIR__ . './../../../autocode-extensions/vendor/autoload.php';
 require_once 'AcSchemaDataDictionary.php';
 
 use AcSql\Models\AcSqlDaoResult;
-use Autocode\AcResult;
+use Autocode\Models\AcResult;
 use AcExtensions\AcExtensionMethods;
-use AcDataDictionary\AcDataDictionary;
+use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Models\AcDDTable;
 use AcDataDictionary\Models\AcDDTableField;
 use AcDataDictionary\Models\AcDDView;

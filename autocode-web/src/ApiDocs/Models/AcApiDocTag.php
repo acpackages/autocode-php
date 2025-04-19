@@ -1,7 +1,7 @@
 <?php
-namespace AcWeb\ApiDocs\Model;
+namespace AcWeb\ApiDocs\Models;
 
-use AcWeb\ApiDocs\Model\AcApiDocExternalDocs;
+use AcWeb\ApiDocs\Models\AcApiDocExternalDocs;
 
 class AcApiDocTag {
     const KEY_NAME = "name";
@@ -10,7 +10,11 @@ class AcApiDocTag {
 
     public string $name = "";
     public string $description = "";
-    public AcApiDocExternalDocs $externalDocs = new AcApiDocExternalDocs();
+    public AcApiDocExternalDocs $externalDocs ;
+
+    public function __construct() {
+        $this->externalDocs = new AcApiDocExternalDocs();
+    }
 
     public static function fromJson(array $jsonData): AcApiDocTag {
         $instance = new AcApiDocTag();
