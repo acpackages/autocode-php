@@ -38,6 +38,26 @@ trait AcStringExtensions {
         return bin2hex(random_bytes(8)) . time();
     }
 
+    public static function regexMatch($pattern, $subject, &$matches = []): bool {
+    preg_match_all('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', $pattern, $groupMatches);
+    $groupNames = $groupMatches[1];
+    $escapedPattern = preg_quote($pattern, '#');
+    $escapedPattern = str_replace(['\{', '\}'], ['{', '}'], $escapedPattern);
+    $convertedPattern = preg_replace('/\{[a-zA-Z_][a-zA-Z0-9_]*\}/', '([^\/]+)', $escapedPattern);
+    $regex = '#^' . $convertedPattern . '$#';
+    if (!preg_match($regex, $subject, $rawMatches)) {
+        $matches = [];
+        return false;
+    }
+    array_shift($rawMatches);
+    $namedMatches = [];
+    foreach ($groupNames as $index => $name) {
+        $namedMatches[$name] = $rawMatches[$index] ?? null;
+    }
+    $matches = $namedMatches;
+    return true;
+    }
+
     public static function toCapitalCase(string $string): string {
         return ucwords(strtolower($string));
     }

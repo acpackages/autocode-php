@@ -54,6 +54,7 @@ class AcExtensionMethods {
         AcStringExtensions::parseJsonToArray as stringParseJsonToArray;
         AcStringExtensions::parseJsonToObject as stringParseJsonToObject;
         AcStringExtensions::random as random;
+        AcStringExtensions::regexMatch as stringRegexMatch;
         AcStringExtensions::toCapitalCase as stringToCapitalCase;
     }
     

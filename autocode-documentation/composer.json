@@ -1,0 +1,11 @@
+{
+    "name": "ac_packages/autocode-documentation",
+    "description": "Documentation generatr and parser",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "AcDoc\\": "src/"            
+        }
+    },
+    "require": {}
+}

@@ -91,6 +91,24 @@ class AcDDTable {
         return $result;
     }
 
+    public function getSearchQueryFieldNames(): array {
+        $result = [];
+        foreach ($this->getSearchQueryFields() as $tableField) {
+            $result[] = $tableField->fieldName;
+        }
+        return $result;
+    }
+
+    public function getSearchQueryFields(): array {
+        $result = [];
+        foreach ($this->tableFields as $tableField) {
+            if ($tableField->isInSearchQuery()) {
+                $result[] = $tableField;
+            }
+        }
+        return $result;
+    }
+
     public function getForeignKeyFields(): array {
         $result = [];
         foreach ($this->tableFields as $tableField) {

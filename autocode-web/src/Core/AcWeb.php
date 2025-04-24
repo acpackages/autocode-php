@@ -69,7 +69,7 @@ class AcWeb
             foreach ($this->routeDefinitions as $routeDefinition) {
                 $url = $routeDefinition->url;
                 if ($url != "/swagger/swagger.json") {
-                    if (!isset($path[$url])) {
+                    if (!isset($paths[$url])) {
                         $paths[$url] = new AcApiDocPath();
                         $paths[$url]->url = $url;
                     }
@@ -201,7 +201,7 @@ class AcWeb
     private function matchPath(string $routePath, string $uri): bool{
         $pattern = preg_replace('/\{(\w+)\}/', '(?P<$1>[^/]+)', $routePath);
         $pattern = "@^" . rtrim($pattern, '/') . "$@";
-        return preg_match($pattern, rtrim($uri, '/')) === 1;
+        return AcExtensionMethods::stringRegexMatch(pattern: $pattern, subject: rtrim($uri, '/'));
     }
 
     public function options(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): void{
@@ -429,9 +429,8 @@ class AcWeb
         }
         if (!$foundHandler) {
             http_response_code(404);
-            echo json_encode(['error' => 'Route not found']);
+            echo json_encode(['error' => 'Route not found','routes']);
         }
-
     }
 
     private function serveStaticFiles(string $uri): bool

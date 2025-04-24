@@ -598,17 +598,19 @@ class AcSqlDbTable extends AcSqlDbBase
         return $result;
     }
 
-    public function getRows(?string $condition = "", ?string $orderBy = "", ?string $mode = AcEnumSelectMode::LIST , ?int $startIndex = -1, ?int $rowCount = -1, ?array $parameters = []): AcSqlDaoResult
+    public function getRows(?string $selectStatement = "",?string $condition = "", ?string $orderBy = "", ?string $mode = AcEnumSelectMode::LIST , ?int $startIndex = -1, ?int $rowCount = -1, ?array $parameters = []): AcSqlDaoResult
     {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::SELECT);
         try {
-            $selectStatement = $this->getSelectStatement();
-            if (!empty($condition)) {
-                $selectStatement .= " WHERE $condition";
-            }
-            if (!empty($orderBy)) {
-                $selectStatement .= " ORDER BY $orderBy";
-            }
+            if (empty($selectStatement)) {
+                $selectStatement = $this->getSelectStatement();
+                if (!empty($condition)) {
+                    $selectStatement .= " WHERE $condition";
+                }
+                if (!empty($orderBy)) {
+                    $selectStatement .= " ORDER BY $orderBy";
+                }
+            }            
             $result = $this->dao->getRows(statement: $selectStatement, parameters: $parameters, mode: $mode, startIndex: $startIndex, rowCount: $rowCount);
         } catch (Exception $ex) {
             $result->setException(exception: $ex, logger: $this->logger, logException: true);

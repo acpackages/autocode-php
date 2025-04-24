@@ -153,6 +153,14 @@ class AcDDTableField {
     public function isForeignKey(): bool {
         return count(AcDDRelationship::getInstances(destinationTable:$this->table->tableName, destinationField:$this->fieldName)) > 0;
     }
+
+    public function isInSearchQuery(): bool {
+        $result = false;
+        if(AcExtensionMethods::arrayContainsKey(AcEnumDDFieldProperty::IN_SEARCH_QUERY,$this->fieldProperties)){
+            $result = ($this->fieldProperties[AcEnumDDFieldProperty::IN_SEARCH_QUERY]->propertyValue ?? false) === true;
+        }
+        return $result;
+    }
     
     public function isNotNull(): bool {
         $result = false;
