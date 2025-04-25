@@ -1,23 +1,34 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
+
+use Autocode\Models\AcJsonBindConfig;
 class AcApiDocContact {
     const KEY_EMAIL = "email";
     const KEY_NAME = "name";
     const KEY_URL = "url";
-
-    
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $email = "";
     public string $name = "";
     public string $url = "";
     
-    public static function fromJson(array $jsonData): AcApiDocContact {
+    public static function instanceFromJson(array $jsonData): AcApiDocContact {
         $instance = new AcApiDocContact();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
+    public function __construct() {
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_EMAIL => "email",
+                self::KEY_NAME => "name",
+                self::KEY_URL => "url",
+            ]        
+        ]);
+    }
 
-    public function setValuesFromJson(array $jsonData) {
+
+    public function fromJson(array $jsonData) {
         if (isset($jsonData[self::KEY_EMAIL])) {
             $this->email = $jsonData[self::KEY_EMAIL];
         }

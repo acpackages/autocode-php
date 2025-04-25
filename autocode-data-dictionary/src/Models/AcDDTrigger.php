@@ -20,9 +20,9 @@ class AcDDTrigger {
     public string $triggerName = "";
     public string $triggerCode = "";
 
-    public static function fromJson(array $jsonData): AcDDTrigger {
+    public static function instanceFromJson(array $jsonData): AcDDTrigger {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
@@ -31,14 +31,14 @@ class AcDDTrigger {
         $acDataDictionary = AcDataDictionary::getInstance($dataDictionaryName);
         
         if (isset($acDataDictionary->triggers[$triggerName])) {
-            $result->setValuesFromJson($acDataDictionary->triggers[$triggerName]);
+            $result->fromJson($acDataDictionary->triggers[$triggerName]);
         }
         
         return $result;
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_TRIGGER_NAME => "triggerName",
                 self::KEY_TRIGGER_CODE => "triggerCode",
@@ -49,8 +49,9 @@ class AcDDTrigger {
         ]);
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {

@@ -122,7 +122,7 @@ class AcBaseSqlDao {
         return $result;
     }
 
-    public function getRows(string $statement, ?string $condition = "", ?array $parameters = [],?string $mode = AcEnumSelectMode::LIST, ?array $formatColumns = [], ?int $startIndex = -1, ?int $rowCount = -1 ): AcSqlDaoResult {
+    public function getRows(string $statement, ?string $condition = "", ?array $parameters = [],?string $mode = AcEnumSelectMode::LIST, ?array $formatColumns = [] ): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         return $result;
     }
@@ -156,7 +156,7 @@ class AcBaseSqlDao {
 
     public function setSqlConnectionFromJson(array $jsonData): AcResult {
         $result = new AcResult();
-        $this->sqlConnection = AcSqlConnection::fromJson($jsonData);
+        $this->sqlConnection = AcSqlConnection::instanceFromJson($jsonData);
         return $result;
     }
 

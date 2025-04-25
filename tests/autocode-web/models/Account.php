@@ -7,7 +7,7 @@ class Account{
     public string $accountTarget = "";
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson([
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson([
             "property_bindings" => [
                 "account_name" => "accountName",
                 "account_target" => "accountTarget"

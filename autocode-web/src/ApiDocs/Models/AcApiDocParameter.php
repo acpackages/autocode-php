@@ -1,6 +1,8 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
+use Autocode\Models\AcJsonBindConfig;
+
 class AcApiDocParameter {
     const KEY_DESCRIPTION = "description"; 
     const KEY_EXPLODE = "explode";   
@@ -8,6 +10,7 @@ class AcApiDocParameter {
     const KEY_NAME = "name";
     const KEY_REQUIRED = "required";
     const KEY_SCHEMA = "schema";
+    public AcJsonBindConfig $acJsonBindConfig;
     public ?string $description = null;
     public ?string $in = null;    
     public ?string $name = null;
@@ -15,7 +18,7 @@ class AcApiDocParameter {
     public bool $explode = true;
     public ?array $schema = null;
 
-    public static function fromJson(array $jsonData): AcApiDocParameter {
+    public static function instanceFromJson(array $jsonData): AcApiDocParameter {
         $instance = new AcApiDocParameter();
         $instance->name = $jsonData[self::KEY_NAME];
         $instance->in = $jsonData[self::KEY_IN];

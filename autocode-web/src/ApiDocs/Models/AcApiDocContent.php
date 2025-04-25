@@ -1,16 +1,18 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
+use Autocode\Models\AcJsonBindConfig;
+
 class AcApiDocContent {
     const KEY_SCHEMA = 'schema';
     const KEY_EXAMPLES = 'examples';
     const KEY_ENCODING = 'encoding';
-
+    public AcJsonBindConfig $acJsonBindConfig;
     public array $schema = [];
     public array $examples = [];
     public string $encoding = "";
 
-    public static function fromJson(array $jsonData): AcApiDocContent {
+    public static function instanceFromJson(array $jsonData): AcApiDocContent {
         $instance = new AcApiDocContent();
 
         if (isset($jsonData[self::KEY_SCHEMA])) {
@@ -26,6 +28,15 @@ class AcApiDocContent {
         }
 
         return $instance;
+    }
+
+    public function __construct() {
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_SCHEMA => "schema",
+                self::KEY_EXAMPLES => "name",
+            ]        
+        ]);
     }
 
     public function toJson(): array {

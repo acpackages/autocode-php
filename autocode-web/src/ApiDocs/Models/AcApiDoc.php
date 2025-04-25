@@ -2,6 +2,8 @@
 namespace AcWeb\ApiDocs\Models;
 
 use AcWeb\ApiDocs\Modelss\AcApiDocLicense;
+use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
 class AcApiDoc {
     const KEY_CONTACT = "contact";
     const KEY_COMPONENTS = "components";
@@ -10,11 +12,11 @@ class AcApiDoc {
     const KEY_MODELS = "models";
     const KEY_PATHS = "paths";
     const KEY_SERVERS = "servers";
+    const KEY_TAGS = "tags";    
     const KEY_TERMS_OF_SERVICE = "termsOfService";
     const KEY_TITLE = "title";
-    const KEY_TAGS = "tags";    
     const KEY_VERSION = "version";
-
+    public AcJsonBindConfig $acJsonBindConfig;
     public ?AcApiDocContact $contact = null;
     public array $components = [];
     public string $description = "";
@@ -27,76 +29,94 @@ class AcApiDoc {
     public string $title = "";
     public string $version = "";
     
-    public static function fromJson(array $jsonData): AcApiDoc {
+    public static function instanceFromJson(array $jsonData): AcApiDoc {
         $instance = new AcApiDoc();
-        $instance->setValuesFromJson(jsonData: $jsonData);
+        $instance->fromJson(jsonData: $jsonData);
         return $instance;
     }
 
-    public function addModel(AcApiDocModel $model){
+    public function __construct() {
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_CONTACT => "contact",
+                self::KEY_COMPONENTS => "components",
+                self::KEY_DESCRIPTION => "description",
+                self::KEY_LICENSE => "license",
+                self::KEY_MODELS => "models",
+                self::KEY_PATHS => "paths",
+                self::KEY_SERVERS => "servers",
+                self::KEY_TAGS => "tags",
+                self::KEY_TERMS_OF_SERVICE => "termsOfService",
+                self::KEY_TITLE => "title",
+                self::KEY_VERSION => "version",
+            ]        
+        ]);
+    }
+
+    public function addModel(AcApiDocModel $model): static{
         $this->models[$model->name] = $model;
+        return $this;
     }
 
-    public function addPath(AcApiDocPath $path){
+    public function addPath(AcApiDocPath $path): static{
         $this->paths[] = $path;
+        return $this;
     }
 
-    public function addServer(AcApiDocServer $server){
+    public function addServer(AcApiDocServer $server): static{
         $this->servers[] = $server;
+        return $this;
     }
 
-    public function addTag(AcApiDocTag $tag){
+    public function addTag(AcApiDocTag $tag): static{
         $this->tags[] = $tag;
+        return $this;
     }
 
-    public function setValuesFromJson(array $jsonData) {
+    public function fromJson(array $jsonData): static {
         if (isset($jsonData[self::KEY_CONTACT])) {
-            $this->contact = AcApiDocContact::fromJson($jsonData[self::KEY_CONTACT]);
-        }
-        if (isset($jsonData[self::KEY_DESCRIPTION])) {
-            $this->description = $jsonData[self::KEY_DESCRIPTION];
+            $this->contact = AcApiDocContact::instanceFromJson($jsonData[self::KEY_CONTACT]);
+            unset($jsonData[self::KEY_CONTACT]);
         }
         if (isset($jsonData[self::KEY_LICENSE])) {
-            $this->url = AcApiDocLicense::fromJson($jsonData[self::KEY_LICENSE]);
+            $this->url = AcApiDocLicense::instanceFromJson($jsonData[self::KEY_LICENSE]);
+            unset($jsonData[self::KEY_LICENSE]);
         }
         if (isset($jsonData[self::KEY_MODELS])) {
             $models = [];
             foreach ($jsonData[self::KEY_MODELS] as $modelJson) {
-                $model = AcApiDocModel::fromJson($modelJson);
+                $model = AcApiDocModel::instanceFromJson($modelJson);
                 $models[$model->name] = $model;
             }
             $this->models = $models;
+            unset($jsonData[self::KEY_MODELS]);
         }
         if (isset($jsonData[self::KEY_PATHS])) {
             $paths = [];
             foreach ($jsonData[self::KEY_PATHS] as $pathJson) {
-                $paths[] = AcApiDocPath::fromJson($pathJson);
+                $paths[] = AcApiDocPath::instanceFromJson($pathJson);
             }
             $this->paths = $paths;
+            unset( $jsonData[self::KEY_PATHS]);
         }
         if (isset($jsonData[self::KEY_SERVERS])) {
             $servers = [];
             foreach ($jsonData[self::KEY_SERVERS] as $serverJson) {
-                $servers[] = AcApiDocServer::fromJson($serverJson);
+                $servers[] = AcApiDocServer::instanceFromJson($serverJson);
             }
             $this->servers = $servers;
+            unset($jsonData[self::KEY_SERVERS]);
         }
         if (isset($jsonData[self::KEY_TAGS])) {
             $tags = [];
             foreach ($jsonData[self::KEY_TAGS] as $tagJson) {
-                $tags[] = AcApiDocTag::fromJson($tagJson);
+                $tags[] = AcApiDocTag::instanceFromJson($tagJson);
             }
             $this->tags = $tags;
+            unset( $jsonData[self::KEY_TAGS]);
         }
-        if (isset($jsonData[self::KEY_TERMS_OF_SERVICE])) {
-            $this->termsOfService = $jsonData[self::KEY_TERMS_OF_SERVICE];
-        }
-        if (isset($jsonData[self::KEY_TITLE])) {
-            $this->title = $jsonData[self::KEY_TITLE];
-        }
-        if (isset($jsonData[self::KEY_VERSION])) {
-            $this->version = $jsonData[self::KEY_VERSION];
-        }
+        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {

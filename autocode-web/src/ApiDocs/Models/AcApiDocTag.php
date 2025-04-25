@@ -2,12 +2,13 @@
 namespace AcWeb\ApiDocs\Models;
 
 use AcWeb\ApiDocs\Models\AcApiDocExternalDocs;
+use Autocode\Models\AcJsonBindConfig;
 
 class AcApiDocTag {
     const KEY_NAME = "name";
     const KEY_DESCRIPTION = "description";
     const KEY_EXTERNAL_DOCS = "externalDocs";
-
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $name = "";
     public string $description = "";
     public AcApiDocExternalDocs $externalDocs ;
@@ -16,13 +17,13 @@ class AcApiDocTag {
         $this->externalDocs = new AcApiDocExternalDocs();
     }
 
-    public static function fromJson(array $jsonData): AcApiDocTag {
+    public static function instanceFromJson(array $jsonData): AcApiDocTag {
         $instance = new AcApiDocTag();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
-    public function setValuesFromJson(array $jsonData) {
+    public function fromJson(array $jsonData) {
         if (isset($jsonData[self::KEY_NAME])) {
             $this->name = $jsonData[self::KEY_NAME];
         }
@@ -30,7 +31,7 @@ class AcApiDocTag {
             $this->description = $jsonData[self::KEY_DESCRIPTION];
         }
         if (isset($jsonData[self::KEY_EXTERNAL_DOCS])) {
-            $this->externalDocs = AcApiDocExternalDocs::fromJson($jsonData[self::KEY_EXTERNAL_DOCS]);
+            $this->externalDocs = AcApiDocExternalDocs::instanceFromJson($jsonData[self::KEY_EXTERNAL_DOCS]);
         }
     }
 

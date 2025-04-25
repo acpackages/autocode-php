@@ -5,7 +5,7 @@ require_once __DIR__ . "./../../../autocode-sql/vendor/autoload.php";
 require_once __DIR__ . "./Controllers/UserController.php";
 use AcDataDictionary\Models\AcDataDictionary;
 use AcSql\Database\AcSqlDatabase;
-use AcSql\Enums\AcEnumSqlDatabaseType;
+use Autocode\Enums\AcEnumSqlDatabaseType;
 use AcSql\Models\AcSqlConnection;
 use AcWeb\Core\AcWeb;
 use AcWeb\DataDictionary\AcDataDictionaryAutoApi;
@@ -20,6 +20,8 @@ $dataDictionaryJson = file_get_contents(filename: __DIR__ . './../../assets/data
 AcDataDictionary::registerDataDictionaryJsonString($dataDictionaryJson);
 $acDataDictionaryAutoApi = new AcDataDictionaryAutoApi(acWeb: $app);
 $acDataDictionaryAutoApi->urlPrefix = '/api';
+$acDataDictionaryAutoApi->includeTable('accounts');
+$acDataDictionaryAutoApi->includeTable('apis');
 $acDataDictionaryAutoApi->generate();
 
 /* Data Dictionary End */
@@ -27,7 +29,7 @@ $acDataDictionaryAutoApi->generate();
 /* Database SQL Start */
 
 AcSqlDatabase::$databaseType = AcEnumSqlDatabaseType::MYSQL;
-$acSqlConnection = AcSqlConnection::fromJson([
+$acSqlConnection = AcSqlConnection::instanceFromJson([
     "username" => 'root',
     "password" => '',
     "hostname" => 'localhost',

@@ -80,7 +80,7 @@ class AcDocReturnType
         $this->description = $description;
         $this->constraints = $constraints ?? [];
 
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_TYPE => 'type',
                 self::KEY_DESCRIPTION => 'description',
@@ -93,7 +93,7 @@ class AcDocReturnType
      * Static method to create an AcDocReturnType instance from JSON data.
      * 
      * @acDoc {
-     *   "name": "fromJson",
+     *   "name": "instanceFromJson",
      *   "type": "method",
      *   "description": "Creates an instance of AcDocReturnType from a JSON array.",
      *   "parameters": {
@@ -104,7 +104,7 @@ class AcDocReturnType
      * @param array $jsonData The JSON data to create the instance.
      * @return AcDocReturnType The created AcDocReturnType instance.
      */
-    public static function fromJson(array $jsonData): AcDocReturnType
+    public static function instanceFromJson(array $jsonData): AcDocReturnType
     {
         $instance = new self(
             $jsonData[self::KEY_TYPE] ?? '',
@@ -118,7 +118,7 @@ class AcDocReturnType
      * Bind the instance properties from the provided JSON data.
      *
      * @acDoc {
-     *   "name": "setValuesFromJson",
+     *   "name": "fromJson",
      *   "type": "method",
      *   "description": "Sets the values of the instance properties from the JSON data.",
      *   "parameters": {
@@ -128,7 +128,7 @@ class AcDocReturnType
      * }
      * @param array $jsonData The JSON data to bind to the instance.
      */
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): void {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
     }
 

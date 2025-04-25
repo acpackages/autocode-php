@@ -19,7 +19,7 @@ use AcSql\Database\SchemaDetails;
 use AcSql\Database\TblSchemaDetails;
 use AcSql\Database\TblSchemaLogs;
 use AcSql\Database\AcSMDataDictionary;
-use AcSql\Enums\AcEnumSqlDatabaseType;
+use Autocode\Enums\AcEnumSqlDatabaseType;
 use AcSql\Enums\AcEnumSqlDatabaseEntity;
 use Exception;
 

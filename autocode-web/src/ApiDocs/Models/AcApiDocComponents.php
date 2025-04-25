@@ -2,20 +2,29 @@
 namespace AcWeb\ApiDocs\Models;
 
 use AcWeb\ApiDocs\Models\AcApiDocSchema;
+use Autocode\Models\AcJsonBindConfig;
 
 class AcApiDocComponents {
     const KEY_SCHEMAS = 'schemas';
-
+    public AcJsonBindConfig $acJsonBindConfig;
     public array $schemas = [];
 
-    public static function fromJson(array $jsonData): AcApiDocComponents {
+    public static function instanceFromJson(array $jsonData): AcApiDocComponents {
         $instance = new AcApiDocComponents();
         if (isset($jsonData[self::KEY_SCHEMAS])) {
             foreach ($jsonData[self::KEY_SCHEMAS] as $name => $schema) {
-                $instance->schemas[$name] = AcApiDocSchema::fromJson($schema);
+                $instance->schemas[$name] = AcApiDocSchema::instanceFromJson($schema);
             }
         }
         return $instance;
+    }
+
+    public function __construct() {
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
+            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
+                self::KEY_SCHEMAS => "schemas",
+            ]        
+        ]);
     }
 
     public function toJson(): array {
@@ -27,8 +36,7 @@ class AcApiDocComponents {
                 if (!empty($schemaJson)) {
                     $schemas[$name] = $schemaJson;
                 }
-            }
-    
+            }    
             if (!empty($schemas)) {
                 $result[self::KEY_SCHEMAS] = $schemas;
             }

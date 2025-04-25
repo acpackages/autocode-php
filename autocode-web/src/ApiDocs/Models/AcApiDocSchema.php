@@ -1,6 +1,8 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
+use Autocode\Models\AcJsonBindConfig;
+
 class AcApiDocSchema {
     const KEY_TYPE = 'type';
     const KEY_FORMAT = 'format';
@@ -10,7 +12,7 @@ class AcApiDocSchema {
     const KEY_REQUIRED = 'required';
     const KEY_ITEMS = 'items';
     const KEY_ENUM = 'enum';
-
+    public AcJsonBindConfig $acJsonBindConfig;
     public ?string $type = null;
     public ?string $format = null;
     public ?string $title = null;
@@ -20,7 +22,7 @@ class AcApiDocSchema {
     public ?array $items = null;
     public ?array $enum = null;
 
-    public static function fromJson(array $jsonData): AcApiDocSchema {
+    public static function instanceFromJson(array $jsonData): AcApiDocSchema {
         $instance = new AcApiDocSchema();
         $instance->type = $jsonData[self::KEY_TYPE] ?? null;
         $instance->format = $jsonData[self::KEY_FORMAT] ?? null;

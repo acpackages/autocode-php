@@ -2,6 +2,7 @@
 namespace AcWeb\ApiDocs\Models;
 
 use AcWeb\ApiDocs\Models\AcApiDocRoute;
+use Autocode\Models\AcJsonBindConfig;
 
 class AcApiDocPath {
     const KEY_URL = "url";
@@ -14,7 +15,7 @@ class AcApiDocPath {
     const KEY_HEAD = "head";
     const KEY_PATCH = "patch";   
     const KEY_TRACE = "trace";
-    
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $url = "";
     public ?AcApiDocRoute $connect = null;
     public ?AcApiDocRoute $get = null;
@@ -26,12 +27,12 @@ class AcApiDocPath {
     public ?AcApiDocRoute $patch = null;
     public ?AcApiDocRoute $trace = null;
 
-    public static function fromJson(array $jsonData): AcApiDocPath {
+    public static function instanceFromJson(array $jsonData): AcApiDocPath {
         $instance = new AcApiDocPath();
         $instance->url = $jsonData[self::KEY_URL] ?? null;
         foreach ([self::KEY_GET, self::KEY_PUT, self::KEY_POST, self::KEY_DELETE, self::KEY_OPTIONS, self::KEY_HEAD, self::KEY_PATCH, self::KEY_TRACE] as $method) {
             if (isset($jsonData[$method])) {
-                $instance->$method = AcApiDocPathOperation::fromJson($jsonData[$method]);
+                $instance->$method = AcApiDocPathOperation::instanceFromJson($jsonData[$method]);
             }
         }
         return $instance;

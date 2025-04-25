@@ -5,12 +5,12 @@ require __DIR__.'./../../autocode-data-dictionary/vendor/autoload.php';
 use AcDataDictionary\Models\AcDataDictionary;
 use AcSql\Database\AcSqlDatabase;
 use AcSql\Database\AcSqlDbSchemaManager;
-use AcSql\Enums\AcEnumSqlDatabaseType;
+use Autocode\Enums\AcEnumSqlDatabaseType;
 use AcSql\Models\AcSqlConnection;
 $dataDictionaryJson = file_get_contents('../assets/data_dictionary.json');
 AcDataDictionary::registerDataDictionaryJsonString($dataDictionaryJson);
 AcSqlDatabase::$databaseType = AcEnumSqlDatabaseType::MYSQL;
-$acSqlConnection = AcSqlConnection::fromJson([
+$acSqlConnection = AcSqlConnection::instanceFromJson([
     "username" => 'root',
     "password" => '',
     "hostname" => 'localhost',

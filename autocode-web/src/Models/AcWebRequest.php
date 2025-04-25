@@ -26,14 +26,14 @@ class AcWebRequest {
     public array $session=[];
     public string $url= "";
 
-    public static function fromJson(array $jsonData): AcWebRequest {
+    public static function instanceFromJson(array $jsonData): AcWebRequest {
         $instance = new AcWebRequest();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_BODY => "body",
                 self::KEY_COOKIES => "cookies",
@@ -49,8 +49,9 @@ class AcWebRequest {
         ]);
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {

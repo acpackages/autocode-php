@@ -9,7 +9,7 @@ use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Enums\AcEnumDDFieldType;
 use AcDataDictionary\Models\AcDDTable;
 use AcDataDictionary\Models\AcDDTableField;
-use AcSql\Enums\AcEnumSqlDatabaseType;
+use Autocode\Enums\AcEnumSqlDatabaseType;
 
 use Autocode\Autocode;
 use DateTime;

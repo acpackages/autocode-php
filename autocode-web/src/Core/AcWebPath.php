@@ -81,7 +81,7 @@ class AcWebPath {
 
     public function redirect($targetUrl){}
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): void {
         if (isset($jsonData[self::KEY_CONNECTION_PORT])) {
             $this->port = (int) $jsonData[self::KEY_CONNECTION_PORT];
         }

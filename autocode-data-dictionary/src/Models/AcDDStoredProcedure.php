@@ -14,9 +14,9 @@ class AcDDStoredProcedure {
     public string $storedProcedureName = "";
     public string $storedProcedureCode = "";
 
-    public static function fromJson(array $jsonData): self {
+    public static function instanceFromJson(array $jsonData): self {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
@@ -25,14 +25,14 @@ class AcDDStoredProcedure {
         $acDataDictionary = AcDataDictionary::getInstance($dataDictionaryName);
 
         if (isset($acDataDictionary->storedProcedures[$storedProcedureName])) {
-            $result->setValuesFromJson($acDataDictionary->storedProcedures[$storedProcedureName]);
+            $result->fromJson($acDataDictionary->storedProcedures[$storedProcedureName]);
         }
 
         return $result;
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_STORED_PROCEDURE_CODE => "storedProcedureCode",
                 self::KEY_STORED_PROCEDURE_NAME => "storedProcedureName"
@@ -40,8 +40,9 @@ class AcDDStoredProcedure {
         ]);
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {

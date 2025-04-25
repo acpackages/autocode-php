@@ -19,9 +19,9 @@ class AcDDView {
     public string $viewQuery = "";
     public array $viewFields = [];
 
-    public static function fromJson(array $jsonData): AcDDView {
+    public static function instanceFromJson(array $jsonData): AcDDView {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
@@ -29,13 +29,13 @@ class AcDDView {
         $result = new self();
         $acDataDictionary = AcDataDictionary::getInstance($dataDictionaryName);
         if (isset($acDataDictionary->views[$viewName])) {
-            $result->setValuesFromJson($acDataDictionary->views[$viewName]);
+            $result->fromJson($acDataDictionary->views[$viewName]);
         }
         return $result;
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_VIEW_NAME => "viewName",
                 self::KEY_VIEW_QUERY => "viewQuery",
@@ -44,7 +44,7 @@ class AcDDView {
         ]);
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         if (isset($jsonData[self::KEY_VIEW_NAME])) {
             $this->viewName = (string) $jsonData[self::KEY_VIEW_NAME];
         }
@@ -53,9 +53,10 @@ class AcDDView {
         }
         if (isset($jsonData[self::KEY_VIEW_FIELDS]) && is_array($jsonData[self::KEY_VIEW_FIELDS])) {
             foreach ($jsonData[self::KEY_VIEW_FIELDS] as $fieldName => $fieldData) {
-                $this->viewFields[$fieldName] = AcDDViewField::fromJson($fieldData);
+                $this->viewFields[$fieldName] = AcDDViewField::instanceFromJson($fieldData);
             }
         }
+        return $this;
     }
 
     public function toJson(): array {

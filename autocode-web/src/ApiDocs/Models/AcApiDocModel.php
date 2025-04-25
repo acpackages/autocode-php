@@ -1,16 +1,18 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
+use Autocode\Models\AcJsonBindConfig;
+
 class AcApiDocModel {
     const KEY_NAME = 'name';
     const KEY_TYPE = 'type';
     const KEY_PROPERTIES = 'properties';
-
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $name = "";
     public string $type = "object";
     public array $properties = [];
 
-    public static function fromJson(array $jsonData): AcApiDocModel {
+    public static function instanceFromJson(array $jsonData): AcApiDocModel {
         $instance = new AcApiDocModel();
 
         if (isset($jsonData[self::KEY_NAME])) {

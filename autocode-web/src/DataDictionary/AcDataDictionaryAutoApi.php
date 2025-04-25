@@ -84,7 +84,7 @@ class AcDataDictionaryAutoApi
         ];
     }
 
-    public function includeTable(string $tableName, ?bool $delete, ?bool $insert, ?bool $save, ?bool $select, ?bool $selectDistinct, ?bool $update)
+    public function includeTable(string $tableName, ?bool $delete = null, ?bool $insert = null, ?bool $save = null, ?bool $select = null, ?bool $selectDistinct = null, ?bool $update = null)
     {
         if ($delete == null && $insert == null && $save == null && $select == null && $selectDistinct == null && $update == null) {
             $delete = true;

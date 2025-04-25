@@ -30,7 +30,7 @@ class AcDataDictionary {
     public const KEY_TRIGGERS = "triggers";
     public const KEY_VERSION = "version";
     public const KEY_VIEWS = "views";
-
+    public AcJsonBindConfig $acJsonBindConfig;
     public static array $dataDictionaries = [];
     public array $functions = [];
     public array $relationships = [];
@@ -40,16 +40,16 @@ class AcDataDictionary {
     public int $version = 0;
     public array $views = [];
 
-    public static function fromJson(array $jsonData): AcDataDictionary {
+    public static function instanceFromJson(array $jsonData): AcDataDictionary {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
     public static function fromJsonString(string $jsonString): AcDataDictionary {
         $instance = new self();
         $jsonData = AcExtensionMethods::stringParseJsonToArray($jsonString);
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
@@ -58,7 +58,7 @@ class AcDataDictionary {
         $acDataDictionary = self::getInstance($dataDictionaryName);
         if (!empty($acDataDictionary->functions)) {
             foreach ($acDataDictionary->functions as $functionName => $functionData) {
-                $result[$functionName] = AcDDFunction::fromJson($functionData);
+                $result[$functionName] = AcDDFunction::instanceFromJson($functionData);
             }
         }
         return $result;
@@ -70,7 +70,7 @@ class AcDataDictionary {
         if (!empty($acDataDictionary->functions)) {
             if(AcExtensionMethods::arrayContainsKey($functionName,$acDataDictionary->functions)){
                 $functionData = $acDataDictionary->functions[$functionName];
-                $result = AcDDFunction::fromJson($functionData);
+                $result = AcDDFunction::instanceFromJson($functionData);
             }
         }
         return $result;
@@ -79,7 +79,7 @@ class AcDataDictionary {
     public static function getInstance(string $dataDictionaryName = "default"): AcDataDictionary {
         $result = new self();
         if (isset(self::$dataDictionaries[$dataDictionaryName])) {
-            $result->setValuesFromJson(self::$dataDictionaries[$dataDictionaryName]);
+            $result->fromJson(self::$dataDictionaries[$dataDictionaryName]);
         }
         return $result;
     }
@@ -92,7 +92,7 @@ class AcDataDictionary {
                 foreach ($destinationTableDetails as $destinationFieldName => $destinationFieldDetails) {
                     foreach ($destinationFieldDetails as $sourceTableName => $sourceTableDetails) {
                         foreach ($sourceTableDetails as $sourceFieldName => $relationshipDetails) {
-                            $result[] = AcDDRelationship::fromJson($relationshipDetails);
+                            $result[] = AcDDRelationship::instanceFromJson($relationshipDetails);
                         }
                     }
                 }
@@ -106,7 +106,7 @@ class AcDataDictionary {
         $acDataDictionary = self::getInstance($dataDictionaryName);
         if (!empty($acDataDictionary->storedProcedures)) {
             foreach ($acDataDictionary->storedProcedures as $storedProcedureName => $storedProcedureData) {
-                $result[$storedProcedureName] = AcDDStoredProcedure::fromJson($storedProcedureData);
+                $result[$storedProcedureName] = AcDDStoredProcedure::instanceFromJson($storedProcedureData);
             }
         }
         return $result;
@@ -118,7 +118,7 @@ class AcDataDictionary {
         if (!empty($acDataDictionary->storedProcedures)) {
             if(AcExtensionMethods::arrayContainsKey($storedProcedureName,$acDataDictionary->storedProcedures)){
                 $storedProcedureData = $acDataDictionary->storedProcedures[$storedProcedureName];
-                $result = AcDDStoredProcedure::fromJson($storedProcedureData);
+                $result = AcDDStoredProcedure::instanceFromJson($storedProcedureData);
             }
         }
         return $result;
@@ -130,7 +130,7 @@ class AcDataDictionary {
         if (!empty($acDataDictionary->tables)) {
             if(AcExtensionMethods::arrayContainsKey($tableName,$acDataDictionary->tables)){
                 $tableData = $acDataDictionary->tables[$tableName];
-                $result = AcDDTable::fromJson($tableData);
+                $result = AcDDTable::instanceFromJson($tableData);
             }
             else{
                 echo "Not found";
@@ -148,7 +148,7 @@ class AcDataDictionary {
         if (!empty($acDataDictionary->tables)) {
             if(AcExtensionMethods::arrayContainsKey($tableName,$acDataDictionary->tables)){
                 $tableData = $acDataDictionary->tables[$tableName];
-                $acDDTable = AcDDTable::fromJson($tableData);
+                $acDDTable = AcDDTable::instanceFromJson($tableData);
                 $result = $acDDTable->getField($fieldName);
             }
             else{
@@ -173,7 +173,7 @@ class AcDataDictionary {
                             if($relationType == AcEnumDDFieldRelationType::ANY){
                                 if(($tableName == $relationshipDetails[AcDDRelationship::KEY_DESTINATION_TABLE] && $fieldName == $relationshipDetails[AcDDRelationship::KEY_DESTINATION_FIELD]) || ($tableName == $relationshipDetails[AcDDRelationship::KEY_SOURCE_TABLE] && $fieldName == $relationshipDetails[AcDDRelationship::KEY_SOURCE_FIELD])){
                                     $includeRelation = true;
-                                    $result[] = AcDDRelationship::fromJson($relationshipDetails);
+                                    $result[] = AcDDRelationship::instanceFromJson($relationshipDetails);
                                 } 
                             }
                             else if($relationType == AcEnumDDFieldRelationType::SOURCE){
@@ -187,7 +187,7 @@ class AcDataDictionary {
                                 }
                             }
                             if($includeRelation){
-                                $result[] = AcDDRelationship::fromJson($relationshipDetails);
+                                $result[] = AcDDRelationship::instanceFromJson($relationshipDetails);
                             } 
                         }
                     }
@@ -222,7 +222,7 @@ class AcDataDictionary {
                                 }
                             }
                             if($includeRelation){
-                                $result[] = AcDDRelationship::fromJson($relationshipDetails);
+                                $result[] = AcDDRelationship::instanceFromJson($relationshipDetails);
                             } 
                         }
                     }
@@ -237,7 +237,7 @@ class AcDataDictionary {
         $acDataDictionary = self::getInstance($dataDictionaryName);
         if (!empty($acDataDictionary->tables)) {
             foreach ($acDataDictionary->tables as $tableName => $tableData) {
-                $result[$tableName] = AcDDTable::fromJson($tableData);
+                $result[$tableName] = AcDDTable::instanceFromJson($tableData);
             }
         }
         return $result;
@@ -248,7 +248,7 @@ class AcDataDictionary {
         $acDataDictionary = self::getInstance($dataDictionaryName);
         if (!empty($acDataDictionary->triggers)) {
             foreach ($acDataDictionary->triggers as $triggerName => $triggerData) {
-                $result[$triggerName] = AcDDTrigger::fromJson($triggerData);
+                $result[$triggerName] = AcDDTrigger::instanceFromJson($triggerData);
             }
         }
         return $result;
@@ -260,7 +260,7 @@ class AcDataDictionary {
         if (!empty($acDataDictionary->triggers)) {
             if(AcExtensionMethods::arrayContainsKey($triggerName,$acDataDictionary->triggers)){
                 $triggerData = $acDataDictionary->triggers[$triggerName];
-                $result = AcDDTrigger::fromJson($triggerData);
+                $result = AcDDTrigger::instanceFromJson($triggerData);
             }
         }
         return $result;
@@ -271,7 +271,7 @@ class AcDataDictionary {
         $acDataDictionary = self::getInstance($dataDictionaryName);
         if (!empty($acDataDictionary->views)) {
             foreach ($acDataDictionary->views as $viewName => $viewData) {
-                $result[$viewName] = AcDDView::fromJson($viewData);
+                $result[$viewName] = AcDDView::instanceFromJson($viewData);
             }
         }
         return $result;
@@ -283,7 +283,7 @@ class AcDataDictionary {
         if (!empty($acDataDictionary->views)) {
             if(AcExtensionMethods::arrayContainsKey($viewName,$acDataDictionary->views)){
                 $viewData = $acDataDictionary->views[$viewName];
-                $result = AcDDView::fromJson($viewData);
+                $result = AcDDView::instanceFromJson($viewData);
             }
         }
         return $result;
@@ -299,7 +299,7 @@ class AcDataDictionary {
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_FUNCTIONS => "functions",
                 self::KEY_RELATIONSHIPS => "relationships",
@@ -355,7 +355,7 @@ class AcDataDictionary {
         });
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         $this->functions = $jsonData[self::KEY_FUNCTIONS] ?? [];
         $this->relationships = $jsonData[self::KEY_RELATIONSHIPS] ?? [];
         $this->storedProcedures = $jsonData[self::KEY_STORED_PROCEDURES] ?? [];
@@ -363,6 +363,7 @@ class AcDataDictionary {
         $this->triggers = $jsonData[self::KEY_TRIGGERS] ?? [];
         $this->version = $jsonData[self::KEY_VERSION] ?? 0;
         $this->views = $jsonData[self::KEY_VIEWS] ?? [];
+        return $this;
     }
 
     public function toJson(): array {

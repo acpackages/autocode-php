@@ -1,6 +1,6 @@
 <?php
 
-namespace AcSql\Enums;
+namespace Autocode\Enums;
 
 class AcEnumSqlDatabaseType {
     const MARIADB = "mariadb";

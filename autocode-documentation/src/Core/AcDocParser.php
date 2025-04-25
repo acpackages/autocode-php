@@ -11,7 +11,7 @@ class AcDocParser
 {
     
     private function parseDocArray(array $data): AcDocumentation{
-        return AcDocumentation::fromJson($data);
+        return AcDocumentation::instanceFromJson($data);
     }
 
     public function parseFile(string $filePath): array

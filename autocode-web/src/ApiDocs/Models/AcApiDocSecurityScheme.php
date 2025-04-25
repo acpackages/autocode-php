@@ -1,6 +1,8 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
+use Autocode\Models\AcJsonBindConfig;
+
 class AcApiDocSecurityScheme {
     const KEY_TYPE = 'type';
     const KEY_DESCRIPTION = 'description';
@@ -10,7 +12,7 @@ class AcApiDocSecurityScheme {
     const KEY_BEARER_FORMAT = 'bearerFormat';
     const KEY_FLOWS = 'flows';
     const KEY_OPENID_CONNECT_URL = 'openIdConnectUrl';
-
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $type = '';
     public string $description = '';
     public string $name = '';
@@ -20,7 +22,7 @@ class AcApiDocSecurityScheme {
     public array $flows = [];
     public string $openIdConnectUrl = '';
 
-    public static function fromJson(array $jsonData): AcApiDocSecurityScheme {
+    public static function instanceFromJson(array $jsonData): AcApiDocSecurityScheme {
         $instance = new AcApiDocSecurityScheme();
 
         $instance->type = $jsonData[self::KEY_TYPE] ?? '';

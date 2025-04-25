@@ -19,14 +19,14 @@ class AcWebRouteDefinition {
     public string $method = "POST";
     public string $url = "";
 
-    public static function fromJson(array $jsonData): AcWebRouteDefinition {
+    public static function instanceFromJson(array $jsonData): AcWebRouteDefinition {
         $instance = new AcWebRouteDefinition();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_CONTROLLER => "controller",
                 self::KEY_HANDLER => "handler",
@@ -37,8 +37,9 @@ class AcWebRouteDefinition {
         ]);
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {

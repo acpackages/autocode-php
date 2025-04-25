@@ -8,6 +8,7 @@ require_once __DIR__ . './../../../autocode-data-dictionary/vendor/autoload.php'
 use AcDataDictionary\Enums\AcEnumDDFieldFormat;
 use AcDataDictionary\Enums\AcEnumDDTableRowEvent;
 use AcDataDictionary\Enums\AcEnumDDTableRowOperation;
+use AcDataDictionary\Models\AcDDSelectStatement;
 use AcSql\Enums\AcEnumFieldType;
 use AcSql\Enums\AcEnumRowOperation;
 use AcSql\Enums\AcEnumSelectMode;
@@ -17,7 +18,7 @@ use Autocode\Models\AcResult;
 use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Enums\AcEnumDDFieldType;
 use AcDataDictionary\Models\AcDDTable;
-use AcSql\Enums\AcEnumSqlDatabaseType;
+use Autocode\Enums\AcEnumSqlDatabaseType;
 use AcSql\Database\AcSqlDbTableField;
 use AcSql\Database\AcSqlDbTableRowEvent;
 use Autocode\Autocode;
@@ -437,7 +438,7 @@ class AcSqlDbTable extends AcSqlDbBase
         return $result;
     }
 
-    public function getDistinctFieldValues(string $fieldName = "", ?string $condition = "", ?string $orderBy = "", ?string $mode = AcEnumSelectMode::LIST , ?int $startIndex = -1, ?int $rowCount = -1, ?array $parameters = []): AcSqlDaoResult
+    public function getDistinctFieldValues(string $fieldName = "", ?string $condition = "", ?string $orderBy = "", ?string $mode = AcEnumSelectMode::LIST , ?int $pageNumber = -1, ?int $pageSize = -1, ?array $parameters = []): AcSqlDaoResult
     {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::SELECT);
         try {
@@ -445,14 +446,15 @@ class AcSqlDbTable extends AcSqlDbBase
                 $orderBy = $fieldName;
             }
             $selectStatement = $this->getSelectStatement();
-            $statement = "SELECT DISTINCT $fieldName FROM ($selectStatement) AS recordsList";
+            $selectStatement = "SELECT DISTINCT $fieldName FROM ($selectStatement) AS recordsList";
             if (!empty($condition)) {
                 $condition .= " AND $fieldName IS NOT NULL AND $fieldName != ''";
             } else {
                 $condition = " $fieldName IS NOT NULL AND $fieldName != ''";
             }
             $this->logger->log(["", "", "Executing getDistinctFieldValues select statement"]);
-            $result = $this->dao->getRows(statement: $statement, condition: $condition, mode: $mode, startIndex: $startIndex, rowCount: $rowCount, parameters: $parameters);
+            $sqlStatement = AcDDSelectStatement::generateSqlStatement(selectStatement:$selectStatement,condition:$condition,orderBy:$orderBy,pageNumber:$pageNumber,pageSize:$pageSize,databaseType:$this->databaseType);
+            $result = $this->dao->getRows(statement: $sqlStatement,parameters: $parameters);
         } catch (Exception $ex) {
             $result->setException(exception: $ex, logger: $this->logger, logException: true);
         }
@@ -598,20 +600,15 @@ class AcSqlDbTable extends AcSqlDbBase
         return $result;
     }
 
-    public function getRows(?string $selectStatement = "",?string $condition = "", ?string $orderBy = "", ?string $mode = AcEnumSelectMode::LIST , ?int $startIndex = -1, ?int $rowCount = -1, ?array $parameters = []): AcSqlDaoResult
+    public function getRows(?string $selectStatement = "",?string $condition = "", ?string $orderBy = "", ?string $mode = AcEnumSelectMode::LIST , ?int $pageNumber = -1, ?int $pageSize = -1, ?array $parameters = []): AcSqlDaoResult
     {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::SELECT);
         try {
-            if (empty($selectStatement)) {
+            if($selectStatement == ""){
                 $selectStatement = $this->getSelectStatement();
-                if (!empty($condition)) {
-                    $selectStatement .= " WHERE $condition";
-                }
-                if (!empty($orderBy)) {
-                    $selectStatement .= " ORDER BY $orderBy";
-                }
-            }            
-            $result = $this->dao->getRows(statement: $selectStatement, parameters: $parameters, mode: $mode, startIndex: $startIndex, rowCount: $rowCount);
+            }
+            $sqlStatement = AcDDSelectStatement::generateSqlStatement(selectStatement:$selectStatement,condition:$condition,orderBy:$orderBy,pageNumber:$pageNumber,pageSize:$pageSize,databaseType:$this->databaseType);
+            $result = $this->dao->getRows(statement: $sqlStatement, parameters: $parameters, mode: $mode);
         } catch (Exception $ex) {
             $result->setException(exception: $ex, logger: $this->logger, logException: true);
         }

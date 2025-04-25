@@ -9,32 +9,34 @@ use Autocode\Utils\AcUtilsJson;
 
 class AcDDCondition {
 
-    const KEY_FIELD = "field";
+    const KEY_FIELD_NAME = "field_name";
     const KEY_OPERATOR = "operator";
     const KEY_VALUE = "value";
     public AcJsonBindConfig $acJsonBindConfig;
-    public string $field = "";    
+    public string $databaseType = "";
+    public string $fieldName = "";    
     public string $operator = "";
     public mixed $value;
 
-    public static function fromJson(array $jsonData): AcDDCondition {
+    public static function instanceFromJson(array $jsonData): AcDDCondition {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_FIELD => "field",
+                self::KEY_FIELD_NAME => "fieldName",
                 self::KEY_OPERATOR => "operator",
                 self::KEY_VALUE => "value"
             ]        
         ]);
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {

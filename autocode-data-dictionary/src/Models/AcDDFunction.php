@@ -15,9 +15,9 @@ class AcDDFunction {
     public string $functionName = "";
     public string $functionCode = "";
 
-    public static function fromJson(array $jsonData): self {
+    public static function instanceFromJson(array $jsonData): self {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
@@ -25,14 +25,13 @@ class AcDDFunction {
         $result = new self();
         $acDataDictionary = AcDataDictionary::getInstance($dataDictionaryName);
         if (isset($acDataDictionary->functions[$functionName])) {
-            $result->setValuesFromJson($acDataDictionary->functions[$functionName]);
+            $result->fromJson($acDataDictionary->functions[$functionName]);
         }
-
         return $result;
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_FUNCTION_CODE => "functionCode",
                 self::KEY_FUNCTION_NAME => "functionName",
@@ -40,8 +39,9 @@ class AcDDFunction {
         ]);
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {

@@ -89,7 +89,7 @@ class AcDocParameter
         $this->description = $description;
         $this->constraints = $constraints ?? [];
 
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_NAME => 'name',
                 self::KEY_TYPE => 'type',
@@ -103,12 +103,12 @@ class AcDocParameter
      * Static method to create an AcDocParameter instance from JSON data.
      * 
      * @acDoc {
-     *   "name": "fromJson",
+     *   "name": "instanceFromJson",
      *   "type": "method",
      *   "description": "Creates an instance of AcDocParameter from a JSON array."
      * }
      */
-    public static function fromJson(array $jsonData): AcDocParameter
+    public static function instanceFromJson(array $jsonData): AcDocParameter
     {
         $instance = new self(
             $jsonData[self::KEY_NAME] ?? '',
@@ -123,12 +123,12 @@ class AcDocParameter
      * Bind the instance properties from the provided JSON data.
      *
      * @acDoc {
-     *   "name": "setValuesFromJson",
+     *   "name": "fromJson",
      *   "type": "method",
      *   "description": "Sets the values of the instance properties from the JSON data."
      * }
      */
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): void {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
     }
 

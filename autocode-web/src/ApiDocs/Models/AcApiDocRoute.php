@@ -1,6 +1,8 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
+use Autocode\Models\AcJsonBindConfig;
+
 class AcApiDocRoute {
     const KEY_TAGS = 'tags';
     const KEY_SUMMARY = 'summary';
@@ -13,7 +15,7 @@ class AcApiDocRoute {
     const KEY_PRODUCES = 'produces';
     const KEY_DEPRECATED = 'deprecated';
     const KEY_SECURITY = 'security';
-
+    public AcJsonBindConfig $acJsonBindConfig;
     public array $tags = [];
     public string $summary = '';
     public string $description = '';
@@ -26,7 +28,7 @@ class AcApiDocRoute {
     public bool $deprecated = false;
     public array $security = [];
 
-    public static function fromJson(array $jsonData): AcApiDocRoute {
+    public static function instanceFromJson(array $jsonData): AcApiDocRoute {
         $instance = new AcApiDocRoute();
         $instance->tags = $jsonData[self::KEY_TAGS] ?? [];
         $instance->summary = $jsonData[self::KEY_SUMMARY] ?? '';
@@ -34,15 +36,15 @@ class AcApiDocRoute {
         $instance->operationId = $jsonData[self::KEY_OPERATION_ID] ?? '';
         if (isset($jsonData[self::KEY_PARAMETERS])) {
             foreach ($jsonData[self::KEY_PARAMETERS] as $param) {
-                $instance->parameters[] = AcApiDocParameter::fromJson($param);
+                $instance->parameters[] = AcApiDocParameter::instanceFromJson($param);
             }
         }
         if (isset($jsonData[self::KEY_REQUEST_BODY])) {
-            $instance->requestBody = AcApiDocRequestBody::fromJson($jsonData[self::KEY_REQUEST_BODY]);
+            $instance->requestBody = AcApiDocRequestBody::instanceFromJson($jsonData[self::KEY_REQUEST_BODY]);
         }
         if (isset($jsonData[self::KEY_RESPONSES])) {
             foreach ($jsonData[self::KEY_RESPONSES] as $response) {
-                $instance->responses[] = AcApiDocResponse::fromJson($response);
+                $instance->responses[] = AcApiDocResponse::instanceFromJson($response);
             }
         }
         $instance->responses = $jsonData[self::KEY_RESPONSES] ?? [];

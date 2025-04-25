@@ -32,14 +32,14 @@ class AcDDTableField {
     public mixed $fieldValue = null;
     public ?AcDDTable $table;
 
-    public static function fromJson(array $jsonData): AcDDTableField {
+    public static function instanceFromJson(array $jsonData): AcDDTableField {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_FIELD_NAME => "fieldName",
                 self::KEY_FIELD_PROPERTIES => "fieldProperties",
@@ -211,16 +211,17 @@ class AcDDTableField {
         return $result;
     }    
     
-    public function setValuesFromJson(array $jsonData): void {
+    public function fromJson(array $jsonData): static {
         $this->fieldName = $jsonData[self::KEY_FIELD_NAME] ?? "";
         $this->fieldType = $jsonData[self::KEY_FIELD_TYPE] ?? "text";
         $this->fieldValue = $jsonData[self::KEY_FIELD_VALUE] ?? null;
         
         if (isset($jsonData[self::KEY_FIELD_PROPERTIES]) && is_array($jsonData[self::KEY_FIELD_PROPERTIES])) {
             foreach ($jsonData[self::KEY_FIELD_PROPERTIES] as $key => $value) {
-                $this->fieldProperties[$key] = AcDDTableFieldProperty::fromJson($value);
+                $this->fieldProperties[$key] = AcDDTableFieldProperty::instanceFromJson($value);
             }
         }
+        return $this;
     }
     
     public function toJson(): array {

@@ -1,23 +1,24 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
+
+use Autocode\Models\AcJsonBindConfig;
 class AcApiDocServer {
     const KEY_DESCRIPTION = "description";
     const KEY_TITLE = "title";
     const KEY_URL = "url";
-
-    
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $description = "";
     public string $title = "";
     public string $url = "";
     
-    public static function fromJson(array $jsonData): AcApiDocServer {
+    public static function instanceFromJson(array $jsonData): AcApiDocServer {
         $instance = new AcApiDocServer();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
 
-    public function setValuesFromJson(array $jsonData) {
+    public function fromJson(array $jsonData) {
         if (isset($jsonData[self::KEY_DESCRIPTION])) {
             $this->description = $jsonData[self::KEY_DESCRIPTION];
         }

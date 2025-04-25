@@ -21,14 +21,14 @@ class AcDDViewField {
     public string $fieldSource = "";
     public string $fieldSourceName = "";
 
-    public static function fromJson(array $jsonData): AcDDViewField {
+    public static function instanceFromJson(array $jsonData): AcDDViewField {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_FIELD_NAME => "fieldName",
                 self::KEY_FIELD_PROPERTIES => "fieldProperties",
@@ -40,7 +40,7 @@ class AcDDViewField {
         ]);  
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         if (array_key_exists(self::KEY_FIELD_NAME, $jsonData)) {
             $this->fieldName = (string) $jsonData[self::KEY_FIELD_NAME];
         }
@@ -58,9 +58,10 @@ class AcDDViewField {
         }
         if (array_key_exists(self::KEY_FIELD_PROPERTIES, $jsonData)) {
             foreach ($jsonData[self::KEY_FIELD_PROPERTIES] as $propertyName => $propertyData) {
-                $this->fieldProperties[$propertyName] = AcDDTableFieldProperty::fromJson($propertyData);
+                $this->fieldProperties[$propertyName] = AcDDTableFieldProperty::instanceFromJson($propertyData);
             }
         }
+        return $this;
     }
 
     public function toJson(): array {

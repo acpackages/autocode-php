@@ -148,7 +148,7 @@ function executeSchemaTests(AcBaseSqlDao $dao) {
 }
 
 $dao = new AcMysqlDao();
-$acSqlConnection = AcSqlConnection::fromJson([
+$acSqlConnection = AcSqlConnection::instanceFromJson([
     "username" => 'root',
     "password" => '',
     "hostname" => 'localhost',

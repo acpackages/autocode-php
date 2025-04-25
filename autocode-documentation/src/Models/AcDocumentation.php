@@ -265,7 +265,7 @@ class AcDocumentation {
      * Constructor method to initialize binding configuration.
      */
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_NAME => 'name',
                 self::KEY_TYPE => 'type',
@@ -296,14 +296,14 @@ class AcDocumentation {
      * Static method to create an instance from JSON data.
      *
      * @acDoc {
-     *   "name": "fromJson",
+     *   "name": "instanceFromJson",
      *   "type": "method",
      *   "description": "Creates an instance of AcDocumentation from a JSON array."
      * }
      */
-    public static function fromJson(array $jsonData): AcDocumentation {
+    public static function instanceFromJson(array $jsonData): AcDocumentation {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
@@ -311,12 +311,12 @@ class AcDocumentation {
      * Bind the instance properties from the provided JSON data.
      *
      * @acDoc {
-     *   "name": "setValuesFromJson",
+     *   "name": "fromJson",
      *   "type": "method",
      *   "description": "Sets the values of the instance properties from the JSON data."
      * }
      */
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): void {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
     }
 

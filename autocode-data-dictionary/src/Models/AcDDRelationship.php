@@ -22,9 +22,9 @@ class AcDDRelationship {
     public string $sourceField = "";
     public string $sourceTable = "";
 
-    public static function fromJson(array $jsonData): self {
+    public static function instanceFromJson(array $jsonData): self {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
@@ -35,7 +35,7 @@ class AcDDRelationship {
         if (isset($acDataDictionary->relationships[$destinationTable][$destinationField])) {
             foreach ($acDataDictionary->relationships[$destinationTable][$destinationField] as $sourceTable => $sourceDetails) {
                 foreach ($sourceDetails as $sourceField => $relationshipDetails) {
-                    $result[] = self::fromJson($relationshipDetails);
+                    $result[] = self::instanceFromJson($relationshipDetails);
                 }
             }
         }
@@ -44,7 +44,7 @@ class AcDDRelationship {
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_CASCADE_DELETE_DESTINATION => "cascadeDeleteDestination",
                 self::KEY_CASCADE_DELETE_SOURCE => "cascadeDeleteSource",
@@ -56,8 +56,9 @@ class AcDDRelationship {
         ]);
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {

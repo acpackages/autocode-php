@@ -12,14 +12,14 @@ class AcDDTableProperty {
     public string $propertyName = "";
     public mixed $propertyValue = null;
 
-    public static function fromJson(array $jsonData): AcDDTableProperty {
+    public static function instanceFromJson(array $jsonData): AcDDTableProperty {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_PROPERTY_NAME => "propertyName",
                 self::KEY_PROPERTY_VALUE => "propertyValue",
@@ -27,8 +27,9 @@ class AcDDTableProperty {
         ]);
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {

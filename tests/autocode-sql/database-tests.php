@@ -8,7 +8,7 @@ use AcSql\Database\AcSqlDbSchemaManager;
 use AcSql\Daos\AcBaseSqlDao;
 use AcSql\Daos\AcMysqlDao;
 use AcSql\Database\AcSqlDbTable;
-use AcSql\Enums\AcEnumSqlDatabaseType;
+use Autocode\Enums\AcEnumSqlDatabaseType;
 use AcSql\Models\AcSqlConnection;
 
 function executeTests() {
@@ -55,7 +55,7 @@ function executeTests() {
 $dataDictionaryJson = file_get_contents('../assets/data_dictionary.json');
 AcDataDictionary::registerDataDictionaryJsonString($dataDictionaryJson);
 AcSqlDatabase::$databaseType = AcEnumSqlDatabaseType::MYSQL;
-$acSqlConnection = AcSqlConnection::fromJson([
+$acSqlConnection = AcSqlConnection::instanceFromJson([
     "username" => 'root',
     "password" => '',
     "hostname" => 'localhost',

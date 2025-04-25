@@ -4,7 +4,6 @@ namespace AcSql\Database;
 
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 require_once __DIR__.'./../../../autocode-data-dictionary/vendor/autoload.php';
-require_once __DIR__.'./../Enums/AcEnumSqlDatabaseType.php';
 require_once 'AcSqlDatabase.php';
 
 use AcDataDictionary\Models\AcDataDictionary;
@@ -15,7 +14,7 @@ use AcDataDictionary\Models\AcDDTableProperty;
 use AcDataDictionary\Models\AcDDTableRowEvent;
 use AcSql\Daos\AcBaseSqlDao;
 use AcSql\Daos\AcMysqlDao;
-use AcSql\Enums\AcEnumSqlDatabaseType;
+use Autocode\Enums\AcEnumSqlDatabaseType;
 use AcSql\Models\AcSqlConnection;
 use Autocode\AcEvents;
 use Autocode\AcLogger;

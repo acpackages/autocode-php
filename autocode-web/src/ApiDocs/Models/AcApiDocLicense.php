@@ -1,21 +1,23 @@
 <?php
 namespace AcWeb\ApiDocs\Modelss;
 
+use Autocode\Models\AcJsonBindConfig;
+
 class AcApiDocLicense {
     const KEY_NAME = "name";
     const KEY_URL = "url";
-
+    public AcJsonBindConfig $acJsonBindConfig;
     public $name = "";
     public $url = "";
 
-    public static function fromJson(array $jsonData): AcApiDocLicense {
+    public static function instanceFromJson(array $jsonData): AcApiDocLicense {
         $instance = new AcApiDocLicense();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
 
-    public function setValuesFromJson(array $jsonData) {
+    public function fromJson(array $jsonData) {
         if (isset($jsonData[self::KEY_NAME])) {
             $this->name = $jsonData[self::KEY_NAME];
         }

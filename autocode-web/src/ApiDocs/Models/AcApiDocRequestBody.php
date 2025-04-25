@@ -1,21 +1,23 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
+use Autocode\Models\AcJsonBindConfig;
+
 class AcApiDocRequestBody {
     const KEY_DESCRIPTION = 'description';
     const KEY_CONTENT = 'content';
     const KEY_REQUIRED = 'required';
-
+    public AcJsonBindConfig $acJsonBindConfig;
     public ?string $description = "";
     public array $content = [];
     public bool $required = false;
 
-    public static function fromJson(array $jsonData): AcApiDocRequestBody {
+    public static function instanceFromJson(array $jsonData): AcApiDocRequestBody {
         $instance = new AcApiDocRequestBody();
         $instance->description = $jsonData[self::KEY_DESCRIPTION] ?? null;
         if (isset($jsonData[self::KEY_CONTENT])) {
             foreach ($jsonData[self::KEY_CONTENT] as $mime => $contentJson) {
-                $instance->content[$mime] = AcApiDocContent::fromJson($contentJson);
+                $instance->content[$mime] = AcApiDocContent::instanceFromJson($contentJson);
             }
         }
         $instance->required = $jsonData[self::KEY_REQUIRED] ?? false;

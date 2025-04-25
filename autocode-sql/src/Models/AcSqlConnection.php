@@ -27,7 +27,7 @@ class AcSqlConnection {
     public array $options = [];
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_CONNECTION_PORT => "port",
                 self::KEY_CONNECTION_HOSTNAME => "hostname",
@@ -40,14 +40,15 @@ class AcSqlConnection {
         $this->logger = new AcLogger();
     }
 
-    public static function fromJson(array $jsonData): AcSqlConnection {
+    public static function instanceFromJson(array $jsonData): AcSqlConnection {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {

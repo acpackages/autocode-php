@@ -272,7 +272,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function getRows(?string $statement, ?string $condition = "", ?array $parameters = [], ?string $mode = AcEnumSelectMode::LIST , ?array $formatColumns = [], ?int $startIndex = -1, ?int $rowCount = -1): AcSqlDaoResult
+    public function getRows(?string $statement, ?string $condition = "", ?array $parameters = [], ?string $mode = AcEnumSelectMode::LIST , ?array $formatColumns = []): AcSqlDaoResult
     {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::SELECT);
         try {

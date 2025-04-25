@@ -1,18 +1,20 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
+use Autocode\Models\AcJsonBindConfig;
+
 class AcApiDocHeader {
     const KEY_DESCRIPTION = 'description';
     const KEY_REQUIRED = 'required';
     const KEY_DEPRECATED = 'deprecated';
     const KEY_SCHEMA = 'schema';
-
+    public AcJsonBindConfig $acJsonBindConfig;
     public string $description = '';
     public bool $required = false;
     public bool $deprecated = false;
     public array $schema = [];
 
-    public static function fromJson(array $jsonData): AcApiDocHeader {
+    public static function instanceFromJson(array $jsonData): AcApiDocHeader {
         $instance = new AcApiDocHeader();
 
         $instance->description = $jsonData[self::KEY_DESCRIPTION] ?? '';

@@ -3,6 +3,7 @@
 namespace Autocode\Models;
 
 use Autocode\AcLogger;
+use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Utils\AcUtilsJson;
 
 class AcResult {
@@ -12,39 +13,45 @@ class AcResult {
     const CODE_EXCEPTION = -2;
 
     const KEY_CODE = "code";
+    const KEY_EXCEPTION = "exception";
+    const KEY_LOG = "log";
     const KEY_MESSAGE = "message";
     const KEY_OTHER_DETAILS = "other_details";
+    const KEY_PREVIOUS_RESULT = "previous_result";
+    const KEY_STACK_TRACE = "stack_trace";
     const KEY_STATUS = "status";
     const KEY_VALUE = "value";
 
-    public AcJsonBindConfig $acJsonBindConfig;
-    public $exception = null;
-    public $stackTrace = null;
     public ?AcLogger $logger = null;
+
+    #[AcBindJsonProperty(key: AcHookResult::KEY_CODE)]
     public int $code = self::CODE_NOTHING_EXECUTED;
-    public $message = "Nothing executed";
-    public string $status = "failure";
-    public $value = null;
-    public $previousResult = null;
-    public array $otherDetails = [];
+
+    #[AcBindJsonProperty(key: AcHookResult::KEY_EXCEPTION)]
+    public $exception = null;
+
+    #[AcBindJsonProperty(key: AcHookResult::KEY_LOG)]
     public array $log = [];
 
-    public static function fromJson(array $jsonData): AcResult {
-        $instance = new AcResult();
-        $instance->setValuesFromJson($jsonData);
-        return $instance;
-    }
+    #[AcBindJsonProperty(key: AcHookResult::KEY_MESSAGE)]
+    public $message = "Nothing executed";
 
-    public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_CODE => "code",
-                self::KEY_MESSAGE => "message",
-                self::KEY_OTHER_DETAILS => "otherDetails",
-                self::KEY_STATUS => "status",
-                self::KEY_VALUE => "value",
-            ]        
-        ]);
+    #[AcBindJsonProperty(key: AcHookResult::KEY_OTHER_DETAILS)]
+    public array $otherDetails = [];
+
+    #[AcBindJsonProperty(key: AcHookResult::KEY_STACK_TRACE)]
+    public $stackTrace = null;
+    
+    #[AcBindJsonProperty(key: AcHookResult::KEY_STATUS)]
+    public string $status = "failure";
+
+    #[AcBindJsonProperty(key: AcHookResult::KEY_VALUE)]
+    public $value = null;
+
+    public static function instanceFromJson(array $jsonData): AcResult {
+        $instance = new AcResult();
+        $instance->fromJson($jsonData);
+        return $instance;
     }
 
     public function isException(): bool {
@@ -59,15 +66,17 @@ class AcResult {
         return $this->status === "success";
     }
 
-    public function appendResultLog(AcResult $result) {
+    public function appendResultLog(AcResult $result):static {
         $this->log = array_merge($this->log, $result->log);
+        return $this;
     }
 
-    public function prependResultLog(AcResult $result) {
+    public function prependResultLog(AcResult $result):static {
         $this->log = array_merge($result->log, $this->log);
+        return $this;
     }
 
-    public function setFromResult(AcResult $result,?string $message = null,?AcLogger $logger = null) {
+    public function setFromResult(AcResult $result,?string $message = null,?AcLogger $logger = null): static {
         $this->status = $result->status;
         $this->message = $result->message;
         $this->code = $result->code;
@@ -79,9 +88,10 @@ class AcResult {
         } elseif ($this->isSuccess()) {
             $this->value = $result->value;
         }
+        return $this;
     }
 
-    public function setSuccess(mixed $value = null,?string $message = null,?AcLogger $logger = null) {
+    public function setSuccess(mixed $value = null,?string $message = null,?AcLogger $logger = null):static {
         $this->status = "success";
         $this->code = self::CODE_SUCCESS;
 
@@ -97,9 +107,10 @@ class AcResult {
                 $this->logger->success($this->message);
             }
         }
+        return $this;
     }
 
-    public function setFailure(mixed $value = null,?string $message = null,?AcLogger $logger = null) {
+    public function setFailure(mixed $value = null,?string $message = null,?AcLogger $logger = null): static {
         $this->status = "failure";
         $this->code = self::CODE_FAILURE;
 
@@ -112,9 +123,10 @@ class AcResult {
                 $this->logger->error($this->message);
             }
         }
+        return $this;
     }
 
-    public function setException($exception = null, ?string $message = null,?AcLogger $logger = null,?bool $logException = false,?string $stackTrace = null) {
+    public function setException($exception = null, ?string $message = null,?AcLogger $logger = null,?bool $logException = false,?string $stackTrace = null):static{
         $this->code = self::CODE_EXCEPTION;
         $this->exception = $exception;
         $this->stackTrace = $stackTrace ?? null;
@@ -126,10 +138,12 @@ class AcResult {
         if ($logException && $this->logger) {
             $this->logger->error([$exception->getMessage(), $this->stackTrace]);
         }
+        return $this;
     }
 
-    public function setValuesFromJson(array $jsonData) {
+    public function fromJson(array $jsonData): static {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {
@@ -137,10 +151,6 @@ class AcResult {
     }
 
     public function __toString(): string {
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
-
-    public function toString():string{
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }

@@ -236,7 +236,7 @@ class AcWeb
                 $routeKey = $httpMethod . '>' . $fullPath;                
                 $handlerReflection = new ReflectionMethod($controllerClass, $handlerMethod->getName());
                 $acApiDocRoute = $this->getRouteDocFromHandlerReflection(handlerReflection:$handlerReflection);
-                $this->routeDefinitions[$routeKey] = AcWebRouteDefinition::fromJson(jsonData: [
+                $this->routeDefinitions[$routeKey] = AcWebRouteDefinition::instanceFromJson(jsonData: [
                     AcWebRouteDefinition::KEY_URL => $fullPath,
                     AcWebRouteDefinition::KEY_METHOD => $httpMethod,
                     AcWebRouteDefinition::KEY_CONTROLLER => $controllerClass,
@@ -319,7 +319,7 @@ class AcWeb
         $routeKey = $method . '>' . $url;
         $handlerReflection = new ReflectionFunction($handler);
         $acApiDocRoute = $this->getRouteDocFromHandlerReflection(handlerReflection:$handlerReflection,acApiDocRoute: $acApiDocRoute);
-        $this->routeDefinitions[$routeKey] = AcWebRouteDefinition::fromJson(jsonData: [
+        $this->routeDefinitions[$routeKey] = AcWebRouteDefinition::instanceFromJson(jsonData: [
             AcWebRouteDefinition::KEY_URL => $url,
             AcWebRouteDefinition::KEY_METHOD => strtolower($method),
             AcWebRouteDefinition::KEY_HANDLER => $handler,

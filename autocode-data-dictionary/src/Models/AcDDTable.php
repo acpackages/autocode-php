@@ -22,9 +22,9 @@ class AcDDTable {
     public array $tableFields = []; // Associative array of AcDDTableField
     public array $tableProperties = []; // Associative array of AcDDTableProperty
 
-    public static function fromJson(array $jsonData): AcDDTable {
+    public static function instanceFromJson(array $jsonData): AcDDTable {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
@@ -33,14 +33,14 @@ class AcDDTable {
         $acDataDictionary = AcDataDictionary::getInstance($dataDictionaryName);
         
         if (isset($acDataDictionary->tables[$tableName])) {
-            $result->setValuesFromJson($acDataDictionary->tables[$tableName]);
+            $result->fromJson($acDataDictionary->tables[$tableName]);
         }
         
         return $result;
     }
 
     public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_TABLE_FIELDS => "tableFields",
                 self::KEY_TABLE_NAME => "tableName",
@@ -149,14 +149,14 @@ class AcDDTable {
         return $result;
     }
 
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): static {
         if (isset($jsonData[self::KEY_TABLE_NAME])) {
             $this->tableName = (string) $jsonData[self::KEY_TABLE_NAME];
         }
 
         if (isset($jsonData[self::KEY_TABLE_FIELDS]) && is_array($jsonData[self::KEY_TABLE_FIELDS])) {
             foreach ($jsonData[self::KEY_TABLE_FIELDS] as $fieldName => $fieldData) {
-                $field = AcDDTableField::fromJson($fieldData);
+                $field = AcDDTableField::instanceFromJson($fieldData);
                 $field->table = $this;
                 $this->tableFields[$fieldName] = $field;
             }
@@ -164,9 +164,10 @@ class AcDDTable {
 
         if (isset($jsonData[self::KEY_TABLE_PROPERTIES]) && is_array($jsonData[self::KEY_TABLE_PROPERTIES])) {
             foreach ($jsonData[self::KEY_TABLE_PROPERTIES] as $propertyName => $propertyData) {
-                $this->tableProperties[$propertyName] = AcDDTableProperty::fromJson($propertyData);
+                $this->tableProperties[$propertyName] = AcDDTableProperty::instanceFromJson($propertyData);
             }
         }
+        return $this;
     }
 
     public function toJson(): array {

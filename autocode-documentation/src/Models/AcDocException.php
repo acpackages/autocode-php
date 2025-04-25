@@ -64,7 +64,7 @@ class AcDocException
      */
     public function __construct()
     {
-        $this->acJsonBindConfig = AcJsonBindConfig::fromJson(jsonData: [
+        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
             AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
                 self::KEY_TYPE => 'type',
                 self::KEY_DESCRIPTION => 'description',
@@ -76,15 +76,15 @@ class AcDocException
      * Static method to create an AcDocException instance from JSON data.
      * 
      * @acDoc {
-     *   "name": "fromJson",
+     *   "name": "instanceFromJson",
      *   "type": "method",
      *   "description": "Creates an instance of AcDocException from a JSON array."
      * }
      */
-    public static function fromJson(array $jsonData): AcDocException
+    public static function instanceFromJson(array $jsonData): AcDocException
     {
         $instance = new self();
-        $instance->setValuesFromJson($jsonData);
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
@@ -92,12 +92,12 @@ class AcDocException
      * Bind the instance properties from the provided JSON data.
      *
      * @acDoc {
-     *   "name": "setValuesFromJson",
+     *   "name": "fromJson",
      *   "type": "method",
      *   "description": "Sets the values of the instance properties from the JSON data."
      * }
      */
-    public function setValuesFromJson(array $jsonData = []): void {
+    public function fromJson(array $jsonData = []): void {
         AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
     }
 

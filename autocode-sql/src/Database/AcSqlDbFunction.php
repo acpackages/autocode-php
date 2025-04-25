@@ -7,7 +7,7 @@ require_once __DIR__.'./../../../autocode-data-dictionary/vendor/autoload.php';
 
 use AcDataDictionary\Models\AcDDFunction;
 use AcDataDictionary\Models\AcDataDictionary;
-use AcSql\Enums\AcEnumSqlDatabaseType;
+use Autocode\Enums\AcEnumSqlDatabaseType;
 use Exception;
 
 
