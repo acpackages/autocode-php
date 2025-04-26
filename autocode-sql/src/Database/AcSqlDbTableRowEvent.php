@@ -29,13 +29,10 @@ class AcSqlDbTableRowEvent{
         $this->acDataDictionary = AcDataDictionary::getInstance();
     }
 
-
     public function execute():AcResult {
         $result = new AcResult();
         $result->setSuccess();
         return $result;
-    }
-
-    
+    }    
     
 }

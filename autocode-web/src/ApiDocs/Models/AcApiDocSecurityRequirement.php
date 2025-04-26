@@ -1,29 +1,31 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
+
 
 class AcApiDocSecurityRequirement {
     const KEY_REQUIREMENTS = 'requirements';
-    public AcJsonBindConfig $acJsonBindConfig;
     public array $requirements = [];
 
-    public static function instanceFromJson(array $jsonData): AcApiDocSecurityRequirement {
-        $instance = new AcApiDocSecurityRequirement();
-        $instance->requirements = $jsonData;
+    public static function instanceFromJson(array $jsonData): static {
+        $instance = new self();
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
-    public function toJson(): array {
-        return $this->requirements;
+    public function fromJson(array $jsonData): static {
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
     }
 
-    public function toString(): string {
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
+    public function toJson(): array {
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
-        return $this->toString();
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
+
 }
 ?>

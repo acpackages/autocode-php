@@ -16,7 +16,6 @@ require_once __DIR__ . './../Models/AcWebRequest.php';
 require_once __DIR__ . './../Models/AcWebResponse.php';
 use AcExtensions\AcExtensionMethods;
 use AcWeb\Annotaions\AcWebRouteMeta;
-use AcWeb\Annotaions\AcWebRouteMetaParemeter;
 use AcWeb\Models\AcWebResponse;
 use AcWeb\Annotaions\AcWebController;
 use AcWeb\Annotaions\AcWebRepository;
@@ -27,7 +26,6 @@ use AcWeb\Annotaions\AcWebValueFromPath;
 use AcWeb\Annotaions\AcWebView;
 use AcWeb\ApiDocs\Models\AcApiDoc;
 use AcWeb\ApiDocs\Models\AcApiDocContent;
-use AcWeb\ApiDocs\Models\AcApiDocModel;
 use AcWeb\ApiDocs\Models\AcApiDocParameter;
 use AcWeb\ApiDocs\Models\AcApiDocPath;
 use AcWeb\ApiDocs\Models\AcApiDocRoute;
@@ -41,7 +39,6 @@ use AcWeb\Models\AcWebRouteDefinition;
 use ApiDocs\Utils\AcApiDocUtils;
 use Autocode\AcHooks;
 use Autocode\Enums\AcEnumHttpMethod;
-use Autocode\Models\AcJsonBindConfig;
 use Autocode\Utils\AcUtilsFile;
 use Autocode\Utils\AcUtilsJson;
 use RecursiveDirectoryIterator;
@@ -102,18 +99,21 @@ class AcWeb
         });
     }
 
-    function addHostUrl(string $url): void{
+    function addHostUrl(string $url): static{
         $server = new AcApiDocServer();
         $server->url = $url;
         $this->acApiDoc->addServer($server);
+        return $this;
     }
 
-    public function connect(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): void{
+    public function connect(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): static{
         $this->route(url: $url, handler: $handler, method: AcEnumHttpMethod::CONNECT,acApiDocRoute: $acApiDocRoute);
+        return $this;
     }
 
-    public function delete(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): void{
+    public function delete(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): static{
         $this->route(url: $url, handler: $handler, method: AcEnumHttpMethod::DELETE,acApiDocRoute: $acApiDocRoute);
+        return $this;
     }
 
     private function extractPathParams(string $routePath, string $uri): array
@@ -124,8 +124,9 @@ class AcWeb
         return array_filter($matches, fn($k) => !is_int($k), ARRAY_FILTER_USE_KEY);
     }
 
-    public function get(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): void{
+    public function get(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): static{
         $this->route(url: $url, handler: $handler, method: AcEnumHttpMethod::GET,acApiDocRoute: $acApiDocRoute);
+        return $this;
     }
 
     private function getRouteDocFromHandlerReflection(ReflectionMethod|ReflectionFunction $handlerReflection,?AcApiDocRoute $acApiDocRoute = new AcApiDocRoute()): AcApiDocRoute {
@@ -178,8 +179,7 @@ class AcWeb
         return $acApiDocRoute;
     }
 
-    private function isValidStaticPath(string $uri): bool
-    {
+    private function isValidStaticPath(string $uri): bool {
         foreach ($this->staticFiles as $staticConfig) {
             $prefix = $staticConfig["prefix"];
             $baseDir = $staticConfig["directory"];
@@ -194,8 +194,9 @@ class AcWeb
         return false;
     }
 
-    public function head(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): void{
+    public function head(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): static{
         $this->route(url: $url, handler: $handler, method: AcEnumHttpMethod::HEAD,acApiDocRoute: $acApiDocRoute);
+        return $this;
     }
 
     private function matchPath(string $routePath, string $uri): bool{
@@ -204,23 +205,27 @@ class AcWeb
         return AcExtensionMethods::stringRegexMatch(pattern: $pattern, subject: rtrim($uri, '/'));
     }
 
-    public function options(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): void{
+    public function options(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): static{
         $this->route(url: $url, handler: $handler, method: AcEnumHttpMethod::OPTIONS,acApiDocRoute: $acApiDocRoute);
+        return $this;
     }
 
-    public function patch(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): void{
+    public function patch(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): static{
         $this->route(url: $url, handler: $handler, method: AcEnumHttpMethod::PATCH,acApiDocRoute: $acApiDocRoute);
+        return $this;
     }
 
-    public function post(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): void{
+    public function post(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): static{
         $this->route(url: $url, handler: $handler, method: AcEnumHttpMethod::POST,acApiDocRoute: $acApiDocRoute);
+        return $this;
     }
 
-    public function put(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): void{
+    public function put(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): static{
         $this->route(url: $url, handler: $handler, method: AcEnumHttpMethod::PUT,acApiDocRoute: $acApiDocRoute);
+        return $this;
     }
 
-    public function registerController(string $controllerClass): void{
+    public function registerController(string $controllerClass): static{
         $refClass = new ReflectionClass($controllerClass);
         $classRoute = '';
         foreach ($refClass->getAttributes(name: AcWebRoute::class) as $attr) {
@@ -245,9 +250,10 @@ class AcWeb
                 ]);
             }
         }
+        return $this;
     }
 
-    public function registerControllersDirectory(string $baseDir): void{
+    public function registerControllersDirectory(string $baseDir): static{
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($baseDir)) as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) !== 'php')
                 continue;
@@ -262,9 +268,10 @@ class AcWeb
                 }
             }
         }
+        return $this;
     }
 
-    public function registerRepositoriesDirectory(string $baseDir): void{
+    public function registerRepositoriesDirectory(string $baseDir): static{
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($baseDir)) as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) !== 'php')
                 continue;
@@ -279,9 +286,10 @@ class AcWeb
                 }
             }
         }
+        return $this;
     }
 
-    public function registerServicesDirectory(string $baseDir): void{
+    public function registerServicesDirectory(string $baseDir): static{
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($baseDir)) as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) !== 'php')
                 continue;
@@ -296,9 +304,10 @@ class AcWeb
                 }
             }
         }
+        return $this;
     }
 
-    public function registerViewsDirectory(string $baseDir): void{
+    public function registerViewsDirectory(string $baseDir): static{
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($baseDir)) as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) !== 'php')
                 continue;
@@ -313,9 +322,10 @@ class AcWeb
                 }
             }
         }
+        return $this;
     }
 
-    public function route(string $url, callable $handler, string $method,?AcApiDocRoute $acApiDocRoute = null): void{
+    public function route(string $url, callable $handler, string $method,?AcApiDocRoute $acApiDocRoute = null): static{
         $routeKey = $method . '>' . $url;
         $handlerReflection = new ReflectionFunction($handler);
         $acApiDocRoute = $this->getRouteDocFromHandlerReflection(handlerReflection:$handlerReflection,acApiDocRoute: $acApiDocRoute);
@@ -325,9 +335,10 @@ class AcWeb
             AcWebRouteDefinition::KEY_HANDLER => $handler,
             AcWebRouteDefinition::KEY_DOCUMENTATION => $acApiDocRoute
         ]);
+        return $this;
     }
 
-    public function serve(): void{
+    public function serve(): static{
         $request = new AcWebRequest();
         $url = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
         if (str_starts_with($url, $this->urlPrefix)) {
@@ -404,7 +415,7 @@ class AcWeb
                         } elseif ($instance instanceof AcWebValueFromBody) {
                             if ($parameterType && class_exists($parameterType)) {
                                 $object = new $parameterType();
-                                AcUtilsJson::bindInstancePropertiesFromJson(instance: $object, data: $request->body);
+                                AcUtilsJson::setInstancePropertiesFromJsonData(instance: $object, jsonData: $request->body);
                                 $args[] = $object;
                                 $valueSet = true;
                             }
@@ -431,10 +442,10 @@ class AcWeb
             http_response_code(404);
             echo json_encode(['error' => 'Route not found','routes']);
         }
+        return $this;
     }
 
-    private function serveStaticFiles(string $uri): bool
-    {
+    private function serveStaticFiles(string $uri): bool {
         foreach ($this->staticFiles as $staticConfig) {
             $prefix = $staticConfig["prefix"];
             $baseDir = $staticConfig["directory"];
@@ -453,8 +464,7 @@ class AcWeb
         return false;
     }
 
-    public function staticFiles(string $directory, string $urlPrefix = "")
-    {
+    public function staticFiles(string $directory, string $urlPrefix = ""): static {
         if (!str_starts_with($urlPrefix, "/")) {
             $urlPrefix = "/" . $urlPrefix;
         }
@@ -462,10 +472,12 @@ class AcWeb
             "directory" => realpath($directory),
             "prefix" => rtrim(string: $urlPrefix, characters: "/")
         ];
+        return $this;
     }
 
-    public function trace(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): void{
+    public function trace(string $url, callable $handler,?AcApiDocRoute $acApiDocRoute = null): static {
         $this->route(url: $url, handler: $handler, method: AcEnumHttpMethod::TRACE,acApiDocRoute: $acApiDocRoute);
+        return $this;
     }
 
 }

@@ -1,7 +1,8 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
+
 
 class AcApiDocSchema {
     const KEY_TYPE = 'type';
@@ -12,7 +13,6 @@ class AcApiDocSchema {
     const KEY_REQUIRED = 'required';
     const KEY_ITEMS = 'items';
     const KEY_ENUM = 'enum';
-    public AcJsonBindConfig $acJsonBindConfig;
     public ?string $type = null;
     public ?string $format = null;
     public ?string $title = null;
@@ -22,38 +22,24 @@ class AcApiDocSchema {
     public ?array $items = null;
     public ?array $enum = null;
 
-    public static function instanceFromJson(array $jsonData): AcApiDocSchema {
-        $instance = new AcApiDocSchema();
-        $instance->type = $jsonData[self::KEY_TYPE] ?? null;
-        $instance->format = $jsonData[self::KEY_FORMAT] ?? null;
-        $instance->title = $jsonData[self::KEY_TITLE] ?? null;
-        $instance->description = $jsonData[self::KEY_DESCRIPTION] ?? null;
-        $instance->properties = $jsonData[self::KEY_PROPERTIES] ?? null;
-        $instance->required = $jsonData[self::KEY_REQUIRED] ?? null;
-        $instance->items = $jsonData[self::KEY_ITEMS] ?? null;
-        $instance->enum = $jsonData[self::KEY_ENUM] ?? null;
+    public static function instanceFromJson(array $jsonData): static {
+        $instance = new self();
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
+    public function fromJson(array $jsonData): static {
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
+    }
+
     public function toJson(): array {
-        return array_filter([
-            self::KEY_TYPE => $this->type,
-            self::KEY_FORMAT => $this->format,
-            self::KEY_TITLE => $this->title,
-            self::KEY_DESCRIPTION => $this->description,
-            self::KEY_PROPERTIES => $this->properties,
-            self::KEY_REQUIRED => $this->required,
-            self::KEY_ITEMS => $this->items,
-            self::KEY_ENUM => $this->enum,
-        ]);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }
 ?>

@@ -377,7 +377,7 @@ class AcUtilsFile
         "zip" => ["mime_type" => "application/x-zip-compressed"]
     ];
 
-    static function getMimeTypeFromExt(string $extension)
+    static function getMimeTypeFromExt(string $extension): string
     {
         $result = "";
         if (isset(self::values[$extension])) {
@@ -386,13 +386,13 @@ class AcUtilsFile
         return $result;
     }
 
-    static function getMimeTypeFromName(string $fileName)
+    static function getMimeTypeFromName(string $fileName): string
     {
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
         return self::getMimeTypeFromExt($extension);
     }
 
-    static function getMimeTypeFromPath(string $path)
+    static function getMimeTypeFromPath(string $path): string
     {
         $fileName = basename($path);
         return self::getMimeTypeFromName($fileName);

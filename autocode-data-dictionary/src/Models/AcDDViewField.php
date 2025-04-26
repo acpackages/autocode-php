@@ -2,7 +2,7 @@
 
 namespace AcDataDictionary\Models;
 require_once 'AcDDTableFieldProperty.php';
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Utils\AcUtilsJson;
 
 class AcDDViewField {
@@ -13,68 +13,49 @@ class AcDDViewField {
     public const KEY_FIELD_SOURCE = "field_source";
     public const KEY_FIELD_SOURCE_NAME = "field_source_name";
 
-    public AcJsonBindConfig $acJsonBindConfig;
+    #[AcBindJsonProperty(key: AcDDViewField::KEY_FIELD_NAME)]
     public string $fieldName = "";
+
+    #[AcBindJsonProperty(key: AcDDViewField::KEY_FIELD_PROPERTIES)]
     public array $fieldProperties = [];
+
+    #[AcBindJsonProperty(key: AcDDViewField::KEY_FIELD_TYPE)]
     public string $fieldType = "text";
+
+    #[AcBindJsonProperty(key: AcDDViewField::KEY_FIELD_VALUE)]
     public mixed $fieldValue = null;
+
+    #[AcBindJsonProperty(key: AcDDViewField::KEY_FIELD_SOURCE)]
     public string $fieldSource = "";
+
+    #[AcBindJsonProperty(key: AcDDViewField::KEY_FIELD_SOURCE_NAME)]
     public string $fieldSourceName = "";
 
-    public static function instanceFromJson(array $jsonData): AcDDViewField {
+    public static function instanceFromJson(array $jsonData): self {
         $instance = new self();
         $instance->fromJson($jsonData);
         return $instance;
     }
 
-    public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_FIELD_NAME => "fieldName",
-                self::KEY_FIELD_PROPERTIES => "fieldProperties",
-                self::KEY_FIELD_TYPE => "fieldType",
-                self::KEY_FIELD_VALUE => "fieldValue",
-                self::KEY_FIELD_SOURCE => "fieldSource",
-                self::KEY_FIELD_SOURCE_NAME => "fieldSourceName"
-            ]        
-        ]);  
-    }
-
     public function fromJson(array $jsonData = []): static {
-        if (array_key_exists(self::KEY_FIELD_NAME, $jsonData)) {
-            $this->fieldName = (string) $jsonData[self::KEY_FIELD_NAME];
-        }
-        if (array_key_exists(self::KEY_FIELD_TYPE, $jsonData)) {
-            $this->fieldType = (string) $jsonData[self::KEY_FIELD_TYPE];
-        }
-        if (array_key_exists(self::KEY_FIELD_VALUE, $jsonData)) {
-            $this->fieldValue = $jsonData[self::KEY_FIELD_VALUE];
-        }
-        if (array_key_exists(self::KEY_FIELD_SOURCE, $jsonData)) {
-            $this->fieldSource = (string) $jsonData[self::KEY_FIELD_SOURCE];
-        }
-        if (array_key_exists(self::KEY_FIELD_SOURCE_NAME, $jsonData)) {
-            $this->fieldSourceName = (string) $jsonData[self::KEY_FIELD_SOURCE_NAME];
-        }
         if (array_key_exists(self::KEY_FIELD_PROPERTIES, $jsonData)) {
             foreach ($jsonData[self::KEY_FIELD_PROPERTIES] as $propertyName => $propertyData) {
                 $this->fieldProperties[$propertyName] = AcDDTableFieldProperty::instanceFromJson($propertyData);
             }
+            unset($jsonData[self::KEY_FIELD_PROPERTIES]);
         }
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);  
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }
 
 ?>

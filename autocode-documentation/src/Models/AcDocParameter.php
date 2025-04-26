@@ -2,7 +2,6 @@
 namespace AcDoc\Models;
 
 use Autocode\Utils\AcUtilsJson;
-use Autocode\Models\AcJsonBindConfig;
 
 /**
  * AcDocParameter represents a parameter for a function, method, or API endpoint.
@@ -27,15 +26,6 @@ class AcDocParameter
     const KEY_TYPE = 'type';
     const KEY_DESCRIPTION = 'description';
     const KEY_CONSTRAINTS = 'constraints';
-
-    /**
-     * @acDoc {
-     *   "name": "acJsonBindConfig",
-     *   "type": "property",
-     *   "description": "Configuration object for binding properties from JSON."
-     * }
-     */
-    public AcJsonBindConfig $acJsonBindConfig;
 
     /**
      * @acDoc {
@@ -88,15 +78,6 @@ class AcDocParameter
         $this->type = $type;
         $this->description = $description;
         $this->constraints = $constraints ?? [];
-
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_NAME => 'name',
-                self::KEY_TYPE => 'type',
-                self::KEY_DESCRIPTION => 'description',
-                self::KEY_CONSTRAINTS => 'constraints',
-            ]        
-        ]);
     }
 
     /**
@@ -108,8 +89,7 @@ class AcDocParameter
      *   "description": "Creates an instance of AcDocParameter from a JSON array."
      * }
      */
-    public static function instanceFromJson(array $jsonData): AcDocParameter
-    {
+    public static function instanceFromJson(array $jsonData): static {
         $instance = new self(
             $jsonData[self::KEY_NAME] ?? '',
             $jsonData[self::KEY_TYPE] ?? '',
@@ -128,8 +108,9 @@ class AcDocParameter
      *   "description": "Sets the values of the instance properties from the JSON data."
      * }
      */
-    public function fromJson(array $jsonData = []): void {
-        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+    public function fromJson(array $jsonData = []): static {
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
     }
 
     /**
@@ -141,9 +122,8 @@ class AcDocParameter
      *   "description": "Converts the instance into a JSON array representation."
      * }
      */
-    public function toJson(): array
-    {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+    public function toJson(): array {
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     /**
@@ -157,19 +137,6 @@ class AcDocParameter
      */
     public function __toString(): string
     {
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
-
-    /**
-     * Return a string representation of the parameter (JSON format).
-     *
-     * @acDoc {
-     *   "name": "toString",
-     *   "type": "method",
-     *   "description": "Returns a JSON string representation of the parameter."
-     * }
-     */
-    public function toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }

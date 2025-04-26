@@ -28,7 +28,6 @@ class AcDDSelectStatement
     const KEY_SQL_STATEMENT = "sql_statement";
     const KEY_TABLE_NAME = "table_name";
 
-    #[AcBindJsonProperty(key: AcDDSelectStatement::KEY_CONDITION)]
     public string $condition = "";
 
     #[AcBindJsonProperty(key: AcDDSelectStatement::KEY_CONDITION_GROUP)]
@@ -57,7 +56,6 @@ class AcDDSelectStatement
     #[AcBindJsonProperty(key: AcDDSelectStatement::KEY_PAGE_SIZE)]
     public int $pageSize = 0;
     
-    #[AcBindJsonProperty(key: AcDDSelectStatement::KEY_PARAMETERS)]
     public array $parameters = [];
 
     #[AcBindJsonProperty(key: AcDDSelectStatement::KEY_SELECT_STATEMENT)]
@@ -83,7 +81,7 @@ class AcDDSelectStatement
         return $sqlStatement;
     }
 
-    public static function instanceFromJson(array $jsonData): static {
+    public static function instanceFromJson(array $jsonData): self {
         $instance = new self();
         $instance->fromJson($jsonData);
         return $instance;
@@ -115,7 +113,7 @@ class AcDDSelectStatement
     }
 
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
@@ -272,7 +270,7 @@ class AcDDSelectStatement
     }
 
     public function toJson(): array {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {

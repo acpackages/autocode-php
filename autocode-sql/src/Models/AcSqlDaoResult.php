@@ -3,7 +3,7 @@ namespace AcSql\Models;
 
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 require_once __DIR__.'./../Enums/AcEnumRowOperation.php';
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Models\AcResult;
 use Autocode\Utils\AcUtilsJson;
 use AcSql\Enums\AcEnumRowOperation;
@@ -17,25 +17,26 @@ class AcSqlDaoResult extends AcResult {
     const KEY_PRIMARY_KEY_FIELD = 'primary_key_field';
     const KEY_PRIMARY_KEY_VALUE = 'primary_key_value';
 
-    public AcJsonBindConfig $acJsonBindConfig;
     public array $rows = [];
-    public int $affectedRowsCount = 0;
-    public mixed $lastInsertedId = null;
+
+    #[AcBindJsonProperty(key: AcSqlDaoResult::KEY_AFFECTED_ROWS_COUNT)]
+    public ?int $affectedRowsCount = null;
+
+    #[AcBindJsonProperty(key: AcSqlDaoResult::KEY_LAST_INSERTED_ID)]
+    public ?int $lastInsertedId = null;
+
+    #[AcBindJsonProperty(key: AcSqlDaoResult::KEY_LAST_INSERTED_ID)]
     public mixed $lastInsertedIds = null;
     public string $operation = AcEnumRowOperation::UNKNOWN;
-    public ?string $primaryKeyField = "";
+
+    #[AcBindJsonProperty(key: AcSqlDaoResult::KEY_PRIMARY_KEY_FIELD)]
+    public ?string $primaryKeyField = null;
+
+    #[AcBindJsonProperty(key: AcSqlDaoResult::KEY_PRIMARY_KEY_VALUE)]
     public mixed $primaryKeyValue = null;
 
     public function __construct(?string $operation = AcEnumRowOperation::UNKNOWN) {        
-        parent::__construct();
-        $this->acJsonBindConfig->propertyBindings["rows"]="rows";
-        $this->acJsonBindConfig->propertyBindings["affected_rows_count"]="affectedRowsCount";
-        $this->acJsonBindConfig->propertyBindings["last_inserted_id"]="affectedRowsCount";
-        $this->acJsonBindConfig->propertyBindings["operation"]="operation";
-        $this->acJsonBindConfig->propertyBindings["primary_key_field"]="primaryKeyField";
-        $this->acJsonBindConfig->propertyBindings["primary_key_value"]="primaryKeyValue";
-        $this->operation = $operation;
-       
+        $this->operation = $operation;       
     }
 
     public function hasAffectedRows(): bool {

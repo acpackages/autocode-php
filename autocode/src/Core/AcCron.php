@@ -2,6 +2,8 @@
 
 namespace Autocode;
 
+use DateTime;
+
 require_once 'AcLogger.php';
 require_once 'Autocode.php';
 

@@ -5,6 +5,7 @@ namespace Autocode;
 require_once __DIR__.'./../../../autocode-extensions/vendor/autoload.php';
 use AcExtensions\AcExtensionMethods;
 use Autocode\Models\AcEventExecutionResult;
+use Exception;
 
 require_once 'AcEventExecutionResult.php';
 require_once 'Autocode.php';

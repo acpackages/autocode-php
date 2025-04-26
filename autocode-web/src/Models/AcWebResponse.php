@@ -2,6 +2,7 @@
 namespace AcWeb\Models;
 
 use AcWeb\Enums\AcEnumWebResponseType;
+use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Enums\AcEnumHttpResponseCode;
 use Autocode\Utils\AcUtilsJson;
 
@@ -17,7 +18,11 @@ class AcWebResponse {
     public array $cookies=[];  
     public mixed $data;
     public array $headers = [];
+
+    #[AcBindJsonProperty(key: AcWebResponse::KEY_RESPONSE_CODE)]
     public int $responseCode = 0;
+
+    #[AcBindJsonProperty(key: AcWebResponse::KEY_RESPONSE_TYPE)]
     public string $responseType = AcEnumWebResponseType::TEXT;
     public array $session=[];
     
@@ -45,21 +50,18 @@ class AcWebResponse {
     }
 
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }
 
 ?>

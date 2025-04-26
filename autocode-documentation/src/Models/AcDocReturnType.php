@@ -2,7 +2,6 @@
 namespace AcDoc\Models;
 
 use Autocode\Utils\AcUtilsJson;
-use Autocode\Models\AcJsonBindConfig;
 
 /**
  * AcDocReturnType represents the return type of a function, method, or API endpoint.
@@ -25,15 +24,6 @@ class AcDocReturnType
     const KEY_TYPE = 'type';
     const KEY_DESCRIPTION = 'description';
     const KEY_CONSTRAINTS = 'constraints';
-
-    /**
-     * @acDoc {
-     *   "name": "acJsonBindConfig",
-     *   "type": "property",
-     *   "description": "Configuration object for binding properties from JSON."
-     * }
-     */
-    public AcJsonBindConfig $acJsonBindConfig;
 
     /**
      * @acDoc {
@@ -79,14 +69,6 @@ class AcDocReturnType
         $this->type = $type;
         $this->description = $description;
         $this->constraints = $constraints ?? [];
-
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_TYPE => 'type',
-                self::KEY_DESCRIPTION => 'description',
-                self::KEY_CONSTRAINTS => 'constraints',
-            ]        
-        ]);
     }
 
     /**
@@ -104,8 +86,7 @@ class AcDocReturnType
      * @param array $jsonData The JSON data to create the instance.
      * @return AcDocReturnType The created AcDocReturnType instance.
      */
-    public static function instanceFromJson(array $jsonData): AcDocReturnType
-    {
+    public static function instanceFromJson(array $jsonData): self {
         $instance = new self(
             $jsonData[self::KEY_TYPE] ?? '',
             $jsonData[self::KEY_DESCRIPTION] ?? null,
@@ -128,8 +109,9 @@ class AcDocReturnType
      * }
      * @param array $jsonData The JSON data to bind to the instance.
      */
-    public function fromJson(array $jsonData = []): void {
-        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+    public function fromJson(array $jsonData = []): static {
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
     }
 
     /**
@@ -143,9 +125,8 @@ class AcDocReturnType
      * }
      * @return array The JSON array representation of the instance.
      */
-    public function toJson(): array
-    {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+    public function toJson(): array {
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     /**
@@ -164,18 +145,4 @@ class AcDocReturnType
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    /**
-     * Return a string representation of the return type (JSON format).
-     *
-     * @acDoc {
-     *   "name": "toString",
-     *   "type": "method",
-     *   "description": "Returns a JSON string representation of the return type.",
-     *   "returns": "A JSON string representation of the return type."
-     * }
-     * @return string The JSON string representation of the return type.
-     */
-    public function toString(): string {
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }

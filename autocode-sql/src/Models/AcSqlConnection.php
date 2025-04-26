@@ -5,7 +5,6 @@ namespace AcSql\Models;
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 
 use Autocode\AcLogger;
-use Autocode\Models\AcJsonBindConfig;
 use Autocode\Utils\AcUtilsJson;
 
 
@@ -17,7 +16,6 @@ class AcSqlConnection {
     const KEY_CONNECTION_DATABASE = 'database';
     const KEY_CONNECTION_OPTIONS = 'options';
 
-    public AcJsonBindConfig $acJsonBindConfig;
     public AcLogger $logger;
     public int $port = 0;
     public string $hostname = "";
@@ -26,40 +24,24 @@ class AcSqlConnection {
     public string $database = "";
     public array $options = [];
 
-    public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_CONNECTION_PORT => "port",
-                self::KEY_CONNECTION_HOSTNAME => "hostname",
-                self::KEY_CONNECTION_USERNAME => "username",
-                self::KEY_CONNECTION_PASSWORD => "password",
-                self::KEY_CONNECTION_DATABASE => "database",
-                self::KEY_CONNECTION_OPTIONS => "options",
-            ]        
-        ]);
-        $this->logger = new AcLogger();
-    }
 
-    public static function instanceFromJson(array $jsonData): AcSqlConnection {
+    public static function instanceFromJson(array $jsonData): static {
         $instance = new self();
         $instance->fromJson($jsonData);
         return $instance;
     }
 
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }

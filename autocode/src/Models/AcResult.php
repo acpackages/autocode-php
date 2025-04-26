@@ -24,16 +24,12 @@ class AcResult {
 
     public ?AcLogger $logger = null;
 
-    #[AcBindJsonProperty(key: AcHookResult::KEY_CODE)]
     public int $code = self::CODE_NOTHING_EXECUTED;
 
-    #[AcBindJsonProperty(key: AcHookResult::KEY_EXCEPTION)]
     public $exception = null;
 
-    #[AcBindJsonProperty(key: AcHookResult::KEY_LOG)]
     public array $log = [];
 
-    #[AcBindJsonProperty(key: AcHookResult::KEY_MESSAGE)]
     public $message = "Nothing executed";
 
     #[AcBindJsonProperty(key: AcHookResult::KEY_OTHER_DETAILS)]
@@ -42,16 +38,19 @@ class AcResult {
     #[AcBindJsonProperty(key: AcHookResult::KEY_STACK_TRACE)]
     public $stackTrace = null;
     
-    #[AcBindJsonProperty(key: AcHookResult::KEY_STATUS)]
     public string $status = "failure";
 
-    #[AcBindJsonProperty(key: AcHookResult::KEY_VALUE)]
     public $value = null;
 
-    public static function instanceFromJson(array $jsonData): AcResult {
-        $instance = new AcResult();
-        $instance->fromJson($jsonData);
+    public static function instanceFromJson(array $jsonData): self {
+        $instance = new self();
+        $instance->fromJson(jsonData: $jsonData);
         return $instance;
+    }
+
+    public function fromJson(array $jsonData): static {
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
     }
 
     public function isException(): bool {
@@ -66,17 +65,17 @@ class AcResult {
         return $this->status === "success";
     }
 
-    public function appendResultLog(AcResult $result):static {
+    public function appendResultLog(self $result):static {
         $this->log = array_merge($this->log, $result->log);
         return $this;
     }
 
-    public function prependResultLog(AcResult $result):static {
+    public function prependResultLog(self $result):static {
         $this->log = array_merge($result->log, $this->log);
         return $this;
     }
 
-    public function setFromResult(AcResult $result,?string $message = null,?AcLogger $logger = null): static {
+    public function setFromResult(self $result,?string $message = null,?AcLogger $logger = null): static {
         $this->status = $result->status;
         $this->message = $result->message;
         $this->code = $result->code;
@@ -141,13 +140,8 @@ class AcResult {
         return $this;
     }
 
-    public function fromJson(array $jsonData): static {
-        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
-        return $this;
-    }
-
     public function toJson(): array {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {

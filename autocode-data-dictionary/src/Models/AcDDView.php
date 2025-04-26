@@ -6,7 +6,7 @@ require_once 'AcDDViewField.php';
 require_once 'AcDataDictionary.php';
 use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Models\AcDDViewField;
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Utils\AcUtilsJson;
 
 class AcDDView {
@@ -14,18 +14,22 @@ class AcDDView {
     public const KEY_VIEW_FIELDS = "view_fields";
     public const KEY_VIEW_QUERY = "view_query";
 
-    public AcJsonBindConfig $acJsonBindConfig;
+    #[AcBindJsonProperty(key: AcDDView::KEY_VIEW_NAME)]
     public string $viewName = "";
+
+    #[AcBindJsonProperty(key: AcDDView::KEY_VIEW_QUERY)]
     public string $viewQuery = "";
+
+    #[AcBindJsonProperty(key: AcDDView::KEY_VIEW_FIELDS)]
     public array $viewFields = [];
 
-    public static function instanceFromJson(array $jsonData): AcDDView {
+    public static function instanceFromJson(array $jsonData): self {
         $instance = new self();
         $instance->fromJson($jsonData);
         return $instance;
     }
 
-    public static function getInstance(string $viewName, string $dataDictionaryName = "default"): AcDDView {
+    public static function getInstance(string $viewName, string $dataDictionaryName = "default"): static {
         $result = new self();
         $acDataDictionary = AcDataDictionary::getInstance($dataDictionaryName);
         if (isset($acDataDictionary->views[$viewName])) {
@@ -34,40 +38,23 @@ class AcDDView {
         return $result;
     }
 
-    public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_VIEW_NAME => "viewName",
-                self::KEY_VIEW_QUERY => "viewQuery",
-                self::KEY_VIEW_FIELDS => "viewFields"
-            ]        
-        ]);
-    }
-
     public function fromJson(array $jsonData = []): static {
-        if (isset($jsonData[self::KEY_VIEW_NAME])) {
-            $this->viewName = (string) $jsonData[self::KEY_VIEW_NAME];
-        }
-        if (isset($jsonData[self::KEY_VIEW_QUERY])) {
-            $this->viewQuery = (string) $jsonData[self::KEY_VIEW_QUERY];
-        }
         if (isset($jsonData[self::KEY_VIEW_FIELDS]) && is_array($jsonData[self::KEY_VIEW_FIELDS])) {
             foreach ($jsonData[self::KEY_VIEW_FIELDS] as $fieldName => $fieldData) {
                 $this->viewFields[$fieldName] = AcDDViewField::instanceFromJson($fieldData);
             }
+            unset($jsonData[self::KEY_VIEW_FIELDS]);
         }
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }

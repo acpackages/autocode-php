@@ -19,10 +19,11 @@ use AcDataDictionary\Models\AcDDTable;
 use AcDataDictionary\Models\AcDDTableField;
 use AcDataDictionary\Models\AcDDTrigger;
 use AcDataDictionary\Models\AcDDView;
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Utils\AcUtilsJson;
 
 class AcDataDictionary {
+    public const KEY_DATA_DICTIONARIES = "data_dictionaries";
     public const KEY_FUNCTIONS = "functions";
     public const KEY_RELATIONSHIPS = "relationships";
     public const KEY_STORED_PROCEDURES = "stored_procedures";
@@ -30,23 +31,35 @@ class AcDataDictionary {
     public const KEY_TRIGGERS = "triggers";
     public const KEY_VERSION = "version";
     public const KEY_VIEWS = "views";
-    public AcJsonBindConfig $acJsonBindConfig;
+    
+    #[AcBindJsonProperty(key: AcDataDictionary::KEY_DATA_DICTIONARIES)]
     public static array $dataDictionaries = [];
+
     public array $functions = [];
+
     public array $relationships = [];
+
+    #[AcBindJsonProperty(key: AcDataDictionary::KEY_STORED_PROCEDURES)]
     public array $storedProcedures = [];
+
     public array $tables = [];
+
+    #[AcBindJsonProperty(key: AcDataDictionary::KEY_TRIGGERS)]
     public array $triggers = [];
+
+    #[AcBindJsonProperty(key: AcDataDictionary::KEY_VERSION)]
     public int $version = 0;
+
+    #[AcBindJsonProperty(key: AcDataDictionary::KEY_VIEWS)]
     public array $views = [];
 
-    public static function instanceFromJson(array $jsonData): AcDataDictionary {
+    public static function instanceFromJson(array $jsonData): self {
         $instance = new self();
         $instance->fromJson($jsonData);
         return $instance;
     }
 
-    public static function fromJsonString(string $jsonString): AcDataDictionary {
+    public static function fromJsonString(string $jsonString): self {
         $instance = new self();
         $jsonData = AcExtensionMethods::stringParseJsonToArray($jsonString);
         $instance->fromJson($jsonData);
@@ -76,7 +89,7 @@ class AcDataDictionary {
         return $result;
     }
 
-    public static function getInstance(string $dataDictionaryName = "default"): AcDataDictionary {
+    public static function getInstance(string $dataDictionaryName = "default"): self {
         $result = new self();
         if (isset(self::$dataDictionaries[$dataDictionaryName])) {
             $result->fromJson(self::$dataDictionaries[$dataDictionaryName]);
@@ -298,19 +311,11 @@ class AcDataDictionary {
         self::registerDataDictionary($jsonData,$dataDictionaryName);
     }
 
-    public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_FUNCTIONS => "functions",
-                self::KEY_RELATIONSHIPS => "relationships",
-                self::KEY_STORED_PROCEDURES => "storedProcedures",
-                self::KEY_TABLES => "tables",
-                self::KEY_TRIGGERS => "triggers",
-                self::KEY_VERSION => "version",
-                self::KEY_VIEWS => "views",
-            ]        
-        ]);
+    public function fromJson(array $jsonData): static {
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
     }
+
 
     public function getTableNames(): array {
         return array_keys($this->tables);
@@ -355,28 +360,14 @@ class AcDataDictionary {
         });
     }
 
-    public function fromJson(array $jsonData = []): static {
-        $this->functions = $jsonData[self::KEY_FUNCTIONS] ?? [];
-        $this->relationships = $jsonData[self::KEY_RELATIONSHIPS] ?? [];
-        $this->storedProcedures = $jsonData[self::KEY_STORED_PROCEDURES] ?? [];
-        $this->tables = $jsonData[self::KEY_TABLES] ?? [];
-        $this->triggers = $jsonData[self::KEY_TRIGGERS] ?? [];
-        $this->version = $jsonData[self::KEY_VERSION] ?? 0;
-        $this->views = $jsonData[self::KEY_VIEWS] ?? [];
-        return $this;
-    }
-
     public function toJson(): array {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }
 
 ?>

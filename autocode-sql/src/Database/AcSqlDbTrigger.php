@@ -35,6 +35,5 @@ class AcSqlDbTrigger extends AcSqlDbBase {
         }
         return $result;
     }
-
     
 }

@@ -1,27 +1,32 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
+
 
 class AcApiDocRequestBody {
     const KEY_DESCRIPTION = 'description';
     const KEY_CONTENT = 'content';
     const KEY_REQUIRED = 'required';
-    public AcJsonBindConfig $acJsonBindConfig;
     public ?string $description = "";
     public array $content = [];
     public bool $required = false;
 
-    public static function instanceFromJson(array $jsonData): AcApiDocRequestBody {
-        $instance = new AcApiDocRequestBody();
-        $instance->description = $jsonData[self::KEY_DESCRIPTION] ?? null;
+    public static function instanceFromJson(array $jsonData): static {
+        $instance = new self();
+        $instance->fromJson($jsonData);
+        return $instance;
+    }
+
+    public function fromJson(array $jsonData): static {
         if (isset($jsonData[self::KEY_CONTENT])) {
             foreach ($jsonData[self::KEY_CONTENT] as $mime => $contentJson) {
-                $instance->content[$mime] = AcApiDocContent::instanceFromJson($contentJson);
+                $this->content[$mime] = AcApiDocContent::instanceFromJson($contentJson);
             }
+            unset($jsonData[self::KEY_CONTENT]);
         }
-        $instance->required = $jsonData[self::KEY_REQUIRED] ?? false;
-        return $instance;
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
     }
 
     public function addContent(AcApiDocContent $content): void{
@@ -49,8 +54,5 @@ class AcApiDocRequestBody {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }
 ?>

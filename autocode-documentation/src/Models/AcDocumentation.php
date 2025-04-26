@@ -4,7 +4,7 @@ namespace AcDoc\Models;
 
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Utils\AcUtilsJson;
 
 /**
@@ -62,15 +62,6 @@ class AcDocumentation {
     const KEY_RELATED = 'related';
     const KEY_SECURITY = 'security';
     const KEY_URL = 'url';
-
-    /**
-     * @acDoc {
-     *   "name": "acJsonBindConfig",
-     *   "type": "property",
-     *   "description": "Configuration object for binding properties from JSON."
-     * }
-     */
-    public AcJsonBindConfig $acJsonBindConfig;
 
     /**
      * @acDoc {
@@ -214,6 +205,7 @@ class AcDocumentation {
      *   "description": "The date when the code element was last modified."
      * }
      */
+    #[AcBindJsonProperty(key: AcDocumentation::KEY_LAST_MODIFIED)]
     public ?string $lastModified = null;
 
     /**
@@ -252,56 +244,25 @@ class AcDocumentation {
      */
     public ?array $security = [];
 
-    /**
-     * @acDoc {
-     *   "name": "url",
-     *   "type": "property",
-     *   "description": "URL for more information about the code element."
-     * }
-     */
+    /*
+    @acDoc {
+       "name": "url",
+       "type": "property",
+       "description": "URL for more information about the code element."
+    }
+    */
     public ?string $url = null;
 
-    /**
-     * Constructor method to initialize binding configuration.
-     */
-    public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_NAME => 'name',
-                self::KEY_TYPE => 'type',
-                self::KEY_NAMESPACE => 'namespace',
-                self::KEY_DESCRIPTION => 'description',
-                self::KEY_DETAILS => 'details',
-                self::KEY_CATEGORY => 'category',
-                self::KEY_VISIBILITY => 'visibility',
-                self::KEY_DEPRECATED => 'deprecated',
-                self::KEY_SINCE => 'since',
-                self::KEY_PARAMETERS => 'parameters',
-                self::KEY_RETURN => 'return',
-                self::KEY_THROWS => 'throws',
-                self::KEY_EXAMPLES => 'examples',
-                self::KEY_AUTHOR => 'author',
-                self::KEY_MAINTAINER => 'maintainer',
-                self::KEY_LAST_MODIFIED => 'lastModified',
-                self::KEY_FILE => 'file',
-                self::KEY_TAGS => 'tags',
-                self::KEY_RELATED => 'related',
-                self::KEY_SECURITY => 'security',
-                self::KEY_URL => 'url',
-            ]        
-        ]);
+    
+     
+    /* 
+    @acDoc {
+        "name": "instanceFromJson",
+        "type": "method",
+        "description": "Creates an instance of AcDocumentation from a JSON array."
     }
-
-    /**
-     * Static method to create an instance from JSON data.
-     *
-     * @acDoc {
-     *   "name": "instanceFromJson",
-     *   "type": "method",
-     *   "description": "Creates an instance of AcDocumentation from a JSON array."
-     * }
-     */
-    public static function instanceFromJson(array $jsonData): AcDocumentation {
+    */
+    public static function instanceFromJson(array $jsonData): self {
         $instance = new self();
         $instance->fromJson($jsonData);
         return $instance;
@@ -316,8 +277,9 @@ class AcDocumentation {
      *   "description": "Sets the values of the instance properties from the JSON data."
      * }
      */
-    public function fromJson(array $jsonData = []): void {
-        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+    public function fromJson(array $jsonData = []): static {
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
     }
 
     /**
@@ -330,7 +292,7 @@ class AcDocumentation {
      * }
      */
     public function toJson(): array {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     /**
@@ -346,16 +308,4 @@ class AcDocumentation {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    /**
-     * Return a string representation of the instance (JSON format).
-     *
-     * @acDoc {
-     *   "name": "toString",
-     *   "type": "method",
-     *   "description": "Returns a JSON string representation of the instance."
-     * }
-     */
-    public function toString(): string {
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }

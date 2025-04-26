@@ -3,34 +3,39 @@ namespace AcWeb\ApiDocs\Models;
 
 use AcWeb\ApiDocs\Models\AcApiDocParameter;
 use AcWeb\ApiDocs\Models\AcApiDocResponse;
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
 
 class AcApiDocOperation {    
     const KEY_DESCRIPTION = "description";
     const KEY_PARAMETERS = "parameters";
     const KEY_RESPONSES = "responses";    
     const KEY_SUMMARY = "summary";
-    public AcJsonBindConfig $acJsonBindConfig;
     public ?string $summary = null;
     public ?string $description = null;
     public array $parameters = [];
     public array $responses = [];
 
-    public static function instanceFromJson(array $jsonData): AcApiDocOperation {
-        $instance = new AcApiDocOperation();
-        $instance->summary = $jsonData[self::KEY_SUMMARY] ?? null;
-        $instance->description = $jsonData[self::KEY_DESCRIPTION] ?? null;
+    public static function instanceFromJson(array $jsonData): static {
+        $instance = new self();
+        $instance->fromJson($jsonData);
+        return $instance;
+    }
+
+    public function fromJson(array $jsonData): static {
         if (isset($jsonData[self::KEY_PARAMETERS])) {
             foreach ($jsonData[self::KEY_PARAMETERS] as $parameter) {
-                $instance->parameters[] = AcApiDocParameter::instanceFromJson($parameter);
+                $this->parameters[] = AcApiDocParameter::instanceFromJson($parameter);
             }
+            unset($jsonData[self::KEY_PARAMETERS]);
         }
         if (isset($jsonData[self::KEY_RESPONSES])) {
             foreach ($jsonData[self::KEY_RESPONSES] as $status => $response) {
-                $instance->responses[$status] = AcApiDocResponse::instanceFromJson($response);
+                $this->responses[$status] = AcApiDocResponse::instanceFromJson($response);
             }
+            unset($jsonData[self::KEY_RESPONSES]);
         }
-        return $instance;
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {
@@ -55,8 +60,5 @@ class AcApiDocOperation {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }
 ?>

@@ -2,7 +2,6 @@
 namespace AcWeb\Models;
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 use AcWeb\ApiDocs\Models\AcApiDocRoute;
-use Autocode\Models\AcJsonBindConfig;
 use Autocode\Utils\AcUtilsJson;
 
 class AcWebRouteDefinition {
@@ -25,34 +24,19 @@ class AcWebRouteDefinition {
         return $instance;
     }
 
-    public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_CONTROLLER => "controller",
-                self::KEY_HANDLER => "handler",
-                self::KEY_METHOD => "method",
-                self::KEY_DOCUMENTATION => "documentation",
-                self::KEY_URL => "url",
-            ]        
-        ]);
-    }
-
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }
 
 ?>

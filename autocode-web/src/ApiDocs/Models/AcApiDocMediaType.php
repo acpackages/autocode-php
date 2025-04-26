@@ -1,35 +1,33 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
+
 
 class AcApiDocMediaType {
     const KEY_SCHEMA = 'schema';
     const KEY_EXAMPLES = 'examples';
-    public AcJsonBindConfig $acJsonBindConfig;
     public ?array $schema = null;
     public ?array $examples = null;
 
-    public static function instanceFromJson(array $jsonData): AcApiDocMediaType {
-        $instance = new AcApiDocMediaType();
-        $instance->schema = $jsonData[self::KEY_SCHEMA] ?? null;
-        $instance->examples = $jsonData[self::KEY_EXAMPLES] ?? null;
+    public static function instanceFromJson(array $jsonData): static {
+        $instance = new self();
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
+    public function fromJson(array $jsonData): static {
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
+    }
+
     public function toJson(): array {
-        return array_filter([
-            self::KEY_SCHEMA => $this->schema,
-            self::KEY_EXAMPLES => $this->examples,
-        ]);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }
 ?>

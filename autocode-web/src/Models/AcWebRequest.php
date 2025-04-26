@@ -1,7 +1,6 @@
 <?php
 namespace AcWeb\Models;
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
-use Autocode\Models\AcJsonBindConfig;
 use Autocode\Utils\AcUtilsJson;
 
 class AcWebRequest {
@@ -32,39 +31,19 @@ class AcWebRequest {
         return $instance;
     }
 
-    public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_BODY => "body",
-                self::KEY_COOKIES => "cookies",
-                self::KEY_FILES => "files",
-                self::KEY_GET => "get",
-                self::KEY_HEADERS => "headers",
-                self::KEY_METHOD => "method",                
-                self::KEY_PATH_PAREMETERS => "pathParameters",
-                self::KEY_POST => "post",
-                self::KEY_SESSION => "session",
-                self::KEY_URL => "url",
-            ]        
-        ]);
-    }
-
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }
 
 ?>

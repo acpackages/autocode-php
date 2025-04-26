@@ -5,32 +5,24 @@ require_once 'AcDDTableField.php';
 require_once 'AcDDTableProperty.php';
 require_once 'AcDataDictionary.php';
 use AcExtensions\AcExtensionMethods;
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Utils\AcUtilsJson;
 
 class AcDDConditionGroup
 {
+    const KEY_DATABASE_TYPE = "database_type";
     const KEY_CONDITIONS = "conditions";
     const KEY_OPERATOR = "operator";
-    public AcJsonBindConfig $acJsonBindConfig;
+
+    #[AcBindJsonProperty(key: AcDDConditionGroup::KEY_DATABASE_TYPE)]
     public string $databaseType = "";
     public array $conditions = [];
     public string $operator = "";
 
-    public static function instanceFromJson(array $jsonData): AcDDConditionGroup
-    {
+    public static function instanceFromJson(array $jsonData): self {
         $instance = new self();
         $instance->fromJson(jsonData: $jsonData);
         return $instance;
-    }
-
-    public function __construct(){
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_CONDITIONS => "conditions",
-                self::KEY_OPERATOR => "operator",
-            ]
-        ]);
     }
 
     public function addCondition(string $fieldName, string $operator, mixed $value): static
@@ -68,21 +60,15 @@ class AcDDConditionGroup
             }
             unset($jsonData[self::KEY_CONDITIONS]);
         }
-        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
-    public function toJson(): array
-    {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+    public function toJson(): array {
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string
-    {
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
-
-    public function toString(): string
     {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }

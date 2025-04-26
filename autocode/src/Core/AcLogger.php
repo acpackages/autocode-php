@@ -40,44 +40,52 @@ class AcLogger {
         }
     }
 
-    public function debug(...$args) {
+    public function debug(...$args): static {
         $this->loggerMessage($args, "debug");
+        return $this;
     }
 
-    public function error(...$args) {
+    public function error(...$args): static {
         $this->loggerMessage($args, "error");
+        return $this;
     }
 
-    public function exception($exception) {
+    public function exception($exception): static {
         $this->loggerMessage($exception->getMessage(), "error");
+        return $this;
     }
 
-    public function info(...$args) {
+    public function info(...$args): static {
         $this->loggerMessage($args, "info");
+        return $this;
     }
 
-    public function log(...$args) {
+    public function log(...$args): static {
         $this->loggerMessage($args, "log");
+        return $this;
     }
 
-    public function warn(...$args) {
+    public function warn(...$args): static {
         $this->loggerMessage($args, "warn");
+        return $this;
     }
 
-    public function success(...$args) {
+    public function success(...$args): static {
         $this->loggerMessage($args, "success");
+        return $this;
     }
 
-    public function closeLogFile() {
+    public function closeLogFile(): static {
         if ($this->logFileCreated && $this->logFile) {
             if ($this->logType === AcEnumLogType::HTML) {
                 $this->logFile->writeAsString("\n\t\t</table>\n\t</body>\n</html>");
             }
             $this->logFile->close();
         }
+        return $this;
     }
 
-    private function createLogFile() {
+    private function createLogFile(): static {
         if (php_sapi_name() !== 'cli') {
             $this->logFile = new AcBackgroundFile($this->logFilePath);
             if ($this->logType === AcEnumLogType::HTML) {
@@ -85,26 +93,30 @@ class AcLogger {
             }
             $this->logFileCreated = true;
         }
+        return $this;
     }
 
-    public function newLines($count = 1) {
+    public function newLines($count = 1): static {
         for ($i = 0; $i < $count; $i++) {
             $this->log("");
         }
+        return $this;
     }
 
-    private function consoleMessage($message, $type) {
+    private function consoleMessage($message, $type): static {
         $label = $this->prefix ? "{$this->prefix} : " : "";
         echo "{$label}{$message}\n";
+        return $this;
     }
 
-    private function printMessage($message, $type) {
+    private function printMessage($message, $type): static {
         $color = $this->messageColors[$type];
         $label = $this->prefix ? "{$this->prefix} : " : "";
         echo '<p style="color:'.$color.';">'.$label.$message.'</p>';
+        return $this;
     }
 
-    private function loggerMessage($args, $type) {
+    private function loggerMessage($args, $type): static {
         if ($this->logMessages) {
             foreach ($args as $message) {
                 if(is_array($message)) {
@@ -119,9 +131,10 @@ class AcLogger {
                 }
             }
         }
+        return $this;
     }
 
-    private function writeToFile($message, $type) {
+    private function writeToFile($message, $type): static {
         if (php_sapi_name() === 'cli') {
             $this->consoleMessage($message, $type);
         } else {
@@ -137,18 +150,21 @@ class AcLogger {
                 $this->writeText($timestamp, $message, $type);
             }
         }
+        return $this;
     }
 
-    private function writeHtml($timestamp, $message, $type) {
+    private function writeHtml($timestamp, $message, $type): static {
         if ($this->logFile) {
             $this->logFile->writeAsString("\n\t<tr><td>{$timestamp}</td><td>{$message}</td></tr>");
         }
+        return $this;
     }
 
-    private function writeText($timestamp, $message, $type) {
+    private function writeText($timestamp, $message, $type): static {
         if ($this->logFile) {
             $this->logFile->writeAsString("\n{$timestamp} => {$message}");
         }
+        return $this;
     }
 }
 ?>

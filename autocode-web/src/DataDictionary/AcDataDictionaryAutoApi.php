@@ -45,7 +45,7 @@ class AcDataDictionaryAutoApi
         $this->acDataDictionary = AcDataDictionary::getInstance(dataDictionaryName: $dataDictionaryName);
     }
 
-    public function excludeTable(string $tableName, ?bool $delete, ?bool $insert, ?bool $save, ?bool $select, ?bool $selectDistinct, ?bool $update)
+    public function excludeTable(string $tableName, ?bool $delete, ?bool $insert, ?bool $save, ?bool $select, ?bool $selectDistinct, ?bool $update): static
     {
         if ($delete == null && $insert == null && $save == null && $select == null && $selectDistinct == null && $update == null) {
             $delete = true;
@@ -82,10 +82,10 @@ class AcDataDictionaryAutoApi
             "select_distinct" => $selectDistinct,
             "update" => $update
         ];
+        return $this;
     }
 
-    public function includeTable(string $tableName, ?bool $delete = null, ?bool $insert = null, ?bool $save = null, ?bool $select = null, ?bool $selectDistinct = null, ?bool $update = null)
-    {
+    public function includeTable(string $tableName, ?bool $delete = null, ?bool $insert = null, ?bool $save = null, ?bool $select = null, ?bool $selectDistinct = null, ?bool $update = null): static {
         if ($delete == null && $insert == null && $save == null && $select == null && $selectDistinct == null && $update == null) {
             $delete = true;
             $insert = true;
@@ -121,10 +121,10 @@ class AcDataDictionaryAutoApi
             "select_distinct" => $selectDistinct,
             "update" => $update
         ];
+        return $this;
     }
 
-    public function generate()
-    {
+    public function generate(): static{
         foreach (AcDataDictionary::getTables(dataDictionaryName: $this->dataDictionaryName) as $acDDTable) {
             $schema = AcApiDocUtils::getApiModelRefFromAcDDTable(acDDTable: $acDDTable, acApiDoc: $this->acWeb->acApiDoc);
             $continueOperation = false;
@@ -162,97 +162,28 @@ class AcDataDictionaryAutoApi
                     $apiAdded = false;
                     $primaryKeyFieldName = $acDDTable->getPrimaryKeyFieldName();
                     if ($delete) {
-                        // $apiUrl = $this->urlPrefix . '/' . $acDDTable->tableName . "/" . $this->pathForDelete . "/{id}";
-                        // $acApiDocRoute = new AcApiDocRoute();
-                        // $acApiDocRoute->addTag($acDDTable->tableName);
-                        // $acApiDocRoute->description = "Auto generated data dictionary api to delete row in table " . $acDDTable->tableName;
-                        // $handler = function (#[AcWebValueFromPath('id')] $id) use ($acDDTable): AcWebResponse {
-                        //     return AcWebResponse::json(["message" => "delete operation", "table_name" => $acDDTable->tableName]);
-                        // };
-                        // $this->acWeb->delete(url: $apiUrl, handler: $handler, acApiDocRoute: $acApiDocRoute);
                         $controler = new AcDataDictionaryAutoDelete(acDDTable: $acDDTable,acDataDictionaryAutoApi: $this);
                         $apiAdded = true;
                     }
                     if ($insert) {
-                        // $apiUrl = $this->urlPrefix . '/' . $acDDTable->tableName . "/" . $this->pathForInsert;
-                        // $acApiDocRoute = new AcApiDocRoute();
-                        // $acApiDocRoute->addTag($acDDTable->tableName);
-                        // $acApiDocRoute->description = "Auto generated data dictionary api to insert row in table " . $acDDTable->tableName;
-                        // $parameter = new AcApiDocParameter();
-                        // $parameter->name = "body";
-                        // $parameter->description = $acDDTable->getSingularName() . " value to insert";
-                        // $parameter->required = true;
-                        // $parameter->in = "body";
-                        // $parameter->schema = AcApiDocUtils::getApiModelRefFromAcDDTable(acDDTable: $acDDTable,acApiDoc:$this->acWeb->acApiDoc);
-                        // $acApiDocRoute->addParameter($parameter);
-                        // $handler = function () use ($acDDTable): AcWebResponse {
-                        //     return AcWebResponse::json(["message" => "insert operation", "table_name" => $acDDTable->tableName]);
-                        // };
-                        // $this->acWeb->post(url: $apiUrl, handler: $handler, acApiDocRoute: $acApiDocRoute);
                         $controler = new AcDataDictionaryAutoInsert(acDDTable: $acDDTable,acDataDictionaryAutoApi: $this);
                         $apiAdded = true;
                     }
                     if ($save) {
-                        // $apiUrl = $this->urlPrefix . '/' . $acDDTable->tableName . "/" . $this->pathForSave;
-                        // $acApiDocRoute = new AcApiDocRoute();
-                        // $acApiDocRoute->addTag($acDDTable->tableName);
-                        // $acApiDocRoute->description = "Auto generated data dictionary api to save row in table " . $acDDTable->tableName;
-                        // $parameter = new AcApiDocParameter();
-                        // $parameter->name = "body";
-                        // $parameter->description = $acDDTable->getSingularName() . " value to save";
-                        // $parameter->required = true;
-                        // $parameter->in = "body";
-                        // $parameter->schema = AcApiDocUtils::getApiModelRefFromAcDDTable(acDDTable: $acDDTable,acApiDoc:$this->acWeb->acApiDoc);
-                        // $acApiDocRoute->addParameter($parameter);
-                        // $handler = function (AcWebRequest $acWebRequest) use ($acDDTable): AcWebResponse {
-                        //     return AcWebResponse::json(["message" => "save operation", "table_name" => $acDDTable->tableName,"request"=>$acWebRequest->toJson()]);
-                        // };
-                        // $this->acWeb->post(url: $apiUrl, handler: $handler, acApiDocRoute: $acApiDocRoute);
                         $controler = new AcDataDictionaryAutoSave(acDDTable: $acDDTable,acDataDictionaryAutoApi: $this);
                         $apiAdded = true;
                     }
                     if ($select) {
-                        // $apiUrl = $this->urlPrefix . '/' . $acDDTable->tableName . "/" . $this->pathForSelect;
-                        // $acApiDocRoute = new AcApiDocRoute();
-                        // $acApiDocRoute->addTag($acDDTable->tableName);
-                        // $acApiDocRoute->description = "Auto generated data dictionary api to get rows in table " . $acDDTable->tableName;
-                        // $handler = function ($params) use ($acDDTable): AcWebResponse {
-                        //     $acSqlDbTable = new AcSqlDbTable(tableName: $acDDTable->tableName);
-                        //     $getResponse = $acSqlDbTable->getRows();
-                        //     return AcWebResponse::json($getResponse->toJson());
-                        // };
-                        // $this->acWeb->get(url: $apiUrl, handler: $handler, acApiDocRoute: $acApiDocRoute);
                         $controler = new AcDataDictionaryAutoSelect(acDDTable: $acDDTable,acDataDictionaryAutoApi: $this);
                         $apiAdded = true;
                     }
                     if ($selectDistinct) {
                         foreach ($acDDTable->getSelectDistinctFields() as $distinctField) {
-                            // $apiUrl = $this->urlPrefix . '/' . $acDDTable->tableName . "/" . $this->pathForSelectDistinct . "-" . $distinctField->fieldName;
-                            // $acApiDocRoute->addTag($acDDTable->tableName);
-                            // $acApiDocRoute->description = "Auto generated data dictionary api to distinct values from column " . $distinctField . " in table " . $acDDTable->tableName;
-                            // $handler = function ($params) use ($acDDTable, $distinctField): AcWebResponse {
-                            //     return AcWebResponse::json(["message" => "select distinct operation", "table_name" => $acDDTable->tableName, 'field_name' => $distinctField->fieldName]);
-                            // };
                             $controler = new AcDataDictionaryAutoSelectDistinct(acDDTable: $acDDTable,acDDTableField:$distinctField,acDataDictionaryAutoApi: $this);
                             $apiAdded = true;
                         }
                     }
                     if ($update) {
-                        // $apiUrl = $this->urlPrefix . '/' . $acDDTable->tableName . "/" . $this->pathForUpdate;
-                        // $acApiDocRoute = new AcApiDocRoute();
-                        // $acApiDocRoute->addTag($acDDTable->tableName);
-                        // $acApiDocRoute->description = "Auto generated data dictionary api to update row in table " . $acDDTable->tableName;
-                        // $parameter = new AcApiDocParameter();
-                        // $parameter->name = "body";
-                        // $parameter->description = $acDDTable->getSingularName() . " value to save";
-                        // $parameter->required = true;
-                        // $parameter->in = "body";
-                        // $parameter->schema = AcApiDocUtils::getApiModelRefFromAcDDTable(acDDTable: $acDDTable,acApiDoc:$this->acWeb->acApiDoc);
-                        // $acApiDocRoute->addParameter($parameter);
-                        // $handler = function ($params) use ($acDDTable): AcWebResponse {
-                        //     return AcWebResponse::json(["message" => "update operation", "table_name" => $acDDTable->tableName]);
-                        // };
-                        // $this->acWeb->post(url: $apiUrl, handler: $handler, acApiDocRoute: $acApiDocRoute);
                         $controler = new AcDataDictionaryAutoUpdate(acDDTable: $acDDTable,acDataDictionaryAutoApi: $this);
                         $apiAdded = true;
                     }
@@ -265,6 +196,7 @@ class AcDataDictionaryAutoApi
                 }
             }
         }
+        return $this;
     }
 
 }

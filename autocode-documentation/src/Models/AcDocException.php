@@ -2,7 +2,6 @@
 namespace AcDoc\Models;
 
 use Autocode\Utils\AcUtilsJson;
-use Autocode\Models\AcJsonBindConfig;
 
 /**
  * AcDocException represents an exception used in the AcDoc framework.
@@ -25,15 +24,6 @@ class AcDocException
     // Constants for JSON keys
     const KEY_TYPE = 'type';
     const KEY_DESCRIPTION = 'description';
-
-    /**
-     * @acDoc {
-     *   "name": "acJsonBindConfig",
-     *   "type": "property",
-     *   "description": "Configuration object for binding properties from JSON."
-     * }
-     */
-    public AcJsonBindConfig $acJsonBindConfig;
 
     /**
      * @acDoc {
@@ -62,15 +52,6 @@ class AcDocException
      *   "description": "Constructor to initialize the exception with a message, code, type, and description."
      * }
      */
-    public function __construct()
-    {
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_TYPE => 'type',
-                self::KEY_DESCRIPTION => 'description',
-            ]        
-        ]);
-    }
 
     /**
      * Static method to create an AcDocException instance from JSON data.
@@ -81,7 +62,7 @@ class AcDocException
      *   "description": "Creates an instance of AcDocException from a JSON array."
      * }
      */
-    public static function instanceFromJson(array $jsonData): AcDocException
+    public static function instanceFromJson(array $jsonData): static
     {
         $instance = new self();
         $instance->fromJson($jsonData);
@@ -97,8 +78,9 @@ class AcDocException
      *   "description": "Sets the values of the instance properties from the JSON data."
      * }
      */
-    public function fromJson(array $jsonData = []): void {
-        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+    public function fromJson(array $jsonData = []): static {
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
     }
 
     /**
@@ -110,9 +92,8 @@ class AcDocException
      *   "description": "Converts the instance into a JSON array representation."
      * }
      */
-    public function toJson(): array
-    {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+    public function toJson(): array {
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     /**
@@ -126,19 +107,6 @@ class AcDocException
      */
     public function __toString(): string
     {
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
-
-    /**
-     * Return a string representation of the exception (JSON format).
-     *
-     * @acDoc {
-     *   "name": "toString",
-     *   "type": "method",
-     *   "description": "Returns a JSON string representation of the exception."
-     * }
-     */
-    public function toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }

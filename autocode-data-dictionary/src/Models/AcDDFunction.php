@@ -3,7 +3,7 @@
 namespace AcDataDictionary\Models;
 require_once 'AcDataDictionary.php';
 use AcDataDictionary\Models\AcDataDictionary;
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Utils\AcUtilsJson;
 
 
@@ -11,8 +11,10 @@ class AcDDFunction {
     public const KEY_FUNCTION_NAME = "function_name";
     public const KEY_FUNCTION_CODE = "function_code";
 
-    public AcJsonBindConfig $acJsonBindConfig;
+    #[AcBindJsonProperty(key: AcDDFunction::KEY_FUNCTION_NAME)]
     public string $functionName = "";
+
+    #[AcBindJsonProperty(key: AcDDFunction::KEY_FUNCTION_CODE)]
     public string $functionCode = "";
 
     public static function instanceFromJson(array $jsonData): self {
@@ -30,31 +32,19 @@ class AcDDFunction {
         return $result;
     }
 
-    public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_FUNCTION_CODE => "functionCode",
-                self::KEY_FUNCTION_NAME => "functionName",
-            ]        
-        ]);
-    }
-
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::bindInstancePropertiesFromJson(instance: $this, data: $jsonData);
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }
 
 ?>

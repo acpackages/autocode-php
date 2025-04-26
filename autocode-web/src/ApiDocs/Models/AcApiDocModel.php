@@ -1,49 +1,34 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
+
 
 class AcApiDocModel {
     const KEY_NAME = 'name';
     const KEY_TYPE = 'type';
     const KEY_PROPERTIES = 'properties';
-    public AcJsonBindConfig $acJsonBindConfig;
     public string $name = "";
     public string $type = "object";
     public array $properties = [];
 
-    public static function instanceFromJson(array $jsonData): AcApiDocModel {
-        $instance = new AcApiDocModel();
-
-        if (isset($jsonData[self::KEY_NAME])) {
-            $instance->name = $jsonData[self::KEY_NAME];
-        }
-
-        if (isset($jsonData[self::KEY_PROPERTIES])) {
-            $instance->properties = $jsonData[self::KEY_PROPERTIES];
-        }
-
-        if (isset($jsonData[self::KEY_TYPE])) {
-            $instance->type = $jsonData[self::KEY_TYPE];
-        }
-
+    public static function instanceFromJson(array $jsonData): static {
+        $instance = new self();
+        $instance->fromJson($jsonData);
         return $instance;
     }
 
-    public function toJson(): array {
-        return [
-            self::KEY_NAME => $this->name,
-            self::KEY_PROPERTIES => $this->properties,
-            self::KEY_TYPE => $this->type
-        ];
+    public function fromJson(array $jsonData): static {
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
     }
 
-    public function toString(): string {
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
+    public function toJson(): array {
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
-        return $this->toString();
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 }
 ?>

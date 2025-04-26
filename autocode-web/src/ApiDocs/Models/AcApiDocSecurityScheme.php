@@ -1,7 +1,9 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Annotaions\AcBindJsonProperty;
+use Autocode\Utils\AcUtilsJson;
+
 
 class AcApiDocSecurityScheme {
     const KEY_TYPE = 'type';
@@ -12,50 +14,38 @@ class AcApiDocSecurityScheme {
     const KEY_BEARER_FORMAT = 'bearerFormat';
     const KEY_FLOWS = 'flows';
     const KEY_OPENID_CONNECT_URL = 'openIdConnectUrl';
-    public AcJsonBindConfig $acJsonBindConfig;
     public string $type = '';
     public string $description = '';
     public string $name = '';
     public string $in = '';
     public string $scheme = '';
+
+    #[AcBindJsonProperty(key: AcApiDocSecurityScheme::KEY_BEARER_FORMAT)]
     public string $bearerFormat = '';
+
     public array $flows = [];
+
+    #[AcBindJsonProperty(key: AcApiDocSecurityScheme::KEY_OPENID_CONNECT_URL)]
     public string $openIdConnectUrl = '';
 
-    public static function instanceFromJson(array $jsonData): AcApiDocSecurityScheme {
-        $instance = new AcApiDocSecurityScheme();
-
-        $instance->type = $jsonData[self::KEY_TYPE] ?? '';
-        $instance->description = $jsonData[self::KEY_DESCRIPTION] ?? '';
-        $instance->name = $jsonData[self::KEY_NAME] ?? '';
-        $instance->in = $jsonData[self::KEY_IN] ?? '';
-        $instance->scheme = $jsonData[self::KEY_SCHEME] ?? '';
-        $instance->bearerFormat = $jsonData[self::KEY_BEARER_FORMAT] ?? '';
-        $instance->flows = $jsonData[self::KEY_FLOWS] ?? [];
-        $instance->openIdConnectUrl = $jsonData[self::KEY_OPENID_CONNECT_URL] ?? '';
-
+    public static function instanceFromJson(array $jsonData): static {
+        $instance = new self();
+        $instance->fromJson($jsonData);
         return $instance;
+    }
+    
+    public function fromJson(array $jsonData): static {
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {
-        return [
-            self::KEY_TYPE => $this->type,
-            self::KEY_DESCRIPTION => $this->description,
-            self::KEY_NAME => $this->name,
-            self::KEY_IN => $this->in,
-            self::KEY_SCHEME => $this->scheme,
-            self::KEY_BEARER_FORMAT => $this->bearerFormat,
-            self::KEY_FLOWS => $this->flows,
-            self::KEY_OPENID_CONNECT_URL => $this->openIdConnectUrl,
-        ];
-    }
-
-    public function toString(): string {
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
-        return $this->toString();
+        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
+
 }
 ?>

@@ -178,6 +178,5 @@ class AcSqlDbTableField extends AcSqlDbBase {
         }
         return $result;
     }
-
     
 }

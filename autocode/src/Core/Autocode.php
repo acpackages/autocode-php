@@ -2,6 +2,9 @@
 
 namespace Autocode;
 
+use Exception;
+use ReflectionClass;
+
 require_once 'AcLogger.php';
 
 class Autocode {

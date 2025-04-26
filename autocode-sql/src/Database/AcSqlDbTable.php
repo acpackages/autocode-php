@@ -1270,7 +1270,6 @@ class AcSqlDbTable extends AcSqlDbBase
         return $result;
     }
 
-
     public function updateValueLengthWithChars(string $value, string $char, int $length): string
     {
         $result = $value;

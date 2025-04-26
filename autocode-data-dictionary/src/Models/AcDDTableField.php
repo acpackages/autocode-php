@@ -16,7 +16,7 @@ use AcDataDictionary\Models\AcDDRelationship;
 use AcDataDictionary\Models\AcDDTable;
 use AcDataDictionary\Models\AcDDTableFieldProperty;
 use AcExtensions\AcExtensionMethods;
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Utils\AcUtilsJson;
 
 class AcDDTableField {
@@ -25,29 +25,24 @@ class AcDDTableField {
     const KEY_FIELD_TYPE = "field_type";
     const KEY_FIELD_VALUE = "field_value";
 
-    public AcJsonBindConfig $acJsonBindConfig;
+    #[AcBindJsonProperty(key: AcDDTableField::KEY_FIELD_NAME)]
     public string $fieldName = "";
+
+    #[AcBindJsonProperty(key: AcDDTableField::KEY_FIELD_PROPERTIES)]
     public array $fieldProperties = [];
+
+    #[AcBindJsonProperty(key: AcDDTableField::KEY_FIELD_TYPE)]
     public string $fieldType = "text";
+
+    #[AcBindJsonProperty(key: AcDDTableField::KEY_FIELD_VALUE)]
     public mixed $fieldValue = null;
+
     public ?AcDDTable $table;
 
-    public static function instanceFromJson(array $jsonData): AcDDTableField {
+    public static function instanceFromJson(array $jsonData): self {
         $instance = new self();
         $instance->fromJson($jsonData);
         return $instance;
-    }
-
-    public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_FIELD_NAME => "fieldName",
-                self::KEY_FIELD_PROPERTIES => "fieldProperties",
-                self::KEY_FIELD_TYPE => "fieldType",
-                self::KEY_FIELD_VALUE => "fieldValue"
-            ]        
-        ]);
-        $this->table = new AcDDTable();        
     }
     
     public function checkInAutoNumber(): bool {
@@ -211,28 +206,23 @@ class AcDDTableField {
         return $result;
     }    
     
-    public function fromJson(array $jsonData): static {
-        $this->fieldName = $jsonData[self::KEY_FIELD_NAME] ?? "";
-        $this->fieldType = $jsonData[self::KEY_FIELD_TYPE] ?? "text";
-        $this->fieldValue = $jsonData[self::KEY_FIELD_VALUE] ?? null;
-        
+    public function fromJson(array $jsonData): static {        
         if (isset($jsonData[self::KEY_FIELD_PROPERTIES]) && is_array($jsonData[self::KEY_FIELD_PROPERTIES])) {
             foreach ($jsonData[self::KEY_FIELD_PROPERTIES] as $key => $value) {
                 $this->fieldProperties[$key] = AcDDTableFieldProperty::instanceFromJson($value);
             }
+            unset($jsonData[self::KEY_FIELD_PROPERTIES]);
         }
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
     
     public function toJson(): array {
-        return AcUtilsJson::createJsonArrayFromInstance(instance: $this);
+        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }

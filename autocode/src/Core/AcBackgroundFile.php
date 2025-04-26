@@ -16,7 +16,7 @@ class AcBackgroundFile {
         $this->close();
     }
 
-    private function startWriterProcess(): void {
+    private function startWriterProcess(): static {
         $cmd = 'php ' . escapeshellarg(__DIR__ . '/AcBackgroundFileWorker.php') . ' ' . escapeshellarg($this->filePath);
 
         // Start the worker process
@@ -29,16 +29,18 @@ class AcBackgroundFile {
         if (!is_resource($this->process)) {
             throw new \Exception("Failed to start writer process");
         }
+        return $this;
     }
 
-    public function writeAsString(string $content): void {
+    public function writeAsString(string $content): static {
         if (is_resource($this->pipes[0])) {
             fwrite($this->pipes[0], $content . PHP_EOL);
             fflush($this->pipes[0]);
         }
+        return $this;
     }
 
-    public function close(): void {
+    public function close(): static {
         if (is_resource($this->pipes[0])) {
             fwrite($this->pipes[0], "exit\n"); // Signal worker to exit
             fflush($this->pipes[0]);
@@ -49,6 +51,7 @@ class AcBackgroundFile {
             proc_terminate($this->process);
             proc_close($this->process);
         }
+        return $this;
     }
 }
 

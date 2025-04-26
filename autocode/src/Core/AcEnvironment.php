@@ -2,6 +2,8 @@
 
 namespace Autocode;
 
+use Autocode\Enums\AcEnumEnvironment;
+
 require_once 'AcEnumEnvironment.php';
 
 class AcEnvironment {

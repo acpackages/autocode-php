@@ -2,29 +2,27 @@
 namespace AcWeb\ApiDocs\Models;
 
 use AcWeb\ApiDocs\Models\AcApiDocSchema;
-use Autocode\Models\AcJsonBindConfig;
+use Autocode\Utils\AcUtilsJson;
 
 class AcApiDocComponents {
     const KEY_SCHEMAS = 'schemas';
-    public AcJsonBindConfig $acJsonBindConfig;
     public array $schemas = [];
 
-    public static function instanceFromJson(array $jsonData): AcApiDocComponents {
-        $instance = new AcApiDocComponents();
-        if (isset($jsonData[self::KEY_SCHEMAS])) {
-            foreach ($jsonData[self::KEY_SCHEMAS] as $name => $schema) {
-                $instance->schemas[$name] = AcApiDocSchema::instanceFromJson($schema);
-            }
-        }
+    public static function instanceFromJson(array $jsonData): static {
+        $instance = new self();
+        $instance->fromJson(jsonData: $jsonData);
         return $instance;
     }
 
-    public function __construct() {
-        $this->acJsonBindConfig = AcJsonBindConfig::instanceFromJson(jsonData: [
-            AcJsonBindConfig::KEY_PROPERY_BINDINGS => [
-                self::KEY_SCHEMAS => "schemas",
-            ]        
-        ]);
+    public function fromJson(array $jsonData = []): static {
+        if (isset($jsonData[self::KEY_SCHEMAS])) {
+            foreach ($jsonData[self::KEY_SCHEMAS] as $name => $schema) {
+                $this->schemas[$name] = AcApiDocSchema::instanceFromJson($schema);
+            }
+            unset($jsonData[self::KEY_SCHEMAS]);
+        }
+        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        return $this;
     }
 
     public function toJson(): array {
@@ -48,8 +46,5 @@ class AcApiDocComponents {
         return json_encode($this->toJson(), JSON_PRETTY_PRINT);
     }
 
-    public function toString():string{
-        return json_encode($this->toJson(), JSON_PRETTY_PRINT);
-    }
 }
 ?>

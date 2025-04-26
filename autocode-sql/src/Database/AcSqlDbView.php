@@ -5,7 +5,7 @@ namespace AcSql\Database;
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 
 use AcDataDictionary\Models\AcDDView;
-use AcDataDictionary\AcDataDictionary;
+use AcDataDictionary\Models\AcDataDictionary;
 use Exception;
 
 class AcSqlDbView extends AcSqlDbBase{
@@ -27,7 +27,5 @@ class AcSqlDbView extends AcSqlDbBase{
         $result = "CREATE VIEW $this->viewName AS {$this->acDDView->viewQuery};";
         return $result;
     }
-
-    
 
 }
