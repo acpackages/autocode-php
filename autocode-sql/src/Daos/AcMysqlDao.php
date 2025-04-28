@@ -30,8 +30,7 @@ class AcMysqlDao extends AcBaseSqlDao
 {
     private ?PDO $pool = null;
 
-    public function checkDatabaseExist(): AcResult
-    {
+    public function checkDatabaseExist(): AcResult {
         $result = new AcResult();
         try {
             $statement = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = @databaseName";
@@ -54,8 +53,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function checkTableExist(string $tableName): AcResult
-    {
+    public function checkTableExist(string $tableName): AcResult {
         $result = new AcResult();
         try {
             $db = $this->getConnectionObject();
@@ -78,8 +76,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function createDatabase(): AcResult
-    {
+    public function createDatabase(): AcResult {
         $result = new AcResult();
         try {
             $db = $this->getConnectionObject(false);
@@ -93,8 +90,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function deleteRows(string $tableName, string $condition = "", array $parameters = []): AcSqlDaoResult
-    {
+    public function deleteRows(string $tableName, string $condition = "", array $parameters = []): AcSqlDaoResult {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::DELETE);
         try {
             $statement = "DELETE FROM {$tableName} " . ($condition ? "WHERE {$condition}" : "");
@@ -113,8 +109,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function executeMultipleSqlStatements(array $statements, array $parameters = []): AcSqlDaoResult
-    {
+    public function executeMultipleSqlStatements(array $statements, array $parameters = []): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
             $db = $this->getConnectionObject();
@@ -132,8 +127,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function executeStatement(string $statement, ?string $operation = AcEnumRowOperation::UNKNOWN, ?array $parameters = []): AcSqlDaoResult
-    {
+    public function executeStatement(string $statement, ?string $operation = AcEnumRowOperation::UNKNOWN, ?array $parameters = []): AcSqlDaoResult {
         $result = new AcSqlDaoResult(operation: $operation);
         try {
             $db = $this->getConnectionObject();
@@ -146,8 +140,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function getConnectionObject(bool $includeDatabase = true): ?PDO
-    {
+    public function getConnectionObject(bool $includeDatabase = true): ?PDO {
         $result = null;
         try {
             if (!$this->pool || !$includeDatabase) {
@@ -172,8 +165,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function getDatabaseFuntions(): AcSqlDaoResult
-    {
+    public function getDatabaseFunctions(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
             $statement = "SELECT ROUTINE_NAME, DATA_TYPE, CREATED, DEFINER  FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA = ? AND ROUTINE_TYPE = 'FUNCTION'";
@@ -192,8 +184,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function getDatabaseStoredProcedures(): AcSqlDaoResult
-    {
+    public function getDatabaseStoredProcedures(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
             $statement = "SELECT ROUTINE_NAME, CREATED, DEFINER  FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA = ? AND ROUTINE_TYPE = 'PROCEDURE'";
@@ -212,8 +203,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function getDatabaseTables(): AcSqlDaoResult
-    {
+    public function getDatabaseTables(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
             $statement = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_TYPE='BASE TABLE'";
@@ -232,8 +222,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function getDatabaseTriggers(): AcSqlDaoResult
-    {
+    public function getDatabaseTriggers(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
             $statement = "SELECT TRIGGER_NAME, EVENT_MANIPULATION, EVENT_OBJECT_TABLE, ACTION_STATEMENT, ACTION_TIMING FROM INFORMATION_SCHEMA.TRIGGERS WHERE TRIGGER_SCHEMA  = ?";
@@ -252,8 +241,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function getDatabaseViews(): AcSqlDaoResult
-    {
+    public function getDatabaseViews(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
             $statement = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_SCHEMA = ?";
@@ -272,8 +260,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function getRows(?string $statement, ?string $condition = "", ?array $parameters = [], ?string $mode = AcEnumSelectMode::LIST , ?array $formatColumns = []): AcSqlDaoResult
-    {
+    public function getRows(?string $statement, ?string $condition = "", ?array $parameters = [], ?string $mode = AcEnumSelectMode::LIST , ?array $formatColumns = []): AcSqlDaoResult {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::SELECT);
         try {
             $db = $this->getConnectionObject();
@@ -294,8 +281,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function getTableColumns(string $tableName): AcSqlDaoResult
-    {
+    public function getTableColumns(string $tableName): AcSqlDaoResult {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::SELECT);
         try {
             $db = $this->getConnectionObject();
@@ -325,8 +311,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function getViewColumns(string $viewName): AcSqlDaoResult
-    {
+    public function getViewColumns(string $viewName): AcSqlDaoResult {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::SELECT);
         try {
             $db = $this->getConnectionObject();
@@ -356,8 +341,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function insertRow(string $tableName, array $row): AcSqlDaoResult
-    {
+    public function insertRow(string $tableName, array $row): AcSqlDaoResult {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::INSERT);
         try {
             $columns = [];
@@ -385,8 +369,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function insertRows(string $tableName, array $rows): AcSqlDaoResult
-    {
+    public function insertRows(string $tableName, array $rows): AcSqlDaoResult {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::INSERT);
         try {
             $statements = [];
@@ -419,8 +402,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function updateRow(string $tableName, array $row, string $condition = "", array $parameters = []): AcSqlDaoResult
-    {
+    public function updateRow(string $tableName, array $row, string $condition = "", array $parameters = []): AcSqlDaoResult {
         $result = new AcSqlDaoResult(operation: AcEnumRowOperation::UPDATE);
         try {
             $setValues = [];
@@ -490,7 +472,6 @@ class AcMysqlDao extends AcBaseSqlDao
             }
             $parameterValues = [];
             $statement = implode("", $statements);
-            // echo $statement;
             $parameterValues = [];
             $setParametersResult = $this->setSqlStatementParameters($statement, statementParameters: $parameterValues,passedParameters: $parameters);
             $statement = $setParametersResult['statement'];

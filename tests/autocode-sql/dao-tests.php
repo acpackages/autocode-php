@@ -129,7 +129,7 @@ function executeSchemaTests(AcBaseSqlDao $dao) {
 
         $operationIndex++;
         echo "<br><br><br>". "$operationIndex : Getting database functions...";
-        $result = $dao->getDatabaseFuntions();
+        $result = $dao->getDatabaseFunctions();
         echo "<br><br><br>". $result->toString();
 
         $operationIndex++;

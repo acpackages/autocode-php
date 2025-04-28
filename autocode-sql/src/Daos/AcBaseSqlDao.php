@@ -92,7 +92,7 @@ class AcBaseSqlDao {
         return null;
     }
 
-    public function getDatabaseFuntions(): AcSqlDaoResult {
+    public function getDatabaseFunctions(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         return $result;
     }
