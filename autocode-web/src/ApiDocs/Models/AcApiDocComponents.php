@@ -2,7 +2,7 @@
 namespace AcWeb\ApiDocs\Models;
 
 use AcWeb\ApiDocs\Models\AcApiDocSchema;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 class AcApiDocComponents {
     const KEY_SCHEMAS = 'schemas';
@@ -21,7 +21,7 @@ class AcApiDocComponents {
             }
             unset($jsonData[self::KEY_SCHEMAS]);
         }
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 

@@ -9,13 +9,9 @@ require_once 'AcLogger.php';
 
 class Autocode {
     private static array $uniqueIds = [];
-    private static AcLogger $logger;
+    public static ?AcLogger $logger;
     private static string $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-    public function __construct() {
-        self::$logger = new AcLogger();
-    }
-
+    
     public static function enumToObject(string $enumClass): array {
         if (!class_exists($enumClass)) {
             throw new Exception("Enum class '$enumClass' not found.");
@@ -84,7 +80,7 @@ class Autocode {
         return $value !== null;
     }
 
-    public static function guid(){
+    public static function uuid(){
         $data = openssl_random_pseudo_bytes(16);
     $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // Set version to 4
     $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // Set variant to RFC 4122

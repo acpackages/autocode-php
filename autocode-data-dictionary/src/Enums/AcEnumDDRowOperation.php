@@ -2,7 +2,7 @@
 
 namespace AcDataDictionary\Enums;
 
-class AcEnumDDTableRowOperation {
+class AcEnumDDRowOperation {
     const DELETE = "delete";
     const FORMAT = "format";
     const INSERT = "insert";

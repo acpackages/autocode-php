@@ -1,7 +1,7 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 
 class AcApiDocRequestBody {
@@ -25,7 +25,7 @@ class AcApiDocRequestBody {
             }
             unset($jsonData[self::KEY_CONTENT]);
         }
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 

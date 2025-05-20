@@ -8,10 +8,11 @@ require_once 'AcResult.php';
 
 class AcHookResult extends AcResult {
 
-    const KEY_CONTINUE = "continue";
+    const KEY_CONTINUE_OPERATION = "continue_operation";
     const KEY_CHANGES = "changes";
 
-    public bool $continue = true;
+    #[AcBindJsonProperty(key: AcHookResult::KEY_CONTINUE_OPERATION)]
+    public bool $continueOperation = true;
 
     public array $changes = [];
 

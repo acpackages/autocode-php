@@ -12,7 +12,7 @@ use Autocode\Models\AcResult;
 use AcExtensions\AcExtensionMethods;
 use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Models\AcDDTable;
-use AcDataDictionary\Models\AcDDTableField;
+use AcDataDictionary\Models\AcDDTableColumn;
 use AcDataDictionary\Models\AcDDView;
 use AcSql\Database\AcSchemaManagerTables;
 use AcSql\Database\SchemaDetails;
@@ -20,7 +20,7 @@ use AcSql\Database\TblSchemaDetails;
 use AcSql\Database\TblSchemaLogs;
 use AcSql\Database\AcSMDataDictionary;
 use Autocode\Enums\AcEnumSqlDatabaseType;
-use AcSql\Enums\AcEnumSqlDatabaseEntity;
+use AcDataDictionary\Enums\AcEnumDDSqlEntity;
 use Exception;
 
 class AcSqlDbSchemaManager extends AcSqlDbBase { 
@@ -94,7 +94,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                         $result->setFromResult($dropResult,'Error executing drop statement',logger:$this->logger);
                     }
                     $this->saveSchemaLogEntry([
-                        TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::FUNCTION,
+                        TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::FUNCTION,
                         TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $acDDFunction->functionName,
                         TblSchemaLogs::AC_SCHEMA_OPERATION => 'drop',
                         TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $dropResult->status,
@@ -112,7 +112,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                             $result->setFromResult($createResult,logger:$this->logger);
                         }
                         $this->saveSchemaLogEntry([
-                            TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::FUNCTION,
+                            TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::FUNCTION,
                             TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $acDDFunction->functionName,
                             TblSchemaLogs::AC_SCHEMA_OPERATION => 'create',
                             TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $createResult->status,
@@ -169,7 +169,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                                 $this->logger->log("Executed drop relation statement successfully.");
                             }
                             $this->saveSchemaLogEntry([
-                                TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::RELATIONSHIP,
+                                TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::RELATIONSHIP,
                                 TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $row['constraint_name'],
                                 TblSchemaLogs::AC_SCHEMA_OPERATION => 'drop',
                                 TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $dropResponse->status,
@@ -200,8 +200,8 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                             $this->logger->log("Relationship created successfully");
                         }
                         $this->saveSchemaLogEntry([
-                            TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::RELATIONSHIP,
-                            TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $acDDRelationship->sourceTable.".".$acDDRelationship->sourceField.">".$acDDRelationship->destinationTable.".".$acDDRelationship->destinationField,
+                            TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::RELATIONSHIP,
+                            TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $acDDRelationship->sourceTable.".".$acDDRelationship->sourceColumn.">".$acDDRelationship->destinationTable.".".$acDDRelationship->destinationColumn,
                             TblSchemaLogs::AC_SCHEMA_OPERATION => 'create',
                             TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $createResult->status,
                             TblSchemaLogs::AC_SCHEMA_OPERATION_STATEMENT => $createRelationshipStatement,
@@ -240,7 +240,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                         $result->setFromResult($dropResult,logger:$this->logger);
                     }
                     $this->saveSchemaLogEntry([
-                        TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::STORED_PROCEDURE,
+                        TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::STORED_PROCEDURE,
                         TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $acDDStoredProcedure->storedProcedureName,
                         TblSchemaLogs::AC_SCHEMA_OPERATION => 'drop',
                         TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $dropResult->status,
@@ -258,7 +258,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                             $result->setFromResult($createResult,logger:$this->logger);
                         }
                         $this->saveSchemaLogEntry([
-                            TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::STORED_PROCEDURE,
+                            TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::STORED_PROCEDURE,
                             TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $acDDStoredProcedure->storedProcedureName,
                             TblSchemaLogs::AC_SCHEMA_OPERATION => 'create',
                             TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $createResult->status,
@@ -297,7 +297,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                         $result->setFromResult($createResult,logger:$this->logger);
                     }
                     $this->saveSchemaLogEntry([
-                        TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::TABLE,
+                        TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::TABLE,
                         TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $acDDTable->tableName,
                         TblSchemaLogs::AC_SCHEMA_OPERATION => 'create',
                         TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $createResult->status,
@@ -336,7 +336,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                         $result->setFromResult($dropResult,logger:$this->logger);
                     }
                     $this->saveSchemaLogEntry([
-                        TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::TRIGGER,
+                        TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::TRIGGER,
                         TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $acDDTrigger->triggerName,
                         TblSchemaLogs::AC_SCHEMA_OPERATION => 'drop',
                         TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $dropResult->status,
@@ -354,7 +354,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                             $result->setFromResult($createResult,logger:$this->logger);
                         }
                         $this->saveSchemaLogEntry([
-                            TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::TRIGGER,
+                            TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::TRIGGER,
                             TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $acDDTrigger->triggerName,
                             TblSchemaLogs::AC_SCHEMA_OPERATION => 'create',
                             TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $createResult->status,
@@ -395,7 +395,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                         $result->setFromResult($dropResult,logger:$this->logger);
                     }
                     $this->saveSchemaLogEntry([
-                        TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::VIEW,
+                        TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::VIEW,
                         TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $acDDView->viewName,
                         TblSchemaLogs::AC_SCHEMA_OPERATION => 'drop',
                         TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $dropResult->status,
@@ -413,7 +413,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                             $errorViews[] = $acDDView;
                         }
                         $this->saveSchemaLogEntry([
-                            TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::VIEW,
+                            TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::VIEW,
                             TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $acDDView->viewName,
                             TblSchemaLogs::AC_SCHEMA_OPERATION => 'create',
                             TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $createResult->status,
@@ -442,7 +442,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                             $retryViews[] = $acDDView;
                         }
                         $this->saveSchemaLogEntry([
-                            TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::VIEW,
+                            TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::VIEW,
                             TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $acDDView->viewName,
                             TblSchemaLogs::AC_SCHEMA_OPERATION => 'create',
                             TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $createResult->status,
@@ -555,25 +555,25 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                             $foundTables[] = $tableRow[AcDDTable::KEY_TABLE_NAME];
                             $getTableColumnsResult = $this->dao->getTableColumns(tableName:$tableRow[AcDDTable::KEY_TABLE_NAME]);
                             if($getTableColumnsResult->isSuccess()){                            
-                                $currentDataDictionaryFields = $this->acDataDictionary->getTableFieldNames($tableRow[AcDDTable::KEY_TABLE_NAME]);
-                                $foundFields = [];
-                                $missingInDataDictionaryFields = [];
-                                foreach($getTableColumnsResult->rows as $fieldRow){
-                                    if(in_array($fieldRow[AcDDTableField::KEY_FIELD_NAME], $currentDataDictionaryFields)){
-                                        $foundFields[] = $fieldRow[AcDDTableField::KEY_FIELD_NAME];
+                                $currentDataDictionaryColumns = $this->acDataDictionary->getTableColumnNames($tableRow[AcDDTable::KEY_TABLE_NAME]);
+                                $foundColumns = [];
+                                $missingInDataDictionaryColumns = [];
+                                foreach($getTableColumnsResult->rows as $columnRow){
+                                    if(in_array($columnRow[AcDDTableColumn::KEY_COLUMN_NAME], $currentDataDictionaryColumns)){
+                                        $foundColumns[] = $columnRow[AcDDTableColumn::KEY_COLUMN_NAME];
                                     }
                                     else{
-                                        $missingInDataDictionaryFields[] = $fieldRow[AcDDTableField::KEY_FIELD_NAME];
+                                        $missingInDataDictionaryColumns[] = $columnRow[AcDDTableColumn::KEY_COLUMN_NAME];
                                     }
                                 }
-                                $tableDifferenceResult["missing_fields_in_database"] = array_diff($currentDataDictionaryFields, $foundFields);
-                                $tableDifferenceResult["missing_fields_in_data_dictionary"] = $missingInDataDictionaryFields;
+                                $tableDifferenceResult["missing_columns_in_database"] = array_diff($currentDataDictionaryColumns, $foundColumns);
+                                $tableDifferenceResult["missing_columns_in_data_dictionary"] = $missingInDataDictionaryColumns;
                             }
                             else{
                                 $continueOperation = false;
                                 $result->setFromResult($getTableColumnsResult, message: 'Error getting columns for table '.$tableRow[AcDDTable::KEY_TABLE_NAME],logger:$this->logger);
                             }
-                            if(sizeof($tableDifferenceResult['missing_fields_in_database']) > 0 || sizeof($tableDifferenceResult["missing_fields_in_data_dictionary"]) > 0){
+                            if(sizeof($tableDifferenceResult['missing_columns_in_database']) > 0 || sizeof($tableDifferenceResult["missing_columns_in_data_dictionary"]) > 0){
                                 $modifiedTables[] = [
                                     AcDDTable::KEY_TABLE_NAME => $tableRow[AcDDTable::KEY_TABLE_NAME],"difference_details" => $tableDifferenceResult
                                 ];
@@ -726,7 +726,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
         try{
             $continueOperation = true;
             $differenceResult = $this->getDatabaseSchemaDifference();
-            $dropFieldStatements = [];
+            $dropColumnStatements = [];
             $dropTableStatements = [];
             if($differenceResult->isSuccess()){
                 $differences = $differenceResult->value;
@@ -745,7 +745,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                                 $result->setFromResult($createResult,logger:$this->logger);
                             }
                             $this->saveSchemaLogEntry([
-                                TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::TABLE,
+                                TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::TABLE,
                                 TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $tableName,
                                 TblSchemaLogs::AC_SCHEMA_OPERATION => 'create',
                                 TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $createResult->status,
@@ -761,13 +761,13 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                             if($continueOperation){
                                 $tableName = $modificationDetails[AcDDTable::KEY_TABLE_NAME];
                                 $tableDifferenceDetails = $modificationDetails["difference_details"];
-                                if(sizeof($tableDifferenceDetails["missing_fields_in_database"])>0){
-                                    foreach ($tableDifferenceDetails["missing_fields_in_database"] as $fieldName) {
+                                if(sizeof($tableDifferenceDetails["missing_columns_in_database"])>0){
+                                    foreach ($tableDifferenceDetails["missing_columns_in_database"] as $columnName) {
                                         if($continueOperation){
-                                            $this->logger->log("Adding table field ".$fieldName);
-                                            $acSqlDbTableField = new AcSqlDbTableField(tableName: $tableName,fieldName:$fieldName, dataDictionaryName: $this->dataDictionaryName);
-                                            $addStatement = $acSqlDbTableField->getAddFieldStatement();
-                                            $this->logger->log("Executing add table field statement...",$addStatement);
+                                            $this->logger->log("Adding table column ".$columnName);
+                                            $acSqlDbTableColumn = new acSqlDbTableColumn(tableName: $tableName,columnName:$columnName, dataDictionaryName: $this->dataDictionaryName);
+                                            $addStatement = $acSqlDbTableColumn->getAddColumnStatement();
+                                            $this->logger->log("Executing add table column statement...",$addStatement);
                                             $createResult = $this->dao->executeStatement($addStatement);
                                             if ($createResult->isSuccess()) {
                                                 $this->logger->log("Add statement executed successfully");
@@ -776,7 +776,7 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                                                 $result->setFromResult($createResult,logger:$this->logger);
                                             }
                                             $this->saveSchemaLogEntry([
-                                                TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumSqlDatabaseEntity::TABLE,
+                                                TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => AcEnumDDSqlEntity::TABLE,
                                                 TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => $tableName,
                                                 TblSchemaLogs::AC_SCHEMA_OPERATION => 'modify',
                                                 TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => $createResult->status,
@@ -786,11 +786,11 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                                         }
                                     }
                                 }
-                                if(sizeof($tableDifferenceDetails["missing_fields_in_data_dictionary"])>0){
-                                    foreach ($tableDifferenceDetails["missing_fields_in_data_dictionary"] as $fieldName) {
+                                if(sizeof($tableDifferenceDetails["missing_columns_in_data_dictionary"])>0){
+                                    foreach ($tableDifferenceDetails["missing_columns_in_data_dictionary"] as $columnName) {
                                         if($continueOperation){
                                             $acSqlDbTable = new AcSqlDbTable(tableName: $tableName, dataDictionaryName: $this->dataDictionaryName);
-                                            $dropFieldStatements[] = AcSqlDbTableField::getDropFieldStatement(tableName:$tableName,fieldName: $fieldName,databaseType:$this->databaseType);
+                                            $dropColumnStatements[] = acSqlDbTableColumn::getDropColumnStatement(tableName:$tableName,columnName: $columnName,databaseType:$this->databaseType);
                                         }
                                     }
                                 }
@@ -807,10 +807,10 @@ class AcSqlDbSchemaManager extends AcSqlDbBase {
                 }
                 if($continueOperation){
                     $result->setSuccess();
-                    if(sizeof($dropFieldStatements)>0 || sizeof($dropTableStatements)>0){
-                        $this->logger->log("There are fields and tables that are not defined in data dictionary. Here are drop statement for dropping them.");
-                        foreach ($dropFieldStatements as $dropFieldStatement){
-                            $this->logger->error($dropFieldStatement);
+                    if(sizeof($dropColumnStatements)>0 || sizeof($dropTableStatements)>0){
+                        $this->logger->log("There are columns and tables that are not defined in data dictionary. Here are drop statement for dropping them.");
+                        foreach ($dropColumnStatements as $dropColumnStatement){
+                            $this->logger->error($dropColumnStatement);
                         }
                         foreach ($dropTableStatements as $dropTableStatement){
                             $this->logger->error($dropTableStatement);

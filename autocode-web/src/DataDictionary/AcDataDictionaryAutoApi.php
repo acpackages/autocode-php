@@ -23,8 +23,7 @@ use AcWeb\Core\AcWeb;
 
 use ApiDocs\Utils\AcApiDocUtils;
 use Autocode\Enums\AcEnumHttpMethod;
-class AcDataDictionaryAutoApi
-{
+class AcDataDictionaryAutoApi {
     public AcWeb $acWeb;
     public string $dataDictionaryName = "";
     public mixed $excludeTables = [];
@@ -160,7 +159,7 @@ class AcDataDictionaryAutoApi
                 }
                 if ($continueOperation) {
                     $apiAdded = false;
-                    $primaryKeyFieldName = $acDDTable->getPrimaryKeyFieldName();
+                    $primaryKeyColumnName = $acDDTable->getPrimaryKeyColumnName();
                     if ($delete) {
                         $controler = new AcDataDictionaryAutoDelete(acDDTable: $acDDTable,acDataDictionaryAutoApi: $this);
                         $apiAdded = true;
@@ -178,8 +177,8 @@ class AcDataDictionaryAutoApi
                         $apiAdded = true;
                     }
                     if ($selectDistinct) {
-                        foreach ($acDDTable->getSelectDistinctFields() as $distinctField) {
-                            $controler = new AcDataDictionaryAutoSelectDistinct(acDDTable: $acDDTable,acDDTableField:$distinctField,acDataDictionaryAutoApi: $this);
+                        foreach ($acDDTable->getSelectDistinctColumns() as $distinctColumn) {
+                            $controler = new AcDataDictionaryAutoSelectDistinct(acDDTable: $acDDTable,acDDTableColumn:$distinctColumn,acDataDictionaryAutoApi: $this);
                             $apiAdded = true;
                         }
                     }

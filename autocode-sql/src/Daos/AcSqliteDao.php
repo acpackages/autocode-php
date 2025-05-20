@@ -83,13 +83,6 @@ class AcSqliteDao {
         return ['success' => true, 'affectedRows' => $stmt->rowCount()];
     }
 
-    public function updateRows($table, $values, $condition = "", $parameters = []) {
-        $pdo = $this->getConnection();
-        $setFields = implode(", ", array_map(fn($key) => "$key = ?", array_keys($values)));
-        $stmt = $pdo->prepare("UPDATE $table SET $setFields" . ($condition ? " WHERE $condition" : ""));
-        $stmt->execute(array_merge(array_values($values), $parameters));
-        return ['success' => true, 'affectedRows' => $stmt->rowCount()];
-    }
 }
 
 ?>

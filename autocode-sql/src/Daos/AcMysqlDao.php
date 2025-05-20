@@ -3,27 +3,26 @@
 namespace AcSql\Daos;
 require_once __DIR__ . './../../../autocode-data-dictionary/vendor/autoload.php';
 require_once __DIR__ . './../../../autocode/vendor/autoload.php';
-require_once __DIR__ . './../Enums/AcEnumRowOperation.php';
-require_once __DIR__ . './../Enums/AcEnumSelectMode.php';
-require_once __DIR__ . './../Enums/AcEnumTableFieldFormat.php';
 require_once __DIR__ . './../Models/AcSqlDaoResult.php';
 require_once 'AcBaseSqlDao.php';
 
-use AcDataDictionary\Enums\AcEnumDDFieldProperty;
+use AcDataDictionary\Enums\AcEnumDDColumnProperty;
 use AcDataDictionary\Models\AcDDFunction;
 use AcDataDictionary\Models\AcDDStoredProcedure;
 use AcDataDictionary\Models\AcDDTable;
-use AcDataDictionary\Models\AcDDTableField;
+use AcDataDictionary\Models\AcDDTableColumn;
 use AcDataDictionary\Models\AcDDTrigger;
 use AcDataDictionary\Models\AcDDView;
-use AcDataDictionary\Models\AcDDViewField;
+use AcDataDictionary\Models\AcDDViewColumn;
+use AcExtensions\AcExtensionMethods;
+use Autocode\AcEncryption;
 use PDO;
 use PDOException;
 use Autocode\Models\AcResult;
 use AcSql\Daos\AcBaseSqlDao;
-use AcSql\Enums\AcEnumRowOperation;
-use AcSql\Enums\AcEnumSelectMode;
-use AcSql\Enums\AcEnumTableFieldFormat;
+use AcDataDictionary\Enums\AcEnumDDRowOperation;
+use AcDataDictionary\Enums\AcEnumDDSelectMode;
+use AcDataDictionary\Enums\AcEnumDDColumnFormat;
 use AcSql\Models\AcSqlDaoResult;
 
 class AcMysqlDao extends AcBaseSqlDao
@@ -91,7 +90,7 @@ class AcMysqlDao extends AcBaseSqlDao
     }
 
     public function deleteRows(string $tableName, string $condition = "", array $parameters = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult(operation: AcEnumRowOperation::DELETE);
+        $result = new AcSqlDaoResult(operation: AcEnumDDRowOperation::DELETE);
         try {
             $statement = "DELETE FROM {$tableName} " . ($condition ? "WHERE {$condition}" : "");
             $db = $this->getConnectionObject();
@@ -127,7 +126,7 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function executeStatement(string $statement, ?string $operation = AcEnumRowOperation::UNKNOWN, ?array $parameters = []): AcSqlDaoResult {
+    public function executeStatement(string $statement, ?string $operation = AcEnumDDRowOperation::UNKNOWN, ?array $parameters = []): AcSqlDaoResult {
         $result = new AcSqlDaoResult(operation: $operation);
         try {
             $db = $this->getConnectionObject();
@@ -138,6 +137,25 @@ class AcMysqlDao extends AcBaseSqlDao
             $result->setException($e);
         }
         return $result;
+    }
+
+    public function formatRow(array $row, array $columnFormats = []): array {
+        foreach ($columnFormats as $key => $formats) {            
+            if(AcExtensionMethods::arrayContainsKey(key:$key,array:$row)){
+                if(in_array(AcEnumDDColumnFormat::ENCRYPT,$formats)){
+                    $row[$key] = AcEncryption::decrypt($row[$key]);
+                }
+                if(in_array(AcEnumDDColumnFormat::JSON,$formats)){
+                    if($row[$key]!=null && $row != ""){
+                        $row[$key] = json_decode($row[$key]);
+                    }                    
+                }
+                if(in_array(AcEnumDDColumnFormat::HIDE_COLUMN,$formats)){
+                    unset($row[$key]);              
+                }
+            }
+        }
+        return $row;
     }
 
     public function getConnectionObject(bool $includeDatabase = true): ?PDO {
@@ -260,8 +278,8 @@ class AcMysqlDao extends AcBaseSqlDao
         return $result;
     }
 
-    public function getRows(?string $statement, ?string $condition = "", ?array $parameters = [], ?string $mode = AcEnumSelectMode::LIST , ?array $formatColumns = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult(operation: AcEnumRowOperation::SELECT);
+    public function getRows(?string $statement, ?string $condition = "", ?array $parameters = [], ?string $mode = AcEnumDDSelectMode::LIST , ?array $columnFormats = []): AcSqlDaoResult {
+        $result = new AcSqlDaoResult(operation: AcEnumDDRowOperation::SELECT);
         try {
             $db = $this->getConnectionObject();
             if ($condition != "") {
@@ -273,7 +291,12 @@ class AcMysqlDao extends AcBaseSqlDao
             $parameterValues = $setParametersResult['statementParameters'];
             $stmt = $db->prepare($statement);
             $stmt->execute($parameterValues);
-            $result->rows = $mode == AcEnumSelectMode::FIRST ? $stmt->fetch(PDO::FETCH_ASSOC) : $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result->rows = []; 
+            $rows = $mode == AcEnumDDSelectMode::FIRST ? $stmt->fetch(PDO::FETCH_ASSOC) : $stmt->fetchAll(PDO::FETCH_ASSOC);;
+            foreach ($rows as $row) {
+                $result->rows[] = $this->formatRow(row:$row,columnFormats: $columnFormats);
+            }
+
             $result->setSuccess();
         } catch (PDOException $ex) {
             $result->setException($ex);
@@ -282,7 +305,7 @@ class AcMysqlDao extends AcBaseSqlDao
     }
 
     public function getTableColumns(string $tableName): AcSqlDaoResult {
-        $result = new AcSqlDaoResult(operation: AcEnumRowOperation::SELECT);
+        $result = new AcSqlDaoResult(operation: AcEnumDDRowOperation::SELECT);
         try {
             $db = $this->getConnectionObject();
             $stmt = $db->prepare("DESCRIBE `{$tableName}`");
@@ -290,18 +313,18 @@ class AcMysqlDao extends AcBaseSqlDao
             foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
                 $properties = [];
                 if ($row["Null"] != "YES") {
-                    $properties[AcEnumDDFieldProperty::NOT_NULL] = false;
+                    $properties[AcEnumDDColumnProperty::NOT_NULL] = false;
                 }
                 if ($row["Key"] == "PRI") {
-                    $properties[AcEnumDDFieldProperty::PRIMARY_KEY] = true;
+                    $properties[AcEnumDDColumnProperty::PRIMARY_KEY] = true;
                 }
                 if ($row["Default"] != null) {
-                    $properties[AcEnumDDFieldProperty::DEFAULT_VALUE] = $row["Default"];
+                    $properties[AcEnumDDColumnProperty::DEFAULT_VALUE] = $row["Default"];
                 }
                 $result->rows[] = [
-                    AcDDTableField::KEY_FIELD_NAME => $row["Field"],
-                    AcDDTableField::KEY_FIELD_TYPE => $row["Type"],
-                    AcDDTableField::KEY_FIELD_PROPERTIES => $properties
+                    AcDDTableColumn::KEY_COLUMN_NAME => $row["Field"],
+                    AcDDTableColumn::KEY_COLUMN_TYPE => $row["Type"],
+                    AcDDTableColumn::KEY_COLUMN_PROPERTIES => $properties
                 ];
             }
             $result->setSuccess();
@@ -312,7 +335,7 @@ class AcMysqlDao extends AcBaseSqlDao
     }
 
     public function getViewColumns(string $viewName): AcSqlDaoResult {
-        $result = new AcSqlDaoResult(operation: AcEnumRowOperation::SELECT);
+        $result = new AcSqlDaoResult(operation: AcEnumDDRowOperation::SELECT);
         try {
             $db = $this->getConnectionObject();
             $stmt = $db->prepare("DESCRIBE `{$viewName}`");
@@ -320,18 +343,18 @@ class AcMysqlDao extends AcBaseSqlDao
             foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
                 $properties = [];
                 if ($row["Null"] != "YES") {
-                    $properties[AcEnumDDFieldProperty::NOT_NULL] = false;
+                    $properties[AcEnumDDColumnProperty::NOT_NULL] = false;
                 }
                 if ($row["Key"] == "PRI") {
-                    $properties[AcEnumDDFieldProperty::PRIMARY_KEY] = true;
+                    $properties[AcEnumDDColumnProperty::PRIMARY_KEY] = true;
                 }
                 if ($row["Default"] != null) {
-                    $properties[AcEnumDDFieldProperty::DEFAULT_VALUE] = $row["Default"];
+                    $properties[AcEnumDDColumnProperty::DEFAULT_VALUE] = $row["Default"];
                 }
                 $result->rows[] = [
-                    AcDDViewField::KEY_FIELD_NAME => $row["Field"],
-                    AcDDViewField::KEY_FIELD_TYPE => $row["Type"],
-                    AcDDViewField::KEY_FIELD_PROPERTIES => $properties
+                    AcDDViewColumn::KEY_COLUMN_NAME => $row["Field"],
+                    AcDDViewColumn::KEY_COLUMN_TYPE => $row["Type"],
+                    AcDDViewColumn::KEY_COLUMN_PROPERTIES => $properties
                 ];
             }
             $result->setSuccess();
@@ -342,7 +365,7 @@ class AcMysqlDao extends AcBaseSqlDao
     }
 
     public function insertRow(string $tableName, array $row): AcSqlDaoResult {
-        $result = new AcSqlDaoResult(operation: AcEnumRowOperation::INSERT);
+        $result = new AcSqlDaoResult(operation: AcEnumDDRowOperation::INSERT);
         try {
             $columns = [];
             $values = [];
@@ -370,7 +393,7 @@ class AcMysqlDao extends AcBaseSqlDao
     }
 
     public function insertRows(string $tableName, array $rows): AcSqlDaoResult {
-        $result = new AcSqlDaoResult(operation: AcEnumRowOperation::INSERT);
+        $result = new AcSqlDaoResult(operation: AcEnumDDRowOperation::INSERT);
         try {
             $statements = [];
             $parameters = [];
@@ -403,7 +426,7 @@ class AcMysqlDao extends AcBaseSqlDao
     }
 
     public function updateRow(string $tableName, array $row, string $condition = "", array $parameters = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult(operation: AcEnumRowOperation::UPDATE);
+        $result = new AcSqlDaoResult(operation: AcEnumDDRowOperation::UPDATE);
         try {
             $setValues = [];
             $index = -1;
@@ -434,7 +457,7 @@ class AcMysqlDao extends AcBaseSqlDao
 
     public function updateRows(string $tableName, array $rowsWithConditions): AcSqlDaoResult
     {
-        $result = new AcSqlDaoResult(operation: AcEnumRowOperation::UPDATE);
+        $result = new AcSqlDaoResult(operation: AcEnumDDRowOperation::UPDATE);
         try {
             $statements = [];
             $index = -1;

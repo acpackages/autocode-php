@@ -4,7 +4,7 @@ namespace AcDataDictionary\Models;
 require_once 'AcDataDictionary.php';
 use AcDataDictionary\Models\AcDataDictionary;
 use Autocode\Annotaions\AcBindJsonProperty;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 class AcDDTrigger {
     const KEY_ROW_OPERATION = "row_operation";
@@ -46,12 +46,12 @@ class AcDDTrigger {
     }
 
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {

@@ -3,12 +3,15 @@
 namespace ApiDocs\Utils;
 require_once __DIR__ ."./../Enums/AcEnumApiDataFormat.php";
 require_once __DIR__ ."./../Enums/AcEnumApiDataType.php";
-use AcDataDictionary\Enums\AcEnumDDFieldType;
+use AcDataDictionary\Enums\AcEnumDDColumnType;
 use AcDataDictionary\Models\AcDDTable;
 use AcWeb\ApiDocs\Models\AcApiDoc;
+use AcWeb\ApiDocs\Models\AcApiDocContent;
 use AcWeb\ApiDocs\Models\AcApiDocModel;
+use AcWeb\ApiDocs\Models\AcApiDocResponse;
 use ApiDocs\Enums\AcEnumApiDataFormat;
 use ApiDocs\Enums\AcEnumApiDataType;
+use Autocode\Enums\AcEnumHttpResponseCode;
 use ReflectionClass;
 use ReflectionEnum;
 use ReflectionEnumUnitCase;
@@ -21,19 +24,19 @@ class AcApiDocUtils
     public static function getApiDataFormatFromDataDictionaryDataType(string $dataType)
     {
         $result = "";        
-        if(in_array(needle: $dataType, haystack: [AcEnumDDFieldType::AUTO_INCREMENT,AcEnumDDFieldType::INTEGER])){
+        if(in_array(needle: $dataType, haystack: [AcEnumDDColumnType::AUTO_INCREMENT,AcEnumDDColumnType::INTEGER])){
             $result =AcEnumApiDataFormat::INT64;
         }
-        else if($dataType == AcEnumDDFieldType::DOUBLE){
+        else if($dataType == AcEnumDDColumnType::DOUBLE){
             $result =AcEnumApiDataFormat::DOUBLE;
         }
-        else if($dataType == AcEnumDDFieldType::DATE){
+        else if($dataType == AcEnumDDColumnType::DATE){
             $result =AcEnumApiDataFormat::DATE;
         }
-        else if($dataType == AcEnumDDFieldType::DATETIME){
+        else if($dataType == AcEnumDDColumnType::DATETIME){
             $result =AcEnumApiDataFormat::DATETIME;
         }
-        else if($dataType == AcEnumDDFieldType::PASSWORD){
+        else if($dataType == AcEnumDDColumnType::PASSWORD){
             $result =AcEnumApiDataFormat::PASSWORD;
         }
         return $result;
@@ -42,13 +45,13 @@ class AcApiDocUtils
     public static function getApiDataTypeFromDataDictionaryDataType(string $dataType)
     {
         $result = AcEnumApiDataType::STRING;        
-        if(in_array(needle: $dataType, haystack: [AcEnumDDFieldType::AUTO_INCREMENT,AcEnumDDFieldType::INTEGER])){
+        if(in_array(needle: $dataType, haystack: [AcEnumDDColumnType::AUTO_INCREMENT,AcEnumDDColumnType::INTEGER])){
             $result =AcEnumApiDataType::INTEGER;
         }
-        else if(in_array(needle: $dataType, haystack: [AcEnumDDFieldType::JSON,AcEnumDDFieldType::MEDIA_JSON])){
+        else if(in_array(needle: $dataType, haystack: [AcEnumDDColumnType::JSON,AcEnumDDColumnType::MEDIA_JSON])){
             $result =AcEnumApiDataType::OBJECT;
         }
-        else if($dataType == AcEnumDDFieldType::DOUBLE){
+        else if($dataType == AcEnumDDColumnType::DOUBLE){
             $result =AcEnumApiDataType::NUMBER;
         }
         return $result;
@@ -61,14 +64,14 @@ class AcApiDocUtils
         $acApiDocModel = new AcApiDocModel();
         $acApiDocModel->name = $acDDTable->tableName;
         $model = [];
-        foreach($acDDTable->tableFields as $field) {
-            $fieldType = self::getApiDataTypeFromDataDictionaryDataType($field->fieldType);
-            $fieldFormat = self::getApiDataFormatFromDataDictionaryDataType($field->fieldType);
-            $model[$field->fieldName] = [
-                "type" => $fieldType
+        foreach($acDDTable->tableColumns as $column) {
+            $columnType = self::getApiDataTypeFromDataDictionaryDataType($column->columnType);
+            $columnFormat = self::getApiDataFormatFromDataDictionaryDataType($column->columnType);
+            $model[$column->columnName] = [
+                "type" => $columnType
             ];
-            if($fieldFormat!=""){
-                $model[$field->fieldName]["format"] = $fieldFormat;
+            if($columnFormat!=""){
+                $model[$column->columnName]["format"] = $columnFormat;
             }
         }
         $acApiDocModel->properties = $model;        
@@ -189,7 +192,40 @@ class AcApiDocUtils
         return ['$ref' => "#/components/schemas/{$schemaName}"];
     }
 
-   
+    public static function getApiDocRouteResponsesForOperation(string $operation,AcDDTable $acDDTable,AcApiDoc &$acApiDoc): array{
+        $schema = AcApiDocUtils::getApiModelRefFromAcDDTable(acDDTable: $acDDTable, acApiDoc: $acApiDoc);
+        $responses = [];
+        $jsonContent = new AcApiDocContent();
+        $jsonContent->encoding = "application/json";
+        $contentSchema = [
+            "type" => AcEnumApiDataType::OBJECT,
+            "properties" => [
+                "code" => [
+                    "type" => AcEnumApiDataType::INTEGER,
+                    "enum" => [1,2,3]
+                ],
+                "status" => [
+                    "type" => AcEnumApiDataType::STRING,
+                    "enum" => ["success","failure"]
+                ],
+                "message" => [
+                    "type" => AcEnumApiDataType::STRING
+                ],
+                "rows" => [
+                    "type" => AcEnumApiDataType::ARRAY,
+                    "items" => $schema
+                ]
+            ]
+        ];
+        $jsonContent->schema = $contentSchema;
+        $acApiDocResponse = new AcApiDocResponse();
+        $acApiDocResponse->code = AcEnumHttpResponseCode::OK;
+        $acApiDocResponse->description = "Successfull operation";
+        $acApiDocResponse->addContent($jsonContent); 
+        $responses[] = $acApiDocResponse;
+        return $responses;
+    }
+    
 
     
 

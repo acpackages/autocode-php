@@ -6,58 +6,58 @@ require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 require_once __DIR__.'./../../../autocode-data-dictionary/vendor/autoload.php';
 
 use AcDataDictionary\Models\AcDataDictionary;
-use AcDataDictionary\Enums\AcEnumDDFieldType;
+use AcDataDictionary\Enums\AcEnumDDColumnType;
 use AcDataDictionary\Models\AcDDTable;
-use AcDataDictionary\Models\AcDDTableField;
+use AcDataDictionary\Models\AcDDTableColumn;
 use Autocode\Enums\AcEnumSqlDatabaseType;
 
 use Autocode\Autocode;
 use DateTime;
 use Exception;
 
-class AcSqlDbTableField extends AcSqlDbBase {
-    public string $fieldName = "";
+class AcSqlDbTableColumn extends AcSqlDbBase {
+    public string $columnName = "";
     public string $tableName = "";
     public AcDDTable $acDDTable;
-    public AcDDTableField $acDDTableField;
+    public AcDDTableColumn $acDDTableColumn;
 
-    public function __construct(string $tableName,string $fieldName, string $dataDictionaryName = "default"){
+    public function __construct(string $tableName,string $columnName, string $dataDictionaryName = "default"){
         parent::__construct(dataDictionaryName: $dataDictionaryName);
         $this->tableName = $tableName;
-        $this->fieldName = $fieldName;
+        $this->columnName = $columnName;
         $this->acDDTable = AcDataDictionary::getTable(tableName: $tableName, dataDictionaryName: $dataDictionaryName);
-        $this->acDDTableField =  AcDataDictionary::getTableField(tableName: $tableName,fieldName:$fieldName, dataDictionaryName: $dataDictionaryName);
+        $this->acDDTableColumn =  AcDataDictionary::getTableColumn(tableName: $tableName,columnName:$columnName, dataDictionaryName: $dataDictionaryName);
     }
 
-    public static function getDropFieldStatement(string $tableName,string $fieldName,?string $databaseType = AcEnumSqlDatabaseType::UNKNOWN): string{
-        $result = "ALTER TABLE ".$tableName." DROP COLUMN ".$fieldName.";";
+    public static function getDropColumnStatement(string $tableName,string $columnName,?string $databaseType = AcEnumSqlDatabaseType::UNKNOWN): string{
+        $result = "ALTER TABLE ".$tableName." DROP COLUMN ".$columnName.";";
         return $result;
     }
 
-    public function getAddFieldStatement():string{
+    public function getAddColumnStatement():string{
         $result = "";
         if ($this->databaseType == AcEnumSqlDatabaseType::MYSQL) {
-            $result = "ALTER TABLE ".$this->tableName." ADD COLUMN ".$this->getFieldDefinitionForStatement();
+            $result = "ALTER TABLE ".$this->tableName." ADD COLUMN ".$this->getColumnDefinitionForStatement();
         }
         return $result;
     }
 
-    public function getFieldDefinitionForStatement(): string{
+    public function getColumnDefinitionForStatement(): string{
         $result = "";
-        $fieldType = $this->acDDTableField->fieldType;
-        $defaultValue = $this->acDDTableField->getDefaultValue();
-        $size = $this->acDDTableField->getSize();
+        $columnType = $this->acDDTableColumn->columnType;
+        $defaultValue = $this->acDDTableColumn->getDefaultValue();
+        $size = $this->acDDTableColumn->getSize();
         $isAutoIncrementSet = false;
         $isPrimaryKeySet = false;
         if ($this->databaseType == AcEnumSqlDatabaseType::MYSQL) {
             $columnType = "TEXT";
-            switch ($fieldType) {
-                case AcEnumDDFieldType::AUTO_INCREMENT:
+            switch ($columnType) {
+                case AcEnumDDColumnType::AUTO_INCREMENT:
                     $columnType = 'INT AUTO_INCREMENT PRIMARY KEY';
                     $isAutoIncrementSet = true;
                     $isPrimaryKeySet = true;
                     break;
-                case AcEnumDDFieldType::BLOB:
+                case AcEnumDDColumnType::BLOB:
                     $columnType = "LONGBLOB";
                     if ($size > 0) {
                         if ($size <= 255) {
@@ -70,19 +70,19 @@ class AcSqlDbTableField extends AcSqlDbBase {
                         }
                     }
                     break;
-                case AcEnumDDFieldType::DATE:
+                case AcEnumDDColumnType::DATE:
                     $columnType = 'DATE';
                     break;
-                case AcEnumDDFieldType::DATETIME:
+                case AcEnumDDColumnType::DATETIME:
                     $columnType = 'DATETIME';
                     break;
-                case AcEnumDDFieldType::DOUBLE:
+                case AcEnumDDColumnType::DOUBLE:
                     $columnType = 'DOUBLE';
                     break;
-                case AcEnumDDFieldType::GUID:
+                case AcEnumDDColumnType::UUID:
                     $columnType = 'CHAR(36)';
                     break;
-                case AcEnumDDFieldType::INTEGER:
+                case AcEnumDDColumnType::INTEGER:
                     $columnType = 'INT';
                     if ($size > 0) {
                         if ($size <= 255) {
@@ -96,16 +96,16 @@ class AcSqlDbTableField extends AcSqlDbBase {
                         }
                     }
                     break;
-                case AcEnumDDFieldType::JSON:
+                case AcEnumDDColumnType::JSON:
                     $columnType = 'LONGTEXT';
                     break;
-                case AcEnumDDFieldType::STRING:
+                case AcEnumDDColumnType::STRING:
                     if ($size == 0) {
                         $size = 255;
                     }
                     $columnType = "VARCHAR($size)";
                     break;
-                case AcEnumDDFieldType::TEXT:
+                case AcEnumDDColumnType::TEXT:
                     $columnType = 'LONGTEXT';
                     if ($size > 0) {
                         if ($size <= 255) {
@@ -118,24 +118,24 @@ class AcSqlDbTableField extends AcSqlDbBase {
                         }
                     }
                     break;
-                case AcEnumDDFieldType::TIME:
+                case AcEnumDDColumnType::TIME:
                     $columnType = 'TIME';
                     break;
-                case AcEnumDDFieldType::TIMESTAMP:
+                case AcEnumDDColumnType::TIMESTAMP:
                     $columnType = 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP';
                     break;
             }
-            $result = "$this->fieldName $columnType";
-            if ($this->acDDTableField->isAutoIncrement() && !$isAutoIncrementSet) {
+            $result = "$this->columnName $columnType";
+            if ($this->acDDTableColumn->isAutoIncrement() && !$isAutoIncrementSet) {
                 $result .= " AUTO_INCREMENT";
             }
-            if ($this->acDDTableField->isPrimaryKey() && !$isPrimaryKeySet) {
+            if ($this->acDDTableColumn->isPrimaryKey() && !$isPrimaryKeySet) {
                 $result .= " PRIMARY KEY";
             }
-            if ($this->acDDTableField->isUniqueKey()) {
+            if ($this->acDDTableColumn->isUniqueKey()) {
                 $result .= " UNIQUE";
             }
-            if ($this->acDDTableField->isNotNull()) {
+            if ($this->acDDTableColumn->isNotNull()) {
                 $result .= " NOT NULL";
             }
             if ($defaultValue != null) {
@@ -143,33 +143,33 @@ class AcSqlDbTableField extends AcSqlDbBase {
             }
         } else if ($this->databaseType == AcEnumSqlDatabaseType::SQLITE) {
             $columnType = "TEXT";
-            switch ($fieldType) {
-                case AcEnumDDFieldType::AUTO_INCREMENT:
+            switch ($columnType) {
+                case AcEnumDDColumnType::AUTO_INCREMENT:
                     $columnType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
                     $isAutoIncrementSet = true;
                     $isPrimaryKeySet = true;
                     break;
-                case AcEnumDDFieldType::DOUBLE:
+                case AcEnumDDColumnType::DOUBLE:
                     $columnType = 'REAL';
                     break;
-                case AcEnumDDFieldType::BLOB:
+                case AcEnumDDColumnType::BLOB:
                     $columnType = 'BLOB';
                     break;
-                case AcEnumDDFieldType::INTEGER:
+                case AcEnumDDColumnType::INTEGER:
                     $columnType = 'INTEGER';
                     break;
             }
-            $result = "$this->fieldName $columnType";
-            if ($this->acDDTableField->isAutoIncrement() && !$isAutoIncrementSet) {
+            $result = "$this->columnName $columnType";
+            if ($this->acDDTableColumn->isAutoIncrement() && !$isAutoIncrementSet) {
                 $result .= " AUTOINCREMENT";
             }
-            if ($this->acDDTableField->isPrimaryKey() && !$isPrimaryKeySet) {
+            if ($this->acDDTableColumn->isPrimaryKey() && !$isPrimaryKeySet) {
                 $result .= " PRIMARY KEY";
             }
-            if ($this->acDDTableField->isUniqueKey()) {
+            if ($this->acDDTableColumn->isUniqueKey()) {
                 $result .= " UNIQUE ";
             }
-            if ($this->acDDTableField->isNotNull()) {
+            if ($this->acDDTableColumn->isNotNull()) {
                 $result .= " NOT NULL";
             }
             if ($defaultValue != null) {

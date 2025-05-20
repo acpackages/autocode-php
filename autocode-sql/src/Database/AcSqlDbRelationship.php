@@ -18,8 +18,8 @@ class AcSqlDbRelationship extends AcSqlDbBase{
         $this->acDDRelationship = $acDDRelationship;
     }    
 
-    public function getCreateReleationshipStatement(): string{
-        $result = "ALTER TABLE $this->acDDRelationship->destinationTable ADD FOREIGN KEY ($this->acDDRelationship->destinationField) REFERENCES $this->acDDRelationship->sourceTable($this->acDDRelationship->sourceField);";
+    public function getCreateRelationshipStatement(): string{
+        $result = "ALTER TABLE ".$this->acDDRelationship->destinationTable." ADD FOREIGN KEY (".$this->acDDRelationship->destinationColumn.") REFERENCES ".$this->acDDRelationship->sourceTable."(".$this->acDDRelationship->sourceColumn.");";
         return $result;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace AcDataDictionary\Enums;
 
-class AcEnumDDFieldProperty {
+class AcEnumDDColumnProperty {
     const AUTO_INCREMENT = "auto_increment";
     const AUTO_NUMBER_LENGTH = "auto_number_length";
     const AUTO_NUMBER_PREFIX = "auto_number_prefix";
@@ -10,7 +10,7 @@ class AcEnumDDFieldProperty {
     const CHECK_IN_MODIFY = "check_in_modify";
     const CHECK_IN_SAVE = "check_in_save";
     const DEFAULT_VALUE = "default_value";
-    const FIELD_TITLE = "field_title";
+    const COLUMN_TITLE = "column_title";
     const FOREIGN_KEY = "foreign_key";
     const FORMAT = "format";
     const IS_SELECT_DISTINCT = "is_select_distinct";

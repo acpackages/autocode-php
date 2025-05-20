@@ -3,17 +3,14 @@
 namespace AcSql\Daos;
 
 require_once __DIR__.' ./../../../autocode/vendor/autoload.php';
-require_once __DIR__.'./../Enums/AcEnumRowOperation.php';
-require_once __DIR__.'./../Enums/AcEnumSelectMode.php';
-require_once __DIR__.'./../Enums/AcEnumTableFieldFormat.php';
 require_once __DIR__.'./../Models/AcSqlConnection.php';
 require_once __DIR__.'./../Models/AcSqlDaoResult.php';
 
 use Autocode\AcLogger;
 use Autocode\Models\AcResult;
 use Autocode\Enums\AcEnumLogType;
-use AcSql\Enums\AcEnumRowOperation;
-use AcSql\Enums\AcEnumSelectMode;
+use AcDataDictionary\Enums\AcEnumDDRowOperation;
+use AcDataDictionary\Enums\AcEnumDDSelectMode;
 use AcSql\Models\AcSqlConnection;
 use AcSql\Models\AcSqlDaoResult;
 
@@ -74,12 +71,12 @@ class AcBaseSqlDao {
         return $result;
     }
 
-    public function executeStatement(string $statement, ?string $operation = AcEnumRowOperation::UNKNOWN, ?array $parameters = []): AcSqlDaoResult {
+    public function executeStatement(string $statement, ?string $operation = AcEnumDDRowOperation::UNKNOWN, ?array $parameters = []): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         return $result;
     }    
 
-    public function formatRow(array $row, array $formatColumns = []): array {
+    public function formatRow(array $row, array $columnFormats = []): array {
         return $row;
     }
 
@@ -122,7 +119,7 @@ class AcBaseSqlDao {
         return $result;
     }
 
-    public function getRows(string $statement, ?string $condition = "", ?array $parameters = [],?string $mode = AcEnumSelectMode::LIST, ?array $formatColumns = [] ): AcSqlDaoResult {
+    public function getRows(string $statement, ?string $condition = "", ?array $parameters = [],?string $mode = AcEnumDDSelectMode::LIST, ?array $columnFormats = [] ): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         return $result;
     }

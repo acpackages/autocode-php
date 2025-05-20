@@ -1,12 +1,12 @@
 <?php
 
 namespace AcDataDictionary\Models;
-require_once 'AcDDTableField.php';
+require_once 'AcDDTableColumn.php';
 require_once 'AcDDTableProperty.php';
 require_once 'AcDataDictionary.php';
 use AcExtensions\AcExtensionMethods;
 use Autocode\Annotaions\AcBindJsonProperty;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 class AcDDConditionGroup
 {
@@ -25,10 +25,10 @@ class AcDDConditionGroup
         return $instance;
     }
 
-    public function addCondition(string $fieldName, string $operator, mixed $value): static
+    public function addCondition(string $columnName, string $operator, mixed $value): static
     {
         $this->conditions[] = AcDDCondition::instanceFromJson(jsonData: [
-            AcDDCondition::KEY_FIELD_NAME => $fieldName,
+            AcDDCondition::KEY_COLUMN_NAME => $columnName,
             AcDDCondition::KEY_OPERATOR => $operator,
             AcDDCondition::KEY_VALUE => $value
         ]);
@@ -50,7 +50,7 @@ class AcDDConditionGroup
                     if(AcExtensionMethods::arrayContainsKey(key: self::KEY_CONDITIONS, array: $condition)) {
                         $this->conditions[] = AcDDConditionGroup::instanceFromJson(jsonData: $condition);
                     }
-                    else if(AcExtensionMethods::arrayContainsKey(key: AcDDCondition::KEY_FIELD_NAME, array: $condition)){
+                    else if(AcExtensionMethods::arrayContainsKey(key: AcDDCondition::KEY_COLUMN_NAME, array: $condition)){
                         $this->conditions[] = AcDDCondition::instanceFromJson(jsonData: $condition);
                     }
                 }
@@ -60,12 +60,12 @@ class AcDDConditionGroup
             }
             unset($jsonData[self::KEY_CONDITIONS]);
         }
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string

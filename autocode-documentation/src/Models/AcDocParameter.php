@@ -1,7 +1,7 @@
 <?php
 namespace AcDoc\Models;
 
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 /**
  * AcDocParameter represents a parameter for a function, method, or API endpoint.
@@ -109,7 +109,7 @@ class AcDocParameter
      * }
      */
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
@@ -123,7 +123,7 @@ class AcDocParameter
      * }
      */
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     /**

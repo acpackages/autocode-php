@@ -1,5 +1,6 @@
 <?php
 namespace AcWeb\DataDictionary;
+use AcDataDictionary\Enums\AcEnumDDRowOperation;
 use AcDataDictionary\Models\AcDDTable;
 use AcSql\Database\AcSqlDbTable;
 use AcWeb\ApiDocs\Models\AcApiDocContent;
@@ -40,6 +41,10 @@ class AcDataDictionaryAutoUpdate{
         $requestBody = new AcApiDocRequestBody();
         $requestBody->addContent(content: $content);
         $acApiDocRoute->requestBody = $requestBody;
+        $responses = AcApiDocUtils::getApiDocRouteResponsesForOperation(operation:AcEnumDDRowOperation::UPDATE, acDDTable:$this->acDDTable,acApiDoc:$this->acDataDictionaryAutoApi->acWeb->acApiDoc);
+        foreach ($responses as $response) {
+            $acApiDocRoute->addResponse(acApiDocResponse: $response);
+        }  
         return $acApiDocRoute;
     }
 

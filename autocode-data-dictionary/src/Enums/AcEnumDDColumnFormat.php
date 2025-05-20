@@ -1,11 +1,11 @@
 <?php
 
-namespace AcSql\Enums;
+namespace AcDataDictionary\Enums;
 
-class AcEnumTableFieldFormat {
+class AcEnumDDColumnFormat {
     const DATE = "date";
     const ENCRYPT = "encrypt";
-    const HIDE_FIELD = "hide_field";
+    const HIDE_COLUMN = "hide_column";
     const JSON = "json";
     const LOWERCASE = "lowercase";
     const UPPERCASE = "uppercase";

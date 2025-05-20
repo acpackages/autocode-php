@@ -39,8 +39,8 @@ use AcWeb\Models\AcWebRouteDefinition;
 use ApiDocs\Utils\AcApiDocUtils;
 use Autocode\AcHooks;
 use Autocode\Enums\AcEnumHttpMethod;
-use Autocode\Utils\AcUtilsFile;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcFileUtils;
+use Autocode\Utils\AcJsonUtils;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
@@ -415,7 +415,7 @@ class AcWeb
                         } elseif ($instance instanceof AcWebValueFromBody) {
                             if ($parameterType && class_exists($parameterType)) {
                                 $object = new $parameterType();
-                                AcUtilsJson::setInstancePropertiesFromJsonData(instance: $object, jsonData: $request->body);
+                                AcJsonUtils::setInstancePropertiesFromJsonData(instance: $object, jsonData: $request->body);
                                 $args[] = $object;
                                 $valueSet = true;
                             }
@@ -453,7 +453,7 @@ class AcWeb
                 $relativePath = substr($uri, strlen($prefix));
                 $filePath = realpath($baseDir . DIRECTORY_SEPARATOR . ltrim($relativePath, '/'));
                 if ($filePath && str_starts_with($filePath, $baseDir) && is_file($filePath)) {
-                    $mimeType = AcUtilsFile::getMimeTypeFromPath($filePath);
+                    $mimeType = AcFileUtils::getMimeTypeFromPath($filePath);
                     header("Content-Type: $mimeType");
                     header("Content-Length: " . filesize($filePath));
                     readfile($filePath);

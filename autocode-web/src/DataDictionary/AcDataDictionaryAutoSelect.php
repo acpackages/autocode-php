@@ -2,6 +2,7 @@
 namespace AcWeb\DataDictionary;
 use AcDataDictionary\Enums\AcEnumDDConditionOperator;
 use AcDataDictionary\Enums\AcEnumDDLogicalOperator;
+use AcDataDictionary\Enums\AcEnumDDRowOperation;
 use AcDataDictionary\Models\AcDDSelectStatement;
 use AcDataDictionary\Models\AcDDTable;
 use AcExtensions\AcExtensionMethods;
@@ -9,17 +10,20 @@ use AcSql\Database\AcSqlDbTable;
 use AcWeb\ApiDocs\Models\AcApiDocContent;
 use AcWeb\ApiDocs\Models\AcApiDocParameter;
 use AcWeb\ApiDocs\Models\AcApiDocRequestBody;
+use AcWeb\ApiDocs\Models\AcApiDocResponse;
 use AcWeb\ApiDocs\Models\AcApiDocRoute;
 use AcWeb\Models\AcWebRequest;
 use AcWeb\Models\AcWebResponse;
 use ApiDocs\Enums\AcEnumApiDataType;
+use ApiDocs\Utils\AcApiDocUtils;
+use Autocode\Enums\AcEnumHttpResponseCode;
 class AcDataDictionaryAutoSelect {
 
     public function __construct(public AcDDTable $acDDTable, public AcDataDictionaryAutoApi &$acDataDictionaryAutoApi)
     {
         $apiUrl = $acDataDictionaryAutoApi->urlPrefix . '/' . $acDDTable->tableName . "/" . $acDataDictionaryAutoApi->pathForSelect;
         $acDataDictionaryAutoApi->acWeb->get(url: $apiUrl, handler: $this->getHandler(), acApiDocRoute: $this->getAcApiDocRoute());
-        $apiUrl = $acDataDictionaryAutoApi->urlPrefix . '/' . $acDDTable->tableName . "/" . $acDataDictionaryAutoApi->pathForSelect . "/{" . $this->acDDTable->getPrimaryKeyFieldName() . "}";
+        $apiUrl = $acDataDictionaryAutoApi->urlPrefix . '/' . $acDDTable->tableName . "/" . $acDataDictionaryAutoApi->pathForSelect . "/{" . $this->acDDTable->getPrimaryKeyColumnName() . "}";
         $acDataDictionaryAutoApi->acWeb->get(url: $apiUrl, handler: $this->getByIdHandler(), acApiDocRoute: $this->getByIdAcApiDocRoute());
         $apiUrl = $acDataDictionaryAutoApi->urlPrefix . '/' . $acDDTable->tableName . "/" . $acDataDictionaryAutoApi->pathForSelect;
         $acDataDictionaryAutoApi->acWeb->post(url: $apiUrl, handler: $this->postHandler(), acApiDocRoute: $this->postAcApiDocRoute());
@@ -31,11 +35,11 @@ class AcDataDictionaryAutoSelect {
         $acApiDocRoute->addTag($this->acDDTable->tableName);
         $acApiDocRoute->summary = "Get " . $this->acDDTable->tableName;
         $acApiDocRoute->description = "Auto generated data dictionary api to get rows in table " . $this->acDDTable->tableName;
-        $queryFields = $this->acDDTable->getSearchQueryFieldNames();
-        if (count($queryFields) > 0) {
+        $queryColumns = $this->acDDTable->getSearchQueryColumnNames();
+        if (count($queryColumns) > 0) {
             $queryParameter = new AcApiDocParameter();
             $queryParameter->name = "query";
-            $queryParameter->description = "Filter values using like condition for fields (" . implode(separator: ",", array: $queryFields) . ")";
+            $queryParameter->description = "Filter values using like condition for columns (" . implode(separator: ",", array: $queryColumns) . ")";
             $queryParameter->required = false;
             $queryParameter->in = "query";
             $acApiDocRoute->addParameter(parameter: $queryParameter);
@@ -58,14 +62,18 @@ class AcDataDictionaryAutoSelect {
         $orderParameter->required = false;
         $orderParameter->in = "query";
         $acApiDocRoute->addParameter(parameter: $orderParameter);
-        foreach ($this->acDDTable->tableFields as $acDDTableField) {
+        foreach ($this->acDDTable->tableColumns as $acDDTableColumn) {
             $requestParameter = new AcApiDocParameter();
-            $requestParameter->name = $acDDTableField->fieldName;
-            $requestParameter->description = "Filter values in field " . $acDDTableField->fieldName;
+            $requestParameter->name = $acDDTableColumn->columnName;
+            $requestParameter->description = "Filter values in column " . $acDDTableColumn->columnName;
             $requestParameter->required = false;
             $requestParameter->in = "query";
             $acApiDocRoute->addParameter(parameter: $requestParameter);
         }
+        $responses = AcApiDocUtils::getApiDocRouteResponsesForOperation(operation:AcEnumDDRowOperation::SELECT, acDDTable:$this->acDDTable,acApiDoc:$this->acDataDictionaryAutoApi->acWeb->acApiDoc);
+        foreach ($responses as $response) {
+            $acApiDocRoute->addResponse(acApiDocResponse: $response);
+        }  
         return $acApiDocRoute;
     }
 
@@ -74,16 +82,16 @@ class AcDataDictionaryAutoSelect {
             $acSqlDbTable = new AcSqlDbTable(tableName: $this->acDDTable->tableName);
             $acDDSelectStatement = new AcDDSelectStatement(tableName: $this->acDDTable->tableName);
             if(AcExtensionMethods::arrayContainsKey(key: "query",array: $acWebRequest->get)){
-                $queryFields = $this->acDDTable->getSearchQueryFieldNames();
+                $queryColumns = $this->acDDTable->getSearchQueryColumnNames();
                 $acDDSelectStatement->startGroup(operator:AcEnumDDLogicalOperator::OR);
-                foreach($queryFields as $fieldName){
-                    $acDDSelectStatement->addCondition(fieldName:$fieldName,operator:AcEnumDDConditionOperator::LIKE,value: $acWebRequest->get["query"]);
+                foreach($queryColumns as $columnName){
+                    $acDDSelectStatement->addCondition(columnName:$columnName,operator:AcEnumDDConditionOperator::LIKE,value: $acWebRequest->get["query"]);
                 }
                 $acDDSelectStatement->endGroup();
             }
-            foreach ($this->acDDTable->tableFields as $acDDTableField){
-                if(AcExtensionMethods::arrayContainsKey(key: $acDDTableField->fieldName,array: $acWebRequest->get)){
-                    $acDDSelectStatement->addCondition(fieldName:$acDDTableField->fieldName,operator:AcEnumDDConditionOperator::LIKE,value: $acWebRequest->get[$acDDTableField->fieldName]);
+            foreach ($this->acDDTable->tableColumns as $acDDTableColumn){
+                if(AcExtensionMethods::arrayContainsKey(key: $acDDTableColumn->columnName,array: $acWebRequest->get)){
+                    $acDDSelectStatement->addCondition(columnName:$acDDTableColumn->columnName,operator:AcEnumDDConditionOperator::LIKE,value: $acWebRequest->get[$acDDTableColumn->columnName]);
                 }
             }
             if(AcExtensionMethods::arrayContainsKey(key: "page_number",array: $acWebRequest->get)){
@@ -116,13 +124,17 @@ class AcDataDictionaryAutoSelect {
         $acApiDocRoute = new AcApiDocRoute();
         $acApiDocRoute->addTag($this->acDDTable->tableName);
         $acApiDocRoute->summary = "Get single " . $this->acDDTable->tableName;
-        $acApiDocRoute->description = "Auto generated data dictionary api to get single row matching field value " . $this->acDDTable->getPrimaryKeyFieldName() . " in table " . $this->acDDTable->tableName;
+        $acApiDocRoute->description = "Auto generated data dictionary api to get single row matching column value " . $this->acDDTable->getPrimaryKeyColumnName() . " in table " . $this->acDDTable->tableName;
         $parameter = new AcApiDocParameter();
-        $parameter->name = $this->acDDTable->getPrimaryKeyFieldName();
-        $parameter->description = $this->acDDTable->getPrimaryKeyFieldName() . " value of row to get";
+        $parameter->name = $this->acDDTable->getPrimaryKeyColumnName();
+        $parameter->description = $this->acDDTable->getPrimaryKeyColumnName() . " value of row to get";
         $parameter->required = true;
         $parameter->in = "path";
         $acApiDocRoute->addParameter($parameter);
+        $responses = AcApiDocUtils::getApiDocRouteResponsesForOperation(operation:AcEnumDDRowOperation::SELECT, acDDTable:$this->acDDTable,acApiDoc:$this->acDataDictionaryAutoApi->acWeb->acApiDoc);
+        foreach ($responses as $response) {
+            $acApiDocRoute->addResponse(acApiDocResponse: $response);
+        }  
         return $acApiDocRoute;
     }
 
@@ -130,8 +142,8 @@ class AcDataDictionaryAutoSelect {
         $handler = function (AcWebRequest $acWebRequest): AcWebResponse {
             $acSqlDbTable = new AcSqlDbTable(tableName: $this->acDDTable->tableName);
             $acDDSelectStatement = new AcDDSelectStatement(tableName: $this->acDDTable->tableName);
-            $primaryKeyValue = $acWebRequest->pathParameters[$acWebRequest->pathParameters[$this->acDDTable->getPrimaryKeyFieldName()]];
-            $getResponse = $acSqlDbTable->getRows(condition:$this->acDDTable->getPrimaryKeyFieldName()." = @primaryKeyValue", parameters: [
+            $primaryKeyValue = $acWebRequest->pathParameters[$acWebRequest->pathParameters[$this->acDDTable->getPrimaryKeyColumnName()]];
+            $getResponse = $acSqlDbTable->getRows(condition:$this->acDDTable->getPrimaryKeyColumnName()." = @primaryKeyValue", parameters: [
                 "@primaryKeyValue" => $primaryKeyValue 
             ]);
             return AcWebResponse::json($getResponse->toJson());
@@ -144,7 +156,7 @@ class AcDataDictionaryAutoSelect {
         $acApiDocRoute->addTag($this->acDDTable->tableName);
         $acApiDocRoute->summary = "Get " . $this->acDDTable->tableName;
         $acApiDocRoute->description = "Auto generated data dictionary api to get rows in table " . $this->acDDTable->tableName;
-        $queryFields = $this->acDDTable->getSearchQueryFieldNames();
+        $queryColumns = $this->acDDTable->getSearchQueryColumnNames();
         $properties = [
             "query" => [
                 "type" => AcEnumApiDataType::STRING
@@ -161,20 +173,20 @@ class AcDataDictionaryAutoSelect {
             "filters" => [
                 "type" => AcEnumApiDataType::OBJECT
             ],
-            "include_fields" => [
+            "include_columns" => [
                 "type" => AcEnumApiDataType::ARRAY,
                 "items" => [
                     "type" => AcEnumApiDataType::STRING
                 ]
             ],
-            "exclude_fields" => [
+            "exclude_columns" => [
                 "type" => AcEnumApiDataType::ARRAY,
                 "items" => [
                     "type" => AcEnumApiDataType::STRING
                 ]
             ]
         ];
-        if (count($queryFields) == 0) {
+        if (count($queryColumns) == 0) {
             unset($properties["query"]);
         }
         $content = new AcApiDocContent();
@@ -187,6 +199,10 @@ class AcDataDictionaryAutoSelect {
         $requestBody = new AcApiDocRequestBody();
         $requestBody->addContent(content: $content);
         $acApiDocRoute->requestBody = $requestBody;
+        $responses = AcApiDocUtils::getApiDocRouteResponsesForOperation(operation:AcEnumDDRowOperation::SELECT, acDDTable:$this->acDDTable,acApiDoc:$this->acDataDictionaryAutoApi->acWeb->acApiDoc);
+        foreach ($responses as $response) {
+            $acApiDocRoute->addResponse(acApiDocResponse: $response);
+        }  
         return $acApiDocRoute;
     }
 
@@ -195,17 +211,17 @@ class AcDataDictionaryAutoSelect {
         $handler = function (AcWebRequest $acWebRequest): AcWebResponse {            
             $acSqlDbTable = new AcSqlDbTable(tableName: $this->acDDTable->tableName);
             $acDDSelectStatement = new AcDDSelectStatement(tableName: $this->acDDTable->tableName);
-            if(AcExtensionMethods::arrayContainsKey(key: "include_fields",array: $acWebRequest->body)){
-                $acDDSelectStatement->includeFields = $acWebRequest->body["include_fields"];
+            if(AcExtensionMethods::arrayContainsKey(key: "include_columns",array: $acWebRequest->body)){
+                $acDDSelectStatement->includeColumns = $acWebRequest->body["include_columns"];
             }
-            if(AcExtensionMethods::arrayContainsKey(key: "exclude_fields",array: $acWebRequest->body)){
-                $acDDSelectStatement->excludeFields = $acWebRequest->body["exclude_fields"];
+            if(AcExtensionMethods::arrayContainsKey(key: "exclude_columns",array: $acWebRequest->body)){
+                $acDDSelectStatement->excludeColumns = $acWebRequest->body["exclude_columns"];
             }
             if(AcExtensionMethods::arrayContainsKey(key: "query",array: $acWebRequest->body)){
-                $queryFields = $this->acDDTable->getSearchQueryFieldNames();
+                $queryColumns = $this->acDDTable->getSearchQueryColumnNames();
                 $acDDSelectStatement->startGroup(operator:AcEnumDDLogicalOperator::OR);
-                foreach($queryFields as $fieldName){
-                    $acDDSelectStatement->addCondition(fieldName:$fieldName,operator:AcEnumDDConditionOperator::LIKE,value: $acWebRequest->body["query"]);
+                foreach($queryColumns as $columnName){
+                    $acDDSelectStatement->addCondition(columnName:$columnName,operator:AcEnumDDConditionOperator::LIKE,value: $acWebRequest->body["query"]);
                 }
                 $acDDSelectStatement->endGroup();
             }

@@ -3,7 +3,8 @@ namespace AcWeb\ApiDocs\Models;
 
 use AcWeb\ApiDocs\Models\AcApiDocParameter;
 use AcWeb\ApiDocs\Models\AcApiDocResponse;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Annotaions\AcBindJsonProperty;
+use Autocode\Utils\AcJsonUtils;
 
 class AcApiDocOperation {    
     const KEY_DESCRIPTION = "description";
@@ -12,6 +13,8 @@ class AcApiDocOperation {
     const KEY_SUMMARY = "summary";
     public ?string $summary = null;
     public ?string $description = null;
+
+    #[AcBindJsonProperty(key: AcApiDocOperation::KEY_PARAMETERS,arrayType:AcApiDocParameter::class)]
     public array $parameters = [];
     public array $responses = [];
 
@@ -22,19 +25,13 @@ class AcApiDocOperation {
     }
 
     public function fromJson(array $jsonData): static {
-        if (isset($jsonData[self::KEY_PARAMETERS])) {
-            foreach ($jsonData[self::KEY_PARAMETERS] as $parameter) {
-                $this->parameters[] = AcApiDocParameter::instanceFromJson($parameter);
-            }
-            unset($jsonData[self::KEY_PARAMETERS]);
-        }
         if (isset($jsonData[self::KEY_RESPONSES])) {
             foreach ($jsonData[self::KEY_RESPONSES] as $status => $response) {
                 $this->responses[$status] = AcApiDocResponse::instanceFromJson($response);
             }
             unset($jsonData[self::KEY_RESPONSES]);
         }
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 

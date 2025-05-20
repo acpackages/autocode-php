@@ -2,7 +2,7 @@
 namespace AcWeb\ApiDocs\Models;
 
 use Autocode\Annotaions\AcBindJsonProperty;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 
 class AcApiDocRoute {
@@ -27,6 +27,8 @@ class AcApiDocRoute {
 
     #[AcBindJsonProperty(key: AcApiDocRoute::KEY_REQUEST_BODY)]
     public ?AcApiDocRequestBody $requestBody = null;
+
+    #[AcBindJsonProperty(key: AcApiDocRoute::KEY_RESPONSES, skipInToJson:true)]
     public array $responses = [];
     public array $consumes = [];
     public array $produces = [];
@@ -40,12 +42,17 @@ class AcApiDocRoute {
     }
 
     public function fromJson(array $jsonData): static {
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function addParameter(AcApiDocParameter $parameter): static{
         $this->parameters[] = $parameter;
+        return $this;
+    }
+
+    public function addResponse(AcApiDocResponse $acApiDocResponse): static{
+        $this->responses[] = $acApiDocResponse;
         return $this;
     }
 
@@ -55,7 +62,14 @@ class AcApiDocRoute {
     }
 
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        $result = AcJsonUtils::getJsonDataFromInstance(instance: $this);
+        if(sizeof($this->responses) > 0){
+            $result[self::KEY_RESPONSES] = [];
+            foreach ($this->responses as $response) {
+                $result[self::KEY_RESPONSES][$response->code] = $response->toJson();
+            }
+        }
+        return $result;
     }
 
     public function __toString(): string {

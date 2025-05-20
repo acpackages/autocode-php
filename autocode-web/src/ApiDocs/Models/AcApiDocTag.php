@@ -3,7 +3,7 @@ namespace AcWeb\ApiDocs\Models;
 
 use AcWeb\ApiDocs\Models\AcApiDocExternalDocs;
 use Autocode\Annotaions\AcBindJsonProperty;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 class AcApiDocTag {
     const KEY_NAME = "name";
@@ -26,12 +26,12 @@ class AcApiDocTag {
     }
 
     public function fromJson(array $jsonData): static {
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {

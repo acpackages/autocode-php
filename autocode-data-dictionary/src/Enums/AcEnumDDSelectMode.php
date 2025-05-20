@@ -1,8 +1,8 @@
 <?php
 
-namespace AcSql\Enums;
+namespace AcDataDictionary\Enums;
 
-class AcEnumSelectMode {
+class AcEnumDDSelectMode {
     const ALL = "all";
     const COUNT = "count";
     const FIRST = "first";

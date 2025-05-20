@@ -4,7 +4,7 @@ namespace AcExtensions;
 
 trait AcFileExtensions {
 
-    public static function toBlobObject(string $filePath): array {
+    public static function toBlobJson(string $filePath): array {
         if (!file_exists($filePath)) {
             throw new Exception("File not found: $filePath");
         }
@@ -18,7 +18,7 @@ trait AcFileExtensions {
         ];
     }
 
-    public static function toBytesObject(string $filePath): array {
+    public static function toBytesJson(string $filePath): array {
         if (!file_exists($filePath)) {
             throw new Exception("File not found: $filePath");
         }

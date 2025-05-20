@@ -2,7 +2,7 @@
 
 namespace AcDataDictionary\Enums;
 
-class AcEnumDDFieldRelationType {
+class AcEnumDDColumnRelationType {
     const ANY = "any";
     const SOURCE = "source";
     const DESTINATION = "destination";

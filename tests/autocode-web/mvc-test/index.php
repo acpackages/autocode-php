@@ -22,6 +22,7 @@ $acDataDictionaryAutoApi = new AcDataDictionaryAutoApi(acWeb: $app);
 $acDataDictionaryAutoApi->urlPrefix = '/api';
 $acDataDictionaryAutoApi->includeTable('accounts');
 $acDataDictionaryAutoApi->includeTable('apis');
+$acDataDictionaryAutoApi->includeTable('companies');
 $acDataDictionaryAutoApi->generate();
 
 /* Data Dictionary End */

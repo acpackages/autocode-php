@@ -2,7 +2,7 @@
 namespace AcWeb\Annotaions;
 use Attribute;
 #[Attribute(Attribute::TARGET_METHOD)]
-class AcWebRouteMetaParemeter{
+class AcWebRouteMetaParameter{
     public function __construct(
         public string $description = '',        
         public string $in = '',

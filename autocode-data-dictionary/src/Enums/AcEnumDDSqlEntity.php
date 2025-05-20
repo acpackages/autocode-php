@@ -2,7 +2,7 @@
 
 namespace AcSql\Enums;
 
-class AcEnumSqlDatabaseEntity {
+class AcEnumDDSqlEntity {
     const FUNCTION = "function";
     const RELATIONSHIP = "relationship";
     const STORED_PROCEDURE = "stored_procedure";

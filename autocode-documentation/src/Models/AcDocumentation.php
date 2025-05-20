@@ -5,7 +5,7 @@ namespace AcDoc\Models;
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 
 use Autocode\Annotaions\AcBindJsonProperty;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 /**
  * AcDocumentation model to represent documentation for functions, classes, or methods.
@@ -278,7 +278,7 @@ class AcDocumentation {
      * }
      */
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
@@ -292,7 +292,7 @@ class AcDocumentation {
      * }
      */
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     /**

@@ -7,8 +7,8 @@ require_once __DIR__.'./../../../autocode-data-dictionary/vendor/autoload.php';
 
 use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Models\AcDDTable;
-use AcDataDictionary\Models\AcDDTableField;
-use AcDataDictionary\Models\AcDDTableFieldProperty;
+use AcDataDictionary\Models\AcDDTableColumn;
+use AcDataDictionary\Models\AcDDTableColumnProperty;
 use AcDataDictionary\Models\AcDDTableProperty;
 use AcDataDictionary\Models\AcDDTableRowEvent;
 use Autocode\Enums\AcEnumSqlDatabaseType;

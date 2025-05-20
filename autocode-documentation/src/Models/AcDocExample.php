@@ -1,7 +1,7 @@
 <?php
 namespace AcDoc\Models;
 
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 /**
  * AcDocExample represents an example of code, typically used for demonstrating how a code element should be used.
@@ -77,7 +77,7 @@ class AcDocExample
      * }
      */
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
@@ -91,7 +91,7 @@ class AcDocExample
      * }
      */
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     /**

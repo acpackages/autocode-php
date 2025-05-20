@@ -4,7 +4,7 @@ namespace Autocode\Models;
 
 use Autocode\AcLogger;
 use Autocode\Annotaions\AcBindJsonProperty;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 class AcResult {
     const CODE_NOTHING_EXECUTED = 0;
@@ -49,7 +49,7 @@ class AcResult {
     }
 
     public function fromJson(array $jsonData): static {
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
@@ -141,7 +141,7 @@ class AcResult {
     }
 
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {

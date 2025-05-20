@@ -4,7 +4,7 @@ namespace AcWeb\Models;
 use AcWeb\Enums\AcEnumWebResponseType;
 use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Enums\AcEnumHttpResponseCode;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 
@@ -50,12 +50,12 @@ class AcWebResponse {
     }
 
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {

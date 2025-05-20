@@ -2,48 +2,62 @@
 
 namespace AcSql\Daos;
 
-class AcMssqlDao extends AcBaseSqlDao {
+require_once __DIR__ . '/../../../autocode-data-dictionary/vendor/autoload.php';
+require_once __DIR__ . '/../../../autocode/vendor/autoload.php';
+require_once __DIR__ . '/../Models/AcSqlDaoResult.php';
+require_once 'AcBaseSqlDao.php';
+
+use AcDataDictionary\Enums\AcEnumDDColumnProperty;
+use AcDataDictionary\Models\AcDDFunction;
+use AcDataDictionary\Models\AcDDStoredProcedure;
+use AcDataDictionary\Models\AcDDTable;
+use AcDataDictionary\Models\AcDDTrigger;
+use AcDataDictionary\Models\AcDDView;
+use PDO;
+use PDOException;
+use Autocode\Models\AcResult;
+use AcSql\Daos\AcBaseSqlDao;
+use AcDataDictionary\Enums\AcEnumDDRowOperation;
+use AcDataDictionary\Enums\AcEnumDDSelectMode;
+use AcDataDictionary\Enums\AcEnumDDColumnFormat;
+use AcSql\Models\AcSqlDaoResult;
+
+class AcMssqlDao extends AcBaseSqlDao
+{
     private ?PDO $pool = null;
 
     public function checkDatabaseExist(): AcResult {
         $result = new AcResult();
         try {
-            $query = "SELECT database_id FROM sys.databases WHERE name = ?";
-            $db = $this->getConnectionObject();
+            $statement = "SELECT name FROM sys.databases WHERE name = ?";
+            $db = $this->getConnectionObject(false);
             if (!$db) {
-                return $result->setFailure(['message' => 'Database connection error']);
-            }
-            $stmt = $db->prepare($query);
-            $stmt->execute([$this->sqlConnection['database']]);
-            $exists = $stmt->fetch();
-            if($exists){
-                $result->setSuccess(true, message:'Database exists');
-            }
-            else{
-                $result->setSuccess(false,message:'Database does not exist');
+                $result->setFailure(message: 'Database connection error');
+            } else {
+                $stmt = $db->prepare($statement);
+                $stmt->execute([$this->sqlConnection->database]);
+                $exists = $stmt->fetch();
+                $result->setSuccess((bool)$exists, message: $exists ? 'Database exists' : 'Database does not exist');
             }
         } catch (PDOException $ex) {
             $result->setException($ex);
-        }        
+        }
         return $result;
     }
 
-    public function checkTableExist(string $table): AcResult {
+    public function checkTableExist(string $tableName): AcResult {
         $result = new AcResult();
         try {
-            $query = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ?";
+            $statement = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = ? AND TABLE_NAME = ?";
             $db = $this->getConnectionObject();
             if (!$db) {
-                return $result->setFailure(message:'Database connection error');
+                $result->setFailure(message: 'Database connection error');
+            } else {
+                $stmt = $db->prepare($statement);
+                $stmt->execute([$this->sqlConnection->database, $tableName]);
+                $exists = $stmt->fetch();
+                $result->setSuccess((bool)$exists, message: $exists ? 'Table exists' : 'Table does not exist');
             }
-            $stmt = $db->prepare($query);
-            $stmt->execute([$table]);
-            if($stmt->fetch()){
-                $result->setSuccess(true, message:'Table exists');
-            }
-            else{
-                $result->setSuccess(false,message:'Table does not exist');
-            }                
         } catch (PDOException $ex) {
             $result->setException($ex);
         }
@@ -53,27 +67,24 @@ class AcMssqlDao extends AcBaseSqlDao {
     public function createDatabase(): AcResult {
         $result = new AcResult();
         try {
-            $query = "IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = ?) CREATE DATABASE [{$this->sqlConnection['database']}]";
-            $db = $this->getConnectionObject();
-            $stmt = $db->prepare($query);
-            $stmt->execute([$this->sqlConnection['database']]);
-            $result->setSuccess(true,message:'Database created');
+            $db = $this->getConnectionObject(false);
+            $statement = "IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = ?) BEGIN CREATE DATABASE [$this->sqlConnection->database] END";
+            $stmt = $db->prepare($statement);
+            $stmt->execute([$this->sqlConnection->database]);
+            $result->setSuccess(true, message: 'Database created');
         } catch (PDOException $ex) {
             $result->setException($ex);
         }
         return $result;
     }
 
-    public function deleteRows(string $table, string $condition = "", array $parameters = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
+    public function deleteRows(string $tableName, string $condition = "", array $parameters = []): AcSqlDaoResult {
+        $result = new AcSqlDaoResult(operation: AcEnumDDRowOperation::DELETE);
         try {
-            $query = "DELETE FROM {$table} " . ($condition ? "WHERE {$condition}" : "");
+            $statement = "DELETE FROM [$tableName] " . ($condition ? "WHERE $condition" : "");
             $db = $this->getConnectionObject();
-            $stmt = $db->prepare($query);
-            foreach ($parameters as $key => $value) {
-                $stmt->bindValue($key, $value);
-            }
-            $stmt->execute();
+            $stmt = $db->prepare($statement);
+            $stmt->execute($parameters);
             $result->affectedRowsCount = $stmt->rowCount();
             $result->setSuccess();
         } catch (PDOException $ex) {
@@ -82,27 +93,113 @@ class AcMssqlDao extends AcBaseSqlDao {
         return $result;
     }
 
-    public function getConnectionObject(): ?PDO {
+    public function executeMultipleSqlStatements(array $statements, array $parameters = []): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        $db = $this->getConnectionObject();
         try {
-            if (!$this->pool) {
-                $dsn = "sqlsrv:Server={$this->sqlConnection['hostname']},{$this->sqlConnection['port']};Database={$this->sqlConnection['database']}";
-                $this->pool = new PDO($dsn, $this->sqlConnection['username'], $this->sqlConnection['password']);
-                $this->pool->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $db->beginTransaction();
+            foreach ($statements as $statement) {
+                $stmt = $db->prepare($statement);
+                $stmt->execute();
             }
-            return $this->pool;
+            $db->commit();
+            $result->setSuccess();
+        } catch (PDOException $e) {
+            if ($db->inTransaction()) {
+                $db->rollBack();
+            }
+            $result->setException($e);
+        }
+        return $result;
+    }
+
+    public function executeStatement(string $statement, ?string $operation = AcEnumDDRowOperation::UNKNOWN, ?array $parameters = []): AcSqlDaoResult {
+        $result = new AcSqlDaoResult(operation: $operation);
+        try {
+            $db = $this->getConnectionObject();
+            $stmt = $db->prepare($statement);
+            $stmt->execute($parameters);
+            $result->setSuccess();
+        } catch (PDOException $e) {
+            $result->setException($e);
+        }
+        return $result;
+    }
+
+    public function getConnectionObject(bool $includeDatabase = true): ?PDO {
+        $result = null;
+        try {
+            if (!$this->pool || !$includeDatabase) {
+                if ($includeDatabase) {
+                    $dsn = "sqlsrv:Server={$this->sqlConnection->hostname}," . (int)$this->sqlConnection->port . ";Database={$this->sqlConnection->database}";
+                    $this->pool = new PDO($dsn, $this->sqlConnection->username, $this->sqlConnection->password);
+                    $this->pool->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $result = $this->pool;
+                } else {
+                    $dsn = "sqlsrv:Server={$this->sqlConnection->hostname}," . (int)$this->sqlConnection->port;
+                    $pool = new PDO($dsn, $this->sqlConnection->username, $this->sqlConnection->password);
+                    $pool->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $result = $pool;
+                }
+            } else {
+                $result = $this->pool;
+            }
         } catch (PDOException $ex) {
             error_log("Database Connection Error: " . $ex->getMessage());
-            return null;
         }
+        return $result;
+    }
+
+    public function getDatabaseFunctions(): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        try {
+            $statement = "SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_CATALOG = ? AND ROUTINE_TYPE = 'FUNCTION'";
+            $db = $this->getConnectionObject();
+            $stmt = $db->prepare($statement);
+            $stmt->execute([$this->sqlConnection->database]);
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                $result->rows[] = [
+                    AcDDFunction::KEY_FUNCTION_NAME => $row["ROUTINE_NAME"]
+                ];
+            }
+            $result->setSuccess();
+        } catch (PDOException $ex) {
+            $result->setException($ex);
+        }
+        return $result;
+    }
+
+    public function getDatabaseStoredProcedures(): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        try {
+            $statement = "SELECT ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_CATALOG = ? AND ROUTINE_TYPE = 'PROCEDURE'";
+            $db = $this->getConnectionObject();
+            $stmt = $db->prepare($statement);
+            $stmt->execute([$this->sqlConnection->database]);
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                $result->rows[] = [
+                    AcDDStoredProcedure::KEY_STORED_PROCEDURE_NAME => $row["ROUTINE_NAME"]
+                ];
+            }
+            $result->setSuccess();
+        } catch (PDOException $ex) {
+            $result->setException($ex);
+        }
+        return $result;
     }
 
     public function getDatabaseTables(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
-            $query = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";
+            $statement = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = ? AND TABLE_TYPE = 'BASE TABLE'";
             $db = $this->getConnectionObject();
-            $stmt = $db->query($query);
-            $result->rows = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            $stmt = $db->prepare($statement);
+            $stmt->execute([$this->sqlConnection->database]);
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                $result->rows[] = [
+                    AcDDTable::KEY_TABLE_NAME => $row["TABLE_NAME"]
+                ];
+            }
             $result->setSuccess();
         } catch (PDOException $ex) {
             $result->setException($ex);
@@ -110,105 +207,63 @@ class AcMssqlDao extends AcBaseSqlDao {
         return $result;
     }
 
-    public function getTableDefinition(string $table): AcSqlDaoResult {
+    public function getDatabaseTriggers(): AcSqlDaoResult {
         $result = new AcSqlDaoResult();
         try {
-            $connection = $this->getConnection();
-            $stmt = $connection->prepare("SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = :table");
-            $stmt->execute(['table' => $table]);
-            $result->rows = $stmt->fetchAll();
-            $result->setSuccess();
-        } catch (PDOException $e) {
-            $result->setException($e);
-        }
-        return $result;
-    }
-
-    public function insertRows(string $table, array $values, string $primaryKeyColumn = ""): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
-        try {
-            $columns = implode(", ", array_keys($values));
-            $placeholders = implode(", ", array_map(fn($col) => ":$col", array_keys($values)));
-            $query = "INSERT INTO {$table} ({$columns}) VALUES ({$placeholders})";
-            if ($primaryKeyColumn) {
-                $query .= " OUTPUT INSERTED.{$primaryKeyColumn} AS lastInsertedId";
-            }
+            $statement = "SELECT name AS TRIGGER_NAME FROM sys.triggers WHERE parent_class_desc = 'OBJECT_OR_COLUMN'";
             $db = $this->getConnectionObject();
-            $stmt = $db->prepare($query);
-            foreach ($values as $key => $value) {
-                $stmt->bindValue($key, $value);
-            }
+            $stmt = $db->prepare($statement);
             $stmt->execute();
-            $result->lastInsertedId = $db->lastInsertId();
-            return $result->setSuccess();
-        } catch (PDOException $ex) {
-            return $result->setException($ex);
-        }
-    }
-
-    public function getRows(string $statement, ?string $condition = "", ?array $parameters = [],?string $mode = AcEnumSelectMode::LIST, ?array $formatColumns = [], ?int $startIndex = -1, ?int $rowCount): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
-        try {
-            $connection = $this->getConnection();
-            $stmt = $connection->prepare($statement);
-            $stmt->execute($parameters);
-            $result->rows = $firstRowOnly ? $stmt->fetch() : $stmt->fetchAll();
-            $result->setSuccess();
-        } catch (PDOException $e) {
-            $result->setException($e);
-        }
-        return $result;
-    }
-
-    public function executeStatement(string $statement, array $parameters = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
-        try {
-            $connection = $this->getConnection();
-            $stmt = $connection->prepare($statement);
-            $stmt->execute($parameters);
-            $result->setSuccess();
-        } catch (PDOException $e) {
-            $result->setException($e);
-        }
-        return $result;
-    }
-
-    public function sqlBatchStatement(array $statements, array $parameters = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
-        try {
-            $connection = $this->getConnection();
-            $connection->beginTransaction();
-            foreach ($statements as $statement) {
-                $stmt = $connection->prepare($statement);
-                $stmt->execute($parameters);
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                $result->rows[] = [
+                    AcDDTrigger::KEY_TRIGGER_NAME => $row["TRIGGER_NAME"]
+                ];
             }
-            $connection->commit();
-            $result->setSuccess();
-        } catch (PDOException $e) {
-            $connection->rollBack();
-            $result->setException($e);
-        }
-        return $result;
-    }
-
-    public function updateRows(string $table, array $values, string $condition = "", array $parameters = []): AcSqlDaoResult {
-        $result = new AcSqlDaoResult();
-        try {
-            $setClause = implode(", ", array_map(fn($col) => "$col = :$col", array_keys($values)));
-            $query = "UPDATE {$table} SET {$setClause} " . ($condition ? "WHERE {$condition}" : "");
-            $db = $this->getConnectionObject();
-            $stmt = $db->prepare($query);
-            foreach (array_merge($values, $parameters) as $key => $value) {
-                $stmt->bindValue($key, $value);
-            }
-            $stmt->execute();
-            $result->affectedRowsCount = $stmt->rowCount();
             $result->setSuccess();
         } catch (PDOException $ex) {
             $result->setException($ex);
         }
         return $result;
     }
+
+    public function getDatabaseViews(): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        try {
+            $statement = "SELECT TABLE_NAME AS VIEW_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_CATALOG = ?";
+            $db = $this->getConnectionObject();
+            $stmt = $db->prepare($statement);
+            $stmt->execute([$this->sqlConnection->database]);
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                $result->rows[] = [
+                    AcDDView::KEY_VIEW_NAME => $row["VIEW_NAME"]
+                ];
+            }
+            $result->setSuccess();
+        } catch (PDOException $ex) {
+            $result->setException($ex);
+        }
+        return $result;
+    }
+
+    public function getRows(string $tableName, ?string $condition = "", ?array $parameters = []): AcSqlDaoResult {
+        $result = new AcSqlDaoResult();
+        try {
+            $statement = "SELECT * FROM {$tableName} " . ($condition ? "WHERE {$condition}" : "");
+            $db = $this->getConnectionObject();
+            $parameterValues = [];
+            $setParametersResult = $this->setSqlStatementParameters($statement, statementParameters: $parameterValues, passedParameters: $parameters);
+            $statement = $setParametersResult['statement'];
+            $parameterValues = $setParametersResult['statementParameters'];
+            $stmt = $db->prepare($statement);
+            $stmt->execute($parameterValues);
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                $result->rows[] = $row;
+            }
+            $result->setSuccess();
+        } catch (PDOException $ex) {
+            $result->setException($ex);
+        }
+        return $result;
+    }
+    
 }
-
-?>

@@ -2,12 +2,12 @@
 
 namespace AcSql\Database;
 require_once __DIR__ . './../../../autocode-data-dictionary/vendor/autoload.php';
-use AcDataDictionary\Enums\AcEnumDDFieldType;
-use AcDataDictionary\Enums\AcEnumDDFieldProperty;
+use AcDataDictionary\Enums\AcEnumDDColumnType;
+use AcDataDictionary\Enums\AcEnumDDColumnProperty;
 use AcDataDictionary\Models\AcDDTable;
-use AcDataDictionary\Models\AcDDTableField;
+use AcDataDictionary\Models\AcDDTableColumn;
 use AcDataDictionary\Models\AcDataDictionary;
-use AcDataDictionary\Models\AcDDTableFieldProperty; 
+use AcDataDictionary\Models\AcDDTableColumnProperty; 
 class AcSchemaManagerTables {
     const SCHEMA_DETAILS = "_ac_schema_details";
     const SCHEMA_LOGS = "_ac_schema_logs";
@@ -44,81 +44,81 @@ class AcSMDataDictionary {
         AcDataDictionary::KEY_TABLES => [
             AcSchemaManagerTables::SCHEMA_DETAILS => [
                 AcDDTable::KEY_TABLE_NAME => AcSchemaManagerTables::SCHEMA_DETAILS,
-                AcDDTable::KEY_TABLE_FIELDS => [
+                AcDDTable::KEY_TABLE_COLUMNS => [
                     TblSchemaDetails::AC_SCHEMA_DETAIL_ID => [
-                        AcDDTableField::KEY_FIELD_NAME => TblSchemaDetails::AC_SCHEMA_DETAIL_ID,
-                        AcDDTableField::KEY_FIELD_TYPE => AcEnumDDFieldType::AUTO_INCREMENT,
-                        AcDDTableField::KEY_FIELD_PROPERTIES => [
-                            AcEnumDDFieldProperty::PRIMARY_KEY => [
-                                AcDDTableFieldProperty::KEY_PROPERTY_NAME => AcEnumDDFieldProperty::PRIMARY_KEY,
-                                AcDDTableFieldProperty::KEY_PROPERTY_VALUE => true,
+                        AcDDTableColumn::KEY_COLUMN_NAME => TblSchemaDetails::AC_SCHEMA_DETAIL_ID,
+                        AcDDTableColumn::KEY_COLUMN_TYPE => AcEnumDDColumnType::AUTO_INCREMENT,
+                        AcDDTableColumn::KEY_COLUMN_PROPERTIES => [
+                            AcEnumDDColumnProperty::PRIMARY_KEY => [
+                                AcDDTableColumnProperty::KEY_PROPERTY_NAME => AcEnumDDColumnProperty::PRIMARY_KEY,
+                                AcDDTableColumnProperty::KEY_PROPERTY_VALUE => true,
                             ]
                         ]
                     ],
                     TblSchemaDetails::AC_SCHEMA_DETAIL_KEY => [
-                        AcDDTableField::KEY_FIELD_NAME => TblSchemaDetails::AC_SCHEMA_DETAIL_KEY,
-                        AcDDTableField::KEY_FIELD_TYPE => AcEnumDDFieldType::STRING,
-                        AcDDTableField::KEY_FIELD_PROPERTIES => [
-                            AcEnumDDFieldProperty::CHECK_IN_SAVE => [
-                                AcDDTableFieldProperty::KEY_PROPERTY_NAME => AcEnumDDFieldProperty::CHECK_IN_SAVE,
-                                AcDDTableFieldProperty::KEY_PROPERTY_VALUE => true,
+                        AcDDTableColumn::KEY_COLUMN_NAME => TblSchemaDetails::AC_SCHEMA_DETAIL_KEY,
+                        AcDDTableColumn::KEY_COLUMN_TYPE => AcEnumDDColumnType::STRING,
+                        AcDDTableColumn::KEY_COLUMN_PROPERTIES => [
+                            AcEnumDDColumnProperty::CHECK_IN_SAVE => [
+                                AcDDTableColumnProperty::KEY_PROPERTY_NAME => AcEnumDDColumnProperty::CHECK_IN_SAVE,
+                                AcDDTableColumnProperty::KEY_PROPERTY_VALUE => true,
                             ]
                         ]
                     ],
                     TblSchemaDetails::AC_SCHEMA_DETAIL_STRING_VALUE => [
-                        AcDDTableField::KEY_FIELD_NAME => TblSchemaDetails::AC_SCHEMA_DETAIL_STRING_VALUE,
-                        AcDDTableField::KEY_FIELD_TYPE => AcEnumDDFieldType::TEXT,
-                        AcDDTableField::KEY_FIELD_PROPERTIES => []
+                        AcDDTableColumn::KEY_COLUMN_NAME => TblSchemaDetails::AC_SCHEMA_DETAIL_STRING_VALUE,
+                        AcDDTableColumn::KEY_COLUMN_TYPE => AcEnumDDColumnType::TEXT,
+                        AcDDTableColumn::KEY_COLUMN_PROPERTIES => []
                     ],
                     TblSchemaDetails::AC_SCHEMA_DETAIL_NUMERIC_VALUE => [
-                        AcDDTableField::KEY_FIELD_NAME => TblSchemaDetails::AC_SCHEMA_DETAIL_NUMERIC_VALUE,
-                        AcDDTableField::KEY_FIELD_TYPE => AcEnumDDFieldType::DOUBLE,
-                        AcDDTableField::KEY_FIELD_PROPERTIES => []
+                        AcDDTableColumn::KEY_COLUMN_NAME => TblSchemaDetails::AC_SCHEMA_DETAIL_NUMERIC_VALUE,
+                        AcDDTableColumn::KEY_COLUMN_TYPE => AcEnumDDColumnType::DOUBLE,
+                        AcDDTableColumn::KEY_COLUMN_PROPERTIES => []
                     ]
                 ]
             ],
             AcSchemaManagerTables::SCHEMA_LOGS => [
                 AcDDTable::KEY_TABLE_NAME => AcSchemaManagerTables::SCHEMA_LOGS,
-                AcDDTable::KEY_TABLE_FIELDS => [
+                AcDDTable::KEY_TABLE_COLUMNS => [
                     TblSchemaLogs::AC_SCHEMA_LOG_ID => [
-                        AcDDTableField::KEY_FIELD_NAME => TblSchemaLogs::AC_SCHEMA_LOG_ID,
-                        AcDDTableField::KEY_FIELD_TYPE => AcEnumDDFieldType::AUTO_INCREMENT,
-                        AcDDTableField::KEY_FIELD_PROPERTIES => [
-                            AcEnumDDFieldProperty::PRIMARY_KEY => [
-                                AcDDTableFieldProperty::KEY_PROPERTY_NAME => AcEnumDDFieldProperty::PRIMARY_KEY,
-                                AcDDTableFieldProperty::KEY_PROPERTY_VALUE => true,
+                        AcDDTableColumn::KEY_COLUMN_NAME => TblSchemaLogs::AC_SCHEMA_LOG_ID,
+                        AcDDTableColumn::KEY_COLUMN_TYPE => AcEnumDDColumnType::AUTO_INCREMENT,
+                        AcDDTableColumn::KEY_COLUMN_PROPERTIES => [
+                            AcEnumDDColumnProperty::PRIMARY_KEY => [
+                                AcDDTableColumnProperty::KEY_PROPERTY_NAME => AcEnumDDColumnProperty::PRIMARY_KEY,
+                                AcDDTableColumnProperty::KEY_PROPERTY_VALUE => true,
                             ]
                         ]
                     ],
                     TblSchemaLogs::AC_SCHEMA_OPERATION => [
-                        AcDDTableField::KEY_FIELD_NAME => TblSchemaLogs::AC_SCHEMA_OPERATION,
-                        AcDDTableField::KEY_FIELD_TYPE => AcEnumDDFieldType::STRING,
-                        AcDDTableField::KEY_FIELD_PROPERTIES => []
+                        AcDDTableColumn::KEY_COLUMN_NAME => TblSchemaLogs::AC_SCHEMA_OPERATION,
+                        AcDDTableColumn::KEY_COLUMN_TYPE => AcEnumDDColumnType::STRING,
+                        AcDDTableColumn::KEY_COLUMN_PROPERTIES => []
                     ],
                     TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE => [
-                        AcDDTableField::KEY_FIELD_NAME => TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE,
-                        AcDDTableField::KEY_FIELD_TYPE => AcEnumDDFieldType::TEXT,
-                        AcDDTableField::KEY_FIELD_PROPERTIES => []
+                        AcDDTableColumn::KEY_COLUMN_NAME => TblSchemaLogs::AC_SCHEMA_ENTITY_TYPE,
+                        AcDDTableColumn::KEY_COLUMN_TYPE => AcEnumDDColumnType::TEXT,
+                        AcDDTableColumn::KEY_COLUMN_PROPERTIES => []
                     ],
                     TblSchemaLogs::AC_SCHEMA_ENTITY_NAME => [
-                        AcDDTableField::KEY_FIELD_NAME => TblSchemaLogs::AC_SCHEMA_ENTITY_NAME,
-                        AcDDTableField::KEY_FIELD_TYPE => AcEnumDDFieldType::TEXT,
-                        AcDDTableField::KEY_FIELD_PROPERTIES => []
+                        AcDDTableColumn::KEY_COLUMN_NAME => TblSchemaLogs::AC_SCHEMA_ENTITY_NAME,
+                        AcDDTableColumn::KEY_COLUMN_TYPE => AcEnumDDColumnType::TEXT,
+                        AcDDTableColumn::KEY_COLUMN_PROPERTIES => []
                     ],
                     TblSchemaLogs::AC_SCHEMA_OPERATION_STATEMENT => [
-                        AcDDTableField::KEY_FIELD_NAME => TblSchemaLogs::AC_SCHEMA_OPERATION_STATEMENT,
-                        AcDDTableField::KEY_FIELD_TYPE => AcEnumDDFieldType::TEXT,
-                        AcDDTableField::KEY_FIELD_PROPERTIES => []
+                        AcDDTableColumn::KEY_COLUMN_NAME => TblSchemaLogs::AC_SCHEMA_OPERATION_STATEMENT,
+                        AcDDTableColumn::KEY_COLUMN_TYPE => AcEnumDDColumnType::TEXT,
+                        AcDDTableColumn::KEY_COLUMN_PROPERTIES => []
                     ],
                     TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT => [
-                        AcDDTableField::KEY_FIELD_NAME => TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT,
-                        AcDDTableField::KEY_FIELD_TYPE => AcEnumDDFieldType::TEXT,
-                        AcDDTableField::KEY_FIELD_PROPERTIES => []
+                        AcDDTableColumn::KEY_COLUMN_NAME => TblSchemaLogs::AC_SCHEMA_OPERATION_RESULT,
+                        AcDDTableColumn::KEY_COLUMN_TYPE => AcEnumDDColumnType::TEXT,
+                        AcDDTableColumn::KEY_COLUMN_PROPERTIES => []
                     ],
                     TblSchemaLogs::AC_SCHEMA_OPERATION_TIMESTAMP => [
-                        AcDDTableField::KEY_FIELD_NAME => TblSchemaLogs::AC_SCHEMA_OPERATION_TIMESTAMP,
-                        AcDDTableField::KEY_FIELD_TYPE => AcEnumDDFieldType::TIMESTAMP,
-                        AcDDTableField::KEY_FIELD_PROPERTIES => []
+                        AcDDTableColumn::KEY_COLUMN_NAME => TblSchemaLogs::AC_SCHEMA_OPERATION_TIMESTAMP,
+                        AcDDTableColumn::KEY_COLUMN_TYPE => AcEnumDDColumnType::TIMESTAMP,
+                        AcDDTableColumn::KEY_COLUMN_PROPERTIES => []
                     ]
                 ]
             ]

@@ -2,11 +2,9 @@
 namespace AcSql\Models;
 
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
-require_once __DIR__.'./../Enums/AcEnumRowOperation.php';
 use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Models\AcResult;
-use Autocode\Utils\AcUtilsJson;
-use AcSql\Enums\AcEnumRowOperation;
+use AcDataDictionary\Enums\AcEnumDDRowOperation;
 
 
 class AcSqlDaoResult extends AcResult {
@@ -14,7 +12,7 @@ class AcSqlDaoResult extends AcResult {
     const KEY_AFFECTED_ROWS_COUNT = 'affected_rows_count';
     const KEY_LAST_INSERTED_ID = 'last_inserted_id';
     const KEY_OPERATION = 'operation';
-    const KEY_PRIMARY_KEY_FIELD = 'primary_key_field';
+    const KEY_PRIMARY_KEY_COLUMN = 'primary_key_column';
     const KEY_PRIMARY_KEY_VALUE = 'primary_key_value';
 
     public array $rows = [];
@@ -27,15 +25,15 @@ class AcSqlDaoResult extends AcResult {
 
     #[AcBindJsonProperty(key: AcSqlDaoResult::KEY_LAST_INSERTED_ID)]
     public mixed $lastInsertedIds = null;
-    public string $operation = AcEnumRowOperation::UNKNOWN;
+    public string $operation = AcEnumDDRowOperation::UNKNOWN;
 
-    #[AcBindJsonProperty(key: AcSqlDaoResult::KEY_PRIMARY_KEY_FIELD)]
-    public ?string $primaryKeyField = null;
+    #[AcBindJsonProperty(key: AcSqlDaoResult::KEY_PRIMARY_KEY_COLUMN)]
+    public ?string $primaryKeyColumn = null;
 
     #[AcBindJsonProperty(key: AcSqlDaoResult::KEY_PRIMARY_KEY_VALUE)]
     public mixed $primaryKeyValue = null;
 
-    public function __construct(?string $operation = AcEnumRowOperation::UNKNOWN) {        
+    public function __construct(?string $operation = AcEnumDDRowOperation::UNKNOWN) {        
         $this->operation = $operation;       
     }
 

@@ -2,7 +2,7 @@
 namespace AcWeb\ApiDocs\Models;
 
 use AcWeb\ApiDocs\Models\AcApiDocRoute;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 class AcApiDocPath {
     const KEY_URL = "url";
@@ -33,12 +33,12 @@ class AcApiDocPath {
     }
 
     public function fromJson(array $jsonData): static {
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {

@@ -11,7 +11,7 @@ use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Models\AcDDTable;
 use Exception;
 
-class AcSqlDbTableRowEvent{
+class AcSqlDbRowEvent{
     public AcLogger $logger;
     public string $tableName = "";
     public string $dataDictionaryName = "default";

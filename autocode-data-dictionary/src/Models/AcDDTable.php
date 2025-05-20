@@ -2,23 +2,23 @@
 
 namespace AcDataDictionary\Models;
 
-require_once 'AcDDTableField.php';
+require_once 'AcDDTableColumn.php';
 require_once 'AcDDTableProperty.php';
 require_once 'AcDataDictionary.php';
 use AcDataDictionary\Models\AcDataDictionary;
 use AcDataDictionary\Enums\AcEnumDDTableProperty;
-use AcDataDictionary\Models\AcDDTableField;
+use AcDataDictionary\Models\AcDDTableColumn;
 use AcDataDictionary\Models\AcDDTableProperty;
 use Autocode\Annotaions\AcBindJsonProperty;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 class AcDDTable {
-    const KEY_TABLE_FIELDS = "table_fields";
+    const KEY_TABLE_COLUMNS = "table_columns";
     const KEY_TABLE_NAME = "table_name";
     const KEY_TABLE_PROPERTIES = "table_properties";
 
-    #[AcBindJsonProperty(key: AcDDTable::KEY_TABLE_FIELDS)]
-    public array $tableFields = [];
+    #[AcBindJsonProperty(key: AcDDTable::KEY_TABLE_COLUMNS)]
+    public array $tableColumns = [];
 
     #[AcBindJsonProperty(key: AcDDTable::KEY_TABLE_NAME)]
     public string $tableName = "";    
@@ -43,71 +43,71 @@ class AcDDTable {
         return $result;
     }
 
-    public function getField(string $fieldName): ?AcDDTableField {
+    public function getColumn(string $columnName): ?AcDDTableColumn {
         $result = null;
-        foreach($this->tableFields as $field){
-            if( $field->fieldName == $fieldName ){
-                $result = $field;
+        foreach($this->tableColumns as $column){
+            if( $column->columnName == $columnName ){
+                $result = $column;
             }
         }
         return $result;
     }
 
-    public function getFieldNames(): array {
+    public function getColumnNames(): array {
         $result = [];
-        foreach($this->tableFields as $field){
-            $result[] = $field->fieldName;
+        foreach($this->tableColumns as $column){
+            $result[] = $column->columnName;
         }
         return $result;
     }
 
-    public function getPrimaryKeyFieldName(): string {
+    public function getPrimaryKeyColumnName(): string {
         $result = "";
-        $primaryKeyField = $this->getPrimaryKeyField();
-        if($primaryKeyField!=null){
-            $result = $primaryKeyField->fieldName;
+        $primaryKeyColumn = $this->getPrimaryKeyColumn();
+        if($primaryKeyColumn!=null){
+            $result = $primaryKeyColumn->columnName;
         }
         return $result;
     }
 
-    public function getPrimaryKeyField(): ?AcDDTableField {
-        $primaryKeyFields = $this->getPrimaryKeyFields();
-        return !empty($primaryKeyFields) ? $primaryKeyFields[0] : null;
+    public function getPrimaryKeyColumn(): ?AcDDTableColumn {
+        $primaryKeyColumns = $this->getPrimaryKeyColumns();
+        return !empty($primaryKeyColumns) ? $primaryKeyColumns[0] : null;
     }
 
-    public function getPrimaryKeyFields(): array {
+    public function getPrimaryKeyColumns(): array {
         $result = [];
-        foreach ($this->tableFields as $tableField) {
-            if ($tableField->isPrimaryKey()) {
-                $result[] = $tableField;
+        foreach ($this->tableColumns as $tableColumn) {
+            if ($tableColumn->isPrimaryKey()) {
+                $result[] = $tableColumn;
             }
         }
         return $result;
     }
 
-    public function getSearchQueryFieldNames(): array {
+    public function getSearchQueryColumnNames(): array {
         $result = [];
-        foreach ($this->getSearchQueryFields() as $tableField) {
-            $result[] = $tableField->fieldName;
+        foreach ($this->getSearchQueryColumns() as $tableColumn) {
+            $result[] = $tableColumn->columnName;
         }
         return $result;
     }
 
-    public function getSearchQueryFields(): array {
+    public function getSearchQueryColumns(): array {
         $result = [];
-        foreach ($this->tableFields as $tableField) {
-            if ($tableField->isInSearchQuery()) {
-                $result[] = $tableField;
+        foreach ($this->tableColumns as $tableColumn) {
+            if ($tableColumn->isInSearchQuery()) {
+                $result[] = $tableColumn;
             }
         }
         return $result;
     }
 
-    public function getForeignKeyFields(): array {
+    public function getForeignKeyColumns(): array {
         $result = [];
-        foreach ($this->tableFields as $tableField) {
-            if ($tableField->foreignKey) {
-                $result[] = $tableField;
+        foreach ($this->tableColumns as $tableColumn) {
+            if ($tableColumn->foreignKey) {
+                $result[] = $tableColumn;
             }
         }
         return $result;
@@ -133,24 +133,24 @@ class AcDDTable {
         return $result;
     }
 
-    public function getSelectDistinctFields(): array {
+    public function getSelectDistinctColumns(): array {
         $result = [];
-        foreach ($this->tableFields as $field) {
-            if($field->isSelectDistinct()){
-                $result[] = $field;
+        foreach ($this->tableColumns as $column) {
+            if($column->isSelectDistinct()){
+                $result[] = $column;
             }
         }
         return $result;
     }
 
     public function fromJson(array $jsonData = []): static {
-        if (isset($jsonData[self::KEY_TABLE_FIELDS]) && is_array($jsonData[self::KEY_TABLE_FIELDS])) {
-            foreach ($jsonData[self::KEY_TABLE_FIELDS] as $fieldName => $fieldData) {
-                $field = AcDDTableField::instanceFromJson($fieldData);
-                $field->table = $this;
-                $this->tableFields[$fieldName] = $field;
+        if (isset($jsonData[self::KEY_TABLE_COLUMNS]) && is_array($jsonData[self::KEY_TABLE_COLUMNS])) {
+            foreach ($jsonData[self::KEY_TABLE_COLUMNS] as $columnName => $columnData) {
+                $column = AcDDTableColumn::instanceFromJson($columnData);
+                $column->table = $this;
+                $this->tableColumns[$columnName] = $column;
             }
-            unset( $jsonData[self::KEY_TABLE_FIELDS]);
+            unset( $jsonData[self::KEY_TABLE_COLUMNS]);
         }
 
         if (isset($jsonData[self::KEY_TABLE_PROPERTIES]) && is_array($jsonData[self::KEY_TABLE_PROPERTIES])) {
@@ -160,12 +160,12 @@ class AcDDTable {
             unset($jsonData[self::KEY_TABLE_PROPERTIES]);
         }
 
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {

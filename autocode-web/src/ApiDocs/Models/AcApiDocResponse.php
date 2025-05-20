@@ -1,16 +1,20 @@
 <?php
 namespace AcWeb\ApiDocs\Models;
 
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Annotaions\AcBindJsonProperty;
+use Autocode\Utils\AcJsonUtils;
 
 
 class AcApiDocResponse {
+    const KEY_CODE = 'code';
     const KEY_DESCRIPTION = 'description';
     const KEY_HEADERS = 'headers';
     const KEY_CONTENT = 'content';
     const KEY_LINKS = 'links';
+    public int $code = 0;
     public string $description = '';
     public array $headers = [];
+    #[AcBindJsonProperty(key: AcApiDocRoute::KEY_RESPONSES, skipInToJson:true)]
     public array $content = [];
     public array $links = [];
 
@@ -20,8 +24,11 @@ class AcApiDocResponse {
         return $instance;
     }
 
-    public function fromJson(array $jsonData): static {
+    public function addContent(AcApiDocContent $content): void{
+        $this->content[] = $content;
+    }
 
+    public function fromJson(array $jsonData): static {
         if (isset($jsonData[self::KEY_CONTENT])) {
             foreach ($jsonData[self::KEY_CONTENT] as $mime => $contentJson) {
                 $this->content[$mime] = AcApiDocContent::instanceFromJson($contentJson);
@@ -42,12 +49,19 @@ class AcApiDocResponse {
             }
             unset($jsonData[self::KEY_LINKS]);
         }
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        $result = AcJsonUtils::getJsonDataFromInstance(instance: $this);;
+        if(sizeof($this->content) > 0){
+            $result[self::KEY_CONTENT] = [];
+            foreach ($this->content as $content) {
+                $result[self::KEY_CONTENT][$content->encoding] = $content->toJson();
+            }
+        }
+        return $result;
     }
 
     public function __toString(): string {

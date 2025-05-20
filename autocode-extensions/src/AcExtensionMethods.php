@@ -29,8 +29,8 @@ class AcExtensionMethods {
 
         AcBlobExtensions::toBase64 as blobToBase64;
    
-        AcFileExtensions::toBlobObject as fileToBlobObject;
-        AcFileExtensions::toBytesObject as fileToBytesObject;
+        AcFileExtensions::toBlobJson as fileToBlobJson;
+        AcFileExtensions::toBytesJson as fileToBytesJson;
         
         AcNumberExtensions::isEven as numberIsEven;
         AcNumberExtensions::isOdd as numberIsOdd;

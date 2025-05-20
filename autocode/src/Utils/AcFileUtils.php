@@ -2,7 +2,7 @@
 
 namespace Autocode\Utils;
 
-class AcUtilsFile
+class AcFileUtils
 {
     const values = [
         "323" => ["mime_type" => "text/h323"],

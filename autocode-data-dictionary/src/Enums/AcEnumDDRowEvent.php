@@ -2,7 +2,7 @@
 
 namespace AcDataDictionary\Enums;
 
-class AcEnumDDTableRowEvent {
+class AcEnumDDRowEvent {
     const AFTER_DELETE = "after_delete";
     const AFTER_FORMAT = "after_format";
     const AFTER_INSERT = "after_insert";

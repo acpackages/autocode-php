@@ -1,16 +1,16 @@
 <?php
 
 namespace AcDataDictionary\Models;
-require_once 'AcDDTableField.php';
+require_once 'AcDDTableColumn.php';
 require_once 'AcDDTableProperty.php';
 require_once 'AcDataDictionary.php';
 use AcDataDictionary\Enums\AcEnumDDConditionOperator;
-use AcDataDictionary\Enums\AcEnumDDFieldType;
+use AcDataDictionary\Enums\AcEnumDDColumnType;
 use AcDataDictionary\Enums\AcEnumDDLogicalOperator;
 use AcExtensions\AcExtensionMethods;
 use Autocode\Annotaions\AcBindJsonProperty;
 use Autocode\Enums\AcEnumSqlDatabaseType;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 class AcDDSelectStatement
 {
@@ -18,8 +18,8 @@ class AcDDSelectStatement
     const KEY_CONDITION_GROUP = "condition_group";
     const KEY_DATABASE_TYPE = "database_type";
     const KEY_DATA_DICTIONARY_NAME = "data_dictionary_name";
-    const KEY_EXCLUDE_FIELDS = "exclude_fields";
-    const KEY_INCLUDE_FIELDS = "include_fields";
+    const KEY_EXCLUDE_COLUMNS = "exclude_columns";
+    const KEY_INCLUDE_COLUMNS = "include_columns";
     const KEY_ORDER_BY = "order_by";
     const KEY_PAGE_NUMBER = "page_number";
     const KEY_PAGE_SIZE = "page_size";
@@ -39,13 +39,13 @@ class AcDDSelectStatement
     #[AcBindJsonProperty(key: AcDDSelectStatement::KEY_DATA_DICTIONARY_NAME)]
     public string $dataDictionaryName = "";
 
-    #[AcBindJsonProperty(key: AcDDSelectStatement::KEY_EXCLUDE_FIELDS)]
-    public array $excludeFields = [];
+    #[AcBindJsonProperty(key: AcDDSelectStatement::KEY_EXCLUDE_COLUMNS)]
+    public array $excludeColumns = [];
 
     private array $groupStack = [];
 
-    #[AcBindJsonProperty(key: AcDDSelectStatement::KEY_INCLUDE_FIELDS)]
-    public array $includeFields = [];
+    #[AcBindJsonProperty(key: AcDDSelectStatement::KEY_INCLUDE_COLUMNS)]
+    public array $includeColumns = [];
 
     #[AcBindJsonProperty(key: AcDDSelectStatement::KEY_ORDER_BY)]
     public string $orderBy = "";
@@ -95,8 +95,8 @@ class AcDDSelectStatement
         $this->groupStack[] = &$this->conditionGroup;
     }
 
-    public function addCondition(string $fieldName, string $operator, mixed $value): static {
-        $this->groupStack[count($this->groupStack) - 1]->addCondition(fieldName: $fieldName, operator: $operator, value: $value);
+    public function addCondition(string $columnName, string $operator, mixed $value): static {
+        $this->groupStack[count($this->groupStack) - 1]->addCondition(columnName: $columnName, operator: $operator, value: $value);
         return $this;
     }
 
@@ -113,27 +113,27 @@ class AcDDSelectStatement
     }
 
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function getSqlStatement(?bool $skipCondition = false,?bool $skipSelectStatement = false): string {
         if(!$skipSelectStatement){
             $acDDTable = AcDataDictionary::getTable(tableName: $this->tableName, dataDictionaryName: $this->dataDictionaryName);
-            $fields = [];
-            if (empty($this->includeFields) && empty($this->excludeFields)) {
-                $fields[] = "*";
-            } else if (!empty($this->includeFields)) {
-                $fields = $this->includeFields;
-            } else if (!empty($this->excludeFields)) {
-                foreach ($acDDTable->getFieldNames() as $fieldName) {
-                    if (!in_array($fieldName, $this->excludeFields)) {
-                        $fields[] = $fieldName;
+            $columns = [];
+            if (empty($this->includeColumns) && empty($this->excludeColumns)) {
+                $columns[] = "*";
+            } else if (!empty($this->includeColumns)) {
+                $columns = $this->includeColumns;
+            } else if (!empty($this->excludeColumns)) {
+                foreach ($acDDTable->getColumnNames() as $columnName) {
+                    if (!in_array($columnName, $this->excludeColumns)) {
+                        $columns[] = $columnName;
                     }
                 }
             }
-            $fieldsList = implode(separator: ",", array: $fields);
-            $this->selectStatement = "SELECT $fieldsList FROM " . $this->tableName;
+            $columnsList = implode(separator: ",", array: $columns);
+            $this->selectStatement = "SELECT $columnsList FROM " . $this->tableName;
         }        
         if(!$skipCondition){
             $this->condition = "";
@@ -160,7 +160,7 @@ class AcDDSelectStatement
             if (is_array($acDDCondition->value) && count($acDDCondition->value) == 2) {
                 $parameterName = "@parameter" . count($this->parameters);
                 $this->parameters[$parameterName] = $acDDCondition->value[0];
-                $this->condition .= $acDDCondition->fieldName . " BETWEEN " . $parameterName;
+                $this->condition .= $acDDCondition->columnName . " BETWEEN " . $parameterName;
                 $parameterName = "@parameter" . count($this->parameters);
                 $this->parameters[$parameterName] = $acDDCondition->value[0];
                 $this->condition .= " AND " . $parameterName;
@@ -168,15 +168,15 @@ class AcDDSelectStatement
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::EQUAL_TO) {
             $parameterName = "@parameter" . count($this->parameters);
             $this->parameters[$parameterName] = $acDDCondition->value;
-            $this->condition .= $acDDCondition->fieldName . " = " . $parameterName;
+            $this->condition .= $acDDCondition->columnName . " = " . $parameterName;
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::GREATER_THAN) {
             $parameterName = "@parameter" . count($this->parameters);
             $this->parameters[$parameterName] = $acDDCondition->value;
-            $this->condition .= $acDDCondition->fieldName . " > " . $parameterName;
+            $this->condition .= $acDDCondition->columnName . " > " . $parameterName;
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::GREATER_THAN_EQUAL_TO) {
             $parameterName = "@parameter" . count($this->parameters);
             $this->parameters[$parameterName] = $acDDCondition->value;
-            $this->condition .= $acDDCondition->fieldName . " >= " . $parameterName;
+            $this->condition .= $acDDCondition->columnName . " >= " . $parameterName;
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::IN) {
             $parameterName = "@parameter" . count($this->parameters);
             if (is_string($acDDCondition->value)) {
@@ -184,27 +184,27 @@ class AcDDSelectStatement
             } else {
                 $this->parameters[$parameterName] = $acDDCondition->value;
             }
-            $this->condition .= $acDDCondition->fieldName . " IN (" . $parameterName . ")";
+            $this->condition .= $acDDCondition->columnName . " IN (" . $parameterName . ")";
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::IS_EMPTY) {
-            $this->condition .= $acDDCondition->fieldName . " = ''";
+            $this->condition .= $acDDCondition->columnName . " = ''";
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::IS_NOT_NULL) {
-            $this->condition .= $acDDCondition->fieldName . " IS NOT NULL";
+            $this->condition .= $acDDCondition->columnName . " IS NOT NULL";
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::IS_NULL) {
-            $this->condition .= $acDDCondition->fieldName . " IS NULL";
+            $this->condition .= $acDDCondition->columnName . " IS NULL";
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::LESS_THAN) {
             $parameterName = "@parameter" . count($this->parameters);
             $this->parameters[$parameterName] = $acDDCondition->value;
-            $this->condition .= $acDDCondition->fieldName . " < " . $parameterName;
+            $this->condition .= $acDDCondition->columnName . " < " . $parameterName;
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::LESS_THAN_EQUAL_TO) {
             $parameterName = "@parameter" . count($this->parameters);
             $this->parameters[$parameterName] = $acDDCondition->value;
-            $this->condition .= $acDDCondition->fieldName . " <= " . $parameterName;
+            $this->condition .= $acDDCondition->columnName . " <= " . $parameterName;
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::LIKE) {
             $this->setSqlLikeStringCondition(acDDCondition: $acDDCondition);
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::NOT_EQUAL_TO) {
             $parameterName = "@parameter" . count($this->parameters);
             $this->parameters[$parameterName] = $acDDCondition->value;
-            $this->condition .= $acDDCondition->fieldName . " != " . $parameterName;
+            $this->condition .= $acDDCondition->columnName . " != " . $parameterName;
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::NOT_IN) {
             $parameterName = "@parameter" . count($this->parameters);
             if (is_string($acDDCondition->value)) {
@@ -212,7 +212,7 @@ class AcDDSelectStatement
             } else {
                 $this->parameters[$parameterName] = $acDDCondition->value;
             }
-            $this->condition .= $acDDCondition->fieldName . " NOT IN (" . $parameterName . ")";
+            $this->condition .= $acDDCondition->columnName . " NOT IN (" . $parameterName . ")";
         }
         return $this;
     }
@@ -240,24 +240,24 @@ class AcDDSelectStatement
     }
 
     private function setSqlLikeStringCondition(AcDDCondition $acDDCondition): static {
-        $acDDTableField = AcDataDictionary::getTableField(tableName: $this->tableName, fieldName: $acDDCondition->fieldName, dataDictionaryName: $this->dataDictionaryName);
-        $fieldCheck = 'LOWER(' . $acDDCondition->fieldName . ')';
+        $acDDTableColumn = AcDataDictionary::getTableColumn(tableName: $this->tableName, columnName: $acDDCondition->columnName, dataDictionaryName: $this->dataDictionaryName);
+        $columnCheck = 'LOWER(' . $acDDCondition->columnName . ')';
         $likeValue = strtolower($acDDCondition->value);
-        $jsonField = "value";
-        if ($acDDTableField->fieldType == AcEnumDDFieldType::JSON || $acDDTableField->fieldType == AcEnumDDFieldType::MEDIA_JSON) {
+        $jsonColumn = "value";
+        if ($acDDTableColumn->columnType == AcEnumDDColumnType::JSON ) {
             $parameter1 = "@parameter" . count($this->parameters);
-            $this->parameters[$parameter1] = "%\"$jsonField\":\"$likeValue%\"%";
+            $this->parameters[$parameter1] = "%\"$jsonColumn\":\"$likeValue%\"%";
             $parameter2 = "@parameter" . count($this->parameters);
-            $this->parameters[$parameter2] = "%\"$jsonField\":\"%$likeValue%\"%";
+            $this->parameters[$parameter2] = "%\"$jsonColumn\":\"%$likeValue%\"%";
             $parameter3 = "@parameter" . count($this->parameters);
-            $this->parameters[$parameter3] = "%\"$jsonField\":\"%$likeValue\"%";
-            $this->condition .= '(' . $fieldCheck . ' LIKE ' . $parameter1 . ' OR  ' . $fieldCheck . ' LIKE ' . $parameter2 . ' OR ' . $fieldCheck . ' LIKE ' . $parameter3 . ')';
+            $this->parameters[$parameter3] = "%\"$jsonColumn\":\"%$likeValue\"%";
+            $this->condition .= '(' . $columnCheck . ' LIKE ' . $parameter1 . ' OR  ' . $columnCheck . ' LIKE ' . $parameter2 . ' OR ' . $columnCheck . ' LIKE ' . $parameter3 . ')';
         } else {
             $parameter1 = "@parameter" . count($this->parameters);
             $this->parameters[$parameter1] = $likeValue . "%";
             $parameter2 = "@parameter" . count($this->parameters);
             $this->parameters[$parameter2] = "%" . $likeValue . "%";
-            $this->condition .= '(' . $fieldCheck . ' LIKE ' . $parameter1 . ' OR ' . $fieldCheck . ' LIKE ' . $parameter2 . ')';
+            $this->condition .= '(' . $columnCheck . ' LIKE ' . $parameter1 . ' OR ' . $columnCheck . ' LIKE ' . $parameter2 . ')';
         }
         return $this;
     }
@@ -270,7 +270,7 @@ class AcDDSelectStatement
     }
 
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {

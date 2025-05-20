@@ -1,7 +1,7 @@
 <?php
 namespace AcWeb\Models;
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 class AcWebRequest {
     const KEY_COOKIES = 'cookies';
@@ -32,12 +32,12 @@ class AcWebRequest {
     }
 
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {

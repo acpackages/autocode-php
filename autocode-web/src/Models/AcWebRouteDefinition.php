@@ -2,7 +2,7 @@
 namespace AcWeb\Models;
 require_once __DIR__.'./../../../autocode/vendor/autoload.php';
 use AcWeb\ApiDocs\Models\AcApiDocRoute;
-use Autocode\Utils\AcUtilsJson;
+use Autocode\Utils\AcJsonUtils;
 
 class AcWebRouteDefinition {
     const KEY_CONTROLLER = 'controller';
@@ -25,12 +25,12 @@ class AcWebRouteDefinition {
     }
 
     public function fromJson(array $jsonData = []): static {
-        AcUtilsJson::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
+        AcJsonUtils::setInstancePropertiesFromJsonData(instance: $this, jsonData: $jsonData);
         return $this;
     }
 
     public function toJson(): array {
-        return AcUtilsJson::getJsonDataFromInstance(instance: $this);
+        return AcJsonUtils::getJsonDataFromInstance(instance: $this);
     }
 
     public function __toString(): string {
