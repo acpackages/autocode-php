@@ -14,6 +14,7 @@ class AcSqlDaoResult extends AcResult {
     const KEY_OPERATION = 'operation';
     const KEY_PRIMARY_KEY_COLUMN = 'primary_key_column';
     const KEY_PRIMARY_KEY_VALUE = 'primary_key_value';
+    const KEY_TOTAL_ROWS = 'total_rows';
 
     public array $rows = [];
 
@@ -32,6 +33,9 @@ class AcSqlDaoResult extends AcResult {
 
     #[AcBindJsonProperty(key: AcSqlDaoResult::KEY_PRIMARY_KEY_VALUE)]
     public mixed $primaryKeyValue = null;
+
+    #[AcBindJsonProperty(key: AcSqlDaoResult::KEY_TOTAL_ROWS)]
+    public int $totalRows = 0;
 
     public function __construct(?string $operation = AcEnumDDRowOperation::UNKNOWN) {        
         $this->operation = $operation;       

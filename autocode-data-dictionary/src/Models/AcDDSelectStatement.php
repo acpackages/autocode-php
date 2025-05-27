@@ -117,7 +117,7 @@ class AcDDSelectStatement
         return $this;
     }
 
-    public function getSqlStatement(?bool $skipCondition = false,?bool $skipSelectStatement = false): string {
+    public function getSqlStatement(?bool $skipCondition = false,?bool $skipSelectStatement = false,?bool $skipLimit = false): string {
         if(!$skipSelectStatement){
             $acDDTable = AcDataDictionary::getTable(tableName: $this->tableName, dataDictionaryName: $this->dataDictionaryName);
             $columns = [];
@@ -140,7 +140,12 @@ class AcDDSelectStatement
             $this->parameters = [];
             $this->setSqlConditionGroup(acDDConditionGroup: $this->conditionGroup, includeParenthesis: false);
         }
-        $this->sqlStatement = self::generateSqlStatement(selectStatement: $this->selectStatement, condition: $this->condition, orderBy: $this->orderBy, pageNumber: $this->pageNumber, pageSize: $this->pageSize, databaseType: $this->databaseType);
+        if($skipLimit){
+            $this->sqlStatement = self::generateSqlStatement(selectStatement: $this->selectStatement, condition: $this->condition, orderBy: $this->orderBy, databaseType: $this->databaseType);
+        }
+        else{
+            $this->sqlStatement = self::generateSqlStatement(selectStatement: $this->selectStatement, condition: $this->condition, orderBy: $this->orderBy, pageNumber: $this->pageNumber, pageSize: $this->pageSize, databaseType: $this->databaseType);
+        }        
         return $this->sqlStatement;
     }
 
@@ -165,6 +170,10 @@ class AcDDSelectStatement
                 $this->parameters[$parameterName] = $acDDCondition->value[0];
                 $this->condition .= " AND " . $parameterName;
             }
+        } else if ($acDDCondition->operator == AcEnumDDConditionOperator::CONTAINS) {
+            $this->setSqlLikeStringCondition(acDDCondition: $acDDCondition);
+        } else if ($acDDCondition->operator == AcEnumDDConditionOperator::ENDS_WITH) {
+            $this->setSqlLikeStringCondition(acDDCondition: $acDDCondition,includeInBetween: false,includeStart: false);
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::EQUAL_TO) {
             $parameterName = "@parameter" . count($this->parameters);
             $this->parameters[$parameterName] = $acDDCondition->value;
@@ -199,8 +208,6 @@ class AcDDSelectStatement
             $parameterName = "@parameter" . count($this->parameters);
             $this->parameters[$parameterName] = $acDDCondition->value;
             $this->condition .= $acDDCondition->columnName . " <= " . $parameterName;
-        } else if ($acDDCondition->operator == AcEnumDDConditionOperator::LIKE) {
-            $this->setSqlLikeStringCondition(acDDCondition: $acDDCondition);
         } else if ($acDDCondition->operator == AcEnumDDConditionOperator::NOT_EQUAL_TO) {
             $parameterName = "@parameter" . count($this->parameters);
             $this->parameters[$parameterName] = $acDDCondition->value;
@@ -213,6 +220,8 @@ class AcDDSelectStatement
                 $this->parameters[$parameterName] = $acDDCondition->value;
             }
             $this->condition .= $acDDCondition->columnName . " NOT IN (" . $parameterName . ")";
+        } else if ($acDDCondition->operator == AcEnumDDConditionOperator::STARTS_WITH) {
+            $this->setSqlLikeStringCondition(acDDCondition: $acDDCondition,includeInBetween: false,includeEnd: false);
         }
         return $this;
     }
@@ -239,25 +248,47 @@ class AcDDSelectStatement
         return $this;
     }
 
-    private function setSqlLikeStringCondition(AcDDCondition $acDDCondition): static {
+    private function setSqlLikeStringCondition(AcDDCondition $acDDCondition,bool $includeEnd = true,$includeInBetween = true,$includeStart = true): static {
         $acDDTableColumn = AcDataDictionary::getTableColumn(tableName: $this->tableName, columnName: $acDDCondition->columnName, dataDictionaryName: $this->dataDictionaryName);
         $columnCheck = 'LOWER(' . $acDDCondition->columnName . ')';
         $likeValue = strtolower($acDDCondition->value);
         $jsonColumn = "value";
+        $conditionParts = [];
         if ($acDDTableColumn->columnType == AcEnumDDColumnType::JSON ) {
-            $parameter1 = "@parameter" . count($this->parameters);
-            $this->parameters[$parameter1] = "%\"$jsonColumn\":\"$likeValue%\"%";
-            $parameter2 = "@parameter" . count($this->parameters);
-            $this->parameters[$parameter2] = "%\"$jsonColumn\":\"%$likeValue%\"%";
-            $parameter3 = "@parameter" . count($this->parameters);
-            $this->parameters[$parameter3] = "%\"$jsonColumn\":\"%$likeValue\"%";
-            $this->condition .= '(' . $columnCheck . ' LIKE ' . $parameter1 . ' OR  ' . $columnCheck . ' LIKE ' . $parameter2 . ' OR ' . $columnCheck . ' LIKE ' . $parameter3 . ')';
+            if($includeStart) {
+                $parameter1 = "@parameter" . count($this->parameters);
+                $this->parameters[$parameter1] = "%\"$jsonColumn\":\"$likeValue%\"%";
+                $conditionParts[] = "$columnCheck LIKE $parameter1";
+            }
+            if($includeInBetween) {
+                $parameter2 = "@parameter" . count($this->parameters);
+                $this->parameters[$parameter2] = "%\"$jsonColumn\":\"%$likeValue%\"%";
+                $conditionParts[] = "$columnCheck LIKE $parameter2";
+            }
+            if($includeEnd) {
+                $parameter3 = "@parameter" . count($this->parameters);
+                $this->parameters[$parameter3] = "%\"$jsonColumn\":%\"$likeValue\"";
+                $conditionParts[] = "$columnCheck LIKE $parameter3";
+            }
         } else {
-            $parameter1 = "@parameter" . count($this->parameters);
-            $this->parameters[$parameter1] = $likeValue . "%";
-            $parameter2 = "@parameter" . count($this->parameters);
-            $this->parameters[$parameter2] = "%" . $likeValue . "%";
-            $this->condition .= '(' . $columnCheck . ' LIKE ' . $parameter1 . ' OR ' . $columnCheck . ' LIKE ' . $parameter2 . ')';
+            if($includeStart) {
+                $parameter1 = "@parameter" . count($this->parameters);
+                $this->parameters[$parameter1] = $likeValue . "%";
+                $conditionParts[] = "$columnCheck LIKE $parameter1";
+            }
+            if($includeInBetween) {
+                $parameter2 = "@parameter" . count($this->parameters);
+                $this->parameters[$parameter2] = "%" . $likeValue . "%";
+                $conditionParts[] = "$columnCheck LIKE $parameter2";
+            }
+            if($includeEnd) {
+                $parameter3 = "@parameter" . count($this->parameters);
+                $this->parameters[$parameter3] = "%" . $likeValue . "";
+                $conditionParts[] = "$columnCheck LIKE $parameter3";
+            }
+        }
+        if(sizeof($conditionParts)>0){
+            $this->condition .= "(".implode(array: $conditionParts,separator: " OR ").")";
         }
         return $this;
     }

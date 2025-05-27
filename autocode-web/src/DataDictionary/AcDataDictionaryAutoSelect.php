@@ -3,6 +3,7 @@ namespace AcWeb\DataDictionary;
 use AcDataDictionary\Enums\AcEnumDDConditionOperator;
 use AcDataDictionary\Enums\AcEnumDDLogicalOperator;
 use AcDataDictionary\Enums\AcEnumDDRowOperation;
+use AcDataDictionary\Enums\AcEnumDDSelectMode;
 use AcDataDictionary\Models\AcDDSelectStatement;
 use AcDataDictionary\Models\AcDDTable;
 use AcExtensions\AcExtensionMethods;
@@ -85,15 +86,18 @@ class AcDataDictionaryAutoSelect {
                 $queryColumns = $this->acDDTable->getSearchQueryColumnNames();
                 $acDDSelectStatement->startGroup(operator:AcEnumDDLogicalOperator::OR);
                 foreach($queryColumns as $columnName){
-                    $acDDSelectStatement->addCondition(columnName:$columnName,operator:AcEnumDDConditionOperator::LIKE,value: $acWebRequest->get["query"]);
+                    $acDDSelectStatement->addCondition(columnName:$columnName,operator:AcEnumDDConditionOperator::CONTAINS,value: $acWebRequest->get["query"]);
                 }
                 $acDDSelectStatement->endGroup();
             }
             foreach ($this->acDDTable->tableColumns as $acDDTableColumn){
                 if(AcExtensionMethods::arrayContainsKey(key: $acDDTableColumn->columnName,array: $acWebRequest->get)){
-                    $acDDSelectStatement->addCondition(columnName:$acDDTableColumn->columnName,operator:AcEnumDDConditionOperator::LIKE,value: $acWebRequest->get[$acDDTableColumn->columnName]);
+                    $acDDSelectStatement->addCondition(columnName:$acDDTableColumn->columnName,operator:AcEnumDDConditionOperator::EQUAL_TO,value: $acWebRequest->get[$acDDTableColumn->columnName]);
                 }
             }
+            if(AcExtensionMethods::arrayContainsKey(key: "order_by",array: $acWebRequest->get)){
+                $acDDSelectStatement->orderBy = $acWebRequest->get["order_by"];
+            }            
             if(AcExtensionMethods::arrayContainsKey(key: "page_number",array: $acWebRequest->get)){
                 $acDDSelectStatement->pageNumber = intval($acWebRequest->get["page_number"]);
             }
@@ -106,15 +110,9 @@ class AcDataDictionaryAutoSelect {
             else{
                 $acDDSelectStatement->pageSize = 50;
             }
-            if(AcExtensionMethods::arrayContainsKey(key: "order_by",array: $acWebRequest->get)){
-                $acDDSelectStatement->orderBy = $acWebRequest->get["order_by"];
-            }            
-            $sqlStatement = $acDDSelectStatement->getSqlStatement();
-            $sqlParameters = $acDDSelectStatement->parameters;
-            $getResponse = $acSqlDbTable->getRows(
-                selectStatement: $sqlStatement, 
-                parameters: $sqlParameters,
-            );
+            $getResponse = $acSqlDbTable->getRowsFromAcDDStatement(
+                acDDSelectStatement: $acDDSelectStatement
+            );            
             return AcWebResponse::json($getResponse->toJson());
         };
         return $handler;
@@ -221,7 +219,7 @@ class AcDataDictionaryAutoSelect {
                 $queryColumns = $this->acDDTable->getSearchQueryColumnNames();
                 $acDDSelectStatement->startGroup(operator:AcEnumDDLogicalOperator::OR);
                 foreach($queryColumns as $columnName){
-                    $acDDSelectStatement->addCondition(columnName:$columnName,operator:AcEnumDDConditionOperator::LIKE,value: $acWebRequest->body["query"]);
+                    $acDDSelectStatement->addCondition(columnName:$columnName,operator:AcEnumDDConditionOperator::CONTAINS,value: $acWebRequest->body["query"]);
                 }
                 $acDDSelectStatement->endGroup();
             }
@@ -248,12 +246,9 @@ class AcDataDictionaryAutoSelect {
             if(AcExtensionMethods::arrayContainsKey(key: "order_by",array: $acWebRequest->body)){
                 $acDDSelectStatement->orderBy = $acWebRequest->body["order_by"];
             }            
-            $sqlStatement = $acDDSelectStatement->getSqlStatement();
-            $sqlParameters = $acDDSelectStatement->parameters;
-            $getResponse = $acSqlDbTable->getRows(
-                selectStatement: $sqlStatement, 
-                parameters: $sqlParameters,
-            );
+            $getResponse = $acSqlDbTable->getRowsFromAcDDStatement(
+                acDDSelectStatement: $acDDSelectStatement
+            );  
             $data = $getResponse->toJson();
             $data["sql_statement"] = $acDDSelectStatement->toJson();
             return AcWebResponse::json($data);

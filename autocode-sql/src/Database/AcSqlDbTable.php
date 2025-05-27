@@ -635,6 +635,23 @@ class AcSqlDbTable extends AcSqlDbBase
         return $result;
     }
 
+    public function getRowsFromAcDDStatement(AcDDSelectStatement $acDDSelectStatement): AcSqlDaoResult {
+        $result = new AcSqlDaoResult(operation: AcEnumDDRowOperation::SELECT);
+        try {
+            $sqlStatement = $acDDSelectStatement->getSqlStatement();
+            $sqlParameters = $acDDSelectStatement->parameters;
+            $result = $this->dao->getRows(statement: $sqlStatement, parameters: $sqlParameters,columnFormats:$this->getColumnFormats());
+            $countSqlStatement = $acDDSelectStatement->getSqlStatement(skipLimit:true);
+            $countResult = $this->dao->getRows(statement: $countSqlStatement, parameters: $sqlParameters,mode:AcEnumDDSelectMode::COUNT);
+            if($countResult->isSuccess()){
+                $result->totalRows = $countResult->totalRows;
+            }
+        } catch (Exception $ex) {
+            $result->setException(exception: $ex, logger: $this->logger, logException: true);
+        }
+        return $result;
+    }
+
     public function insertRow(array $row, ?AcResult $validateResult = null, bool $executeAfterEvent = true, bool $executeBeforeEvent = true): AcSqlDaoResult
     {
         $result = new AcSqlDaoResult(operation: AcEnumDDRowOperation::INSERT);
