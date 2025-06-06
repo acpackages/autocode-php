@@ -18,7 +18,8 @@ use AcWeb\Models\AcWebResponse;
 use ApiDocs\Enums\AcEnumApiDataType;
 use ApiDocs\Utils\AcApiDocUtils;
 use Autocode\Enums\AcEnumHttpResponseCode;
-class AcDataDictionaryAutoSelect {
+class AcDataDictionaryAutoSelect
+{
 
     public function __construct(public AcDDTable $acDDTable, public AcDataDictionaryAutoApi &$acDataDictionaryAutoApi)
     {
@@ -56,6 +57,11 @@ class AcDataDictionaryAutoSelect {
         $countParameter->description = "Number of rows in each page";
         $countParameter->required = false;
         $countParameter->in = "query";
+        $countParameter = new AcApiDocParameter();
+        $countParameter->name = "get_all_rows";
+        $countParameter->description = "Get all rows in table";
+        $countParameter->required = false;
+        $countParameter->in = "query";
         $acApiDocRoute->addParameter(parameter: $countParameter);
         $orderParameter = new AcApiDocParameter();
         $orderParameter->name = "order_by";
@@ -71,54 +77,62 @@ class AcDataDictionaryAutoSelect {
             $requestParameter->in = "query";
             $acApiDocRoute->addParameter(parameter: $requestParameter);
         }
-        $responses = AcApiDocUtils::getApiDocRouteResponsesForOperation(operation:AcEnumDDRowOperation::SELECT, acDDTable:$this->acDDTable,acApiDoc:$this->acDataDictionaryAutoApi->acWeb->acApiDoc);
+        $responses = AcApiDocUtils::getApiDocRouteResponsesForOperation(operation: AcEnumDDRowOperation::SELECT, acDDTable: $this->acDDTable, acApiDoc: $this->acDataDictionaryAutoApi->acWeb->acApiDoc);
         foreach ($responses as $response) {
             $acApiDocRoute->addResponse(acApiDocResponse: $response);
-        }  
+        }
         return $acApiDocRoute;
     }
 
-    private function getHandler(): callable {
+    private function getHandler(): callable
+    {
         $handler = function (AcWebRequest $acWebRequest): AcWebResponse {
             $acSqlDbTable = new AcSqlDbTable(tableName: $this->acDDTable->tableName);
             $acDDSelectStatement = new AcDDSelectStatement(tableName: $this->acDDTable->tableName);
-            if(AcExtensionMethods::arrayContainsKey(key: "query",array: $acWebRequest->get)){
+            if (AcExtensionMethods::arrayContainsKey(key: "query", array: $acWebRequest->get)) {
                 $queryColumns = $this->acDDTable->getSearchQueryColumnNames();
-                $acDDSelectStatement->startGroup(operator:AcEnumDDLogicalOperator::OR);
-                foreach($queryColumns as $columnName){
-                    $acDDSelectStatement->addCondition(columnName:$columnName,operator:AcEnumDDConditionOperator::CONTAINS,value: $acWebRequest->get["query"]);
+                $acDDSelectStatement->startGroup(operator: AcEnumDDLogicalOperator::OR);
+                foreach ($queryColumns as $columnName) {
+                    $acDDSelectStatement->addCondition(columnName: $columnName, operator: AcEnumDDConditionOperator::CONTAINS, value: $acWebRequest->get["query"]);
                 }
                 $acDDSelectStatement->endGroup();
             }
-            foreach ($this->acDDTable->tableColumns as $acDDTableColumn){
-                if(AcExtensionMethods::arrayContainsKey(key: $acDDTableColumn->columnName,array: $acWebRequest->get)){
-                    $acDDSelectStatement->addCondition(columnName:$acDDTableColumn->columnName,operator:AcEnumDDConditionOperator::EQUAL_TO,value: $acWebRequest->get[$acDDTableColumn->columnName]);
+            foreach ($this->acDDTable->tableColumns as $acDDTableColumn) {
+                if (AcExtensionMethods::arrayContainsKey(key: $acDDTableColumn->columnName, array: $acWebRequest->get)) {
+                    $acDDSelectStatement->addCondition(columnName: $acDDTableColumn->columnName, operator: AcEnumDDConditionOperator::EQUAL_TO, value: $acWebRequest->get[$acDDTableColumn->columnName]);
                 }
             }
-            if(AcExtensionMethods::arrayContainsKey(key: "order_by",array: $acWebRequest->get)){
+            if (AcExtensionMethods::arrayContainsKey(key: "order_by", array: $acWebRequest->get)) {
                 $acDDSelectStatement->orderBy = $acWebRequest->get["order_by"];
-            }            
-            if(AcExtensionMethods::arrayContainsKey(key: "page_number",array: $acWebRequest->get)){
-                $acDDSelectStatement->pageNumber = intval($acWebRequest->get["page_number"]);
             }
-            else{
-                $acDDSelectStatement->pageNumber = 1;
+            $getAllRows = false;
+            if (AcExtensionMethods::arrayContainsKey(key: "get_all_rows", array: $acWebRequest->get)) {
+                if (in_array(strtolower($acWebRequest->get["get_all_rows"]), ["true", "yes"])) {
+                    $getAllRows = true;
+                }
             }
-            if(AcExtensionMethods::arrayContainsKey(key: "page_size",array: $acWebRequest->get)){
-                $acDDSelectStatement->pageSize = intval($acWebRequest->get["page_size"]);
-            }
-            else{
-                $acDDSelectStatement->pageSize = 50;
+            if (!$getAllRows) {
+                if (AcExtensionMethods::arrayContainsKey(key: "page_number", array: $acWebRequest->get)) {
+                    $acDDSelectStatement->pageNumber = intval($acWebRequest->get["page_number"]);
+                } else {
+                    $acDDSelectStatement->pageNumber = 1;
+                }
+                if (AcExtensionMethods::arrayContainsKey(key: "page_size", array: $acWebRequest->get)) {
+                    $acDDSelectStatement->pageSize = intval($acWebRequest->get["page_size"]);
+                } else {
+                    $acDDSelectStatement->pageSize = 50;
+                }
             }
             $getResponse = $acSqlDbTable->getRowsFromAcDDStatement(
                 acDDSelectStatement: $acDDSelectStatement
-            );            
+            );
             return AcWebResponse::json($getResponse->toJson());
         };
         return $handler;
     }
 
-    private function getByIdAcApiDocRoute(): AcApiDocRoute{
+    private function getByIdAcApiDocRoute(): AcApiDocRoute
+    {
         $acApiDocRoute = new AcApiDocRoute();
         $acApiDocRoute->addTag($this->acDDTable->tableName);
         $acApiDocRoute->summary = "Get single " . $this->acDDTable->tableName;
@@ -129,27 +143,29 @@ class AcDataDictionaryAutoSelect {
         $parameter->required = true;
         $parameter->in = "path";
         $acApiDocRoute->addParameter($parameter);
-        $responses = AcApiDocUtils::getApiDocRouteResponsesForOperation(operation:AcEnumDDRowOperation::SELECT, acDDTable:$this->acDDTable,acApiDoc:$this->acDataDictionaryAutoApi->acWeb->acApiDoc);
+        $responses = AcApiDocUtils::getApiDocRouteResponsesForOperation(operation: AcEnumDDRowOperation::SELECT, acDDTable: $this->acDDTable, acApiDoc: $this->acDataDictionaryAutoApi->acWeb->acApiDoc);
         foreach ($responses as $response) {
             $acApiDocRoute->addResponse(acApiDocResponse: $response);
-        }  
+        }
         return $acApiDocRoute;
     }
 
-    private function getByIdHandler(): callable{
+    private function getByIdHandler(): callable
+    {
         $handler = function (AcWebRequest $acWebRequest): AcWebResponse {
             $acSqlDbTable = new AcSqlDbTable(tableName: $this->acDDTable->tableName);
             $acDDSelectStatement = new AcDDSelectStatement(tableName: $this->acDDTable->tableName);
             $primaryKeyValue = $acWebRequest->pathParameters[$acWebRequest->pathParameters[$this->acDDTable->getPrimaryKeyColumnName()]];
-            $getResponse = $acSqlDbTable->getRows(condition:$this->acDDTable->getPrimaryKeyColumnName()." = @primaryKeyValue", parameters: [
-                "@primaryKeyValue" => $primaryKeyValue 
+            $getResponse = $acSqlDbTable->getRows(condition: $this->acDDTable->getPrimaryKeyColumnName() . " = @primaryKeyValue", parameters: [
+                "@primaryKeyValue" => $primaryKeyValue
             ]);
             return AcWebResponse::json($getResponse->toJson());
         };
         return $handler;
     }
 
-    private function postAcApiDocRoute(): AcApiDocRoute {
+    private function postAcApiDocRoute(): AcApiDocRoute
+    {
         $acApiDocRoute = new AcApiDocRoute();
         $acApiDocRoute->addTag($this->acDDTable->tableName);
         $acApiDocRoute->summary = "Get " . $this->acDDTable->tableName;
@@ -162,6 +178,9 @@ class AcDataDictionaryAutoSelect {
             "page_number" => [
                 "type" => AcEnumApiDataType::INTEGER
             ],
+            "get_all_rows" => [
+                "type" => AcEnumApiDataType::BOOLEAN
+            ],
             "page_size" => [
                 "type" => AcEnumApiDataType::INTEGER
             ],
@@ -172,13 +191,13 @@ class AcDataDictionaryAutoSelect {
                 "type" => AcEnumApiDataType::OBJECT
             ],
             "include_columns" => [
-                "type" => AcEnumApiDataType::ARRAY,
+                "type" => AcEnumApiDataType::ARRAY ,
                 "items" => [
                     "type" => AcEnumApiDataType::STRING
                 ]
             ],
             "exclude_columns" => [
-                "type" => AcEnumApiDataType::ARRAY,
+                "type" => AcEnumApiDataType::ARRAY ,
                 "items" => [
                     "type" => AcEnumApiDataType::STRING
                 ]
@@ -197,60 +216,69 @@ class AcDataDictionaryAutoSelect {
         $requestBody = new AcApiDocRequestBody();
         $requestBody->addContent(content: $content);
         $acApiDocRoute->requestBody = $requestBody;
-        $responses = AcApiDocUtils::getApiDocRouteResponsesForOperation(operation:AcEnumDDRowOperation::SELECT, acDDTable:$this->acDDTable,acApiDoc:$this->acDataDictionaryAutoApi->acWeb->acApiDoc);
+        $responses = AcApiDocUtils::getApiDocRouteResponsesForOperation(operation: AcEnumDDRowOperation::SELECT, acDDTable: $this->acDDTable, acApiDoc: $this->acDataDictionaryAutoApi->acWeb->acApiDoc);
         foreach ($responses as $response) {
             $acApiDocRoute->addResponse(acApiDocResponse: $response);
-        }  
+        }
         return $acApiDocRoute;
     }
 
     private function postHandler(): callable
     {
-        $handler = function (AcWebRequest $acWebRequest): AcWebResponse {            
+        $handler = function (AcWebRequest $acWebRequest): AcWebResponse {
             $acSqlDbTable = new AcSqlDbTable(tableName: $this->acDDTable->tableName);
             $acDDSelectStatement = new AcDDSelectStatement(tableName: $this->acDDTable->tableName);
-            if(AcExtensionMethods::arrayContainsKey(key: "include_columns",array: $acWebRequest->body)){
+            if (AcExtensionMethods::arrayContainsKey(key: "include_columns", array: $acWebRequest->body)) {
                 $acDDSelectStatement->includeColumns = $acWebRequest->body["include_columns"];
             }
-            if(AcExtensionMethods::arrayContainsKey(key: "exclude_columns",array: $acWebRequest->body)){
+            if (AcExtensionMethods::arrayContainsKey(key: "exclude_columns", array: $acWebRequest->body)) {
                 $acDDSelectStatement->excludeColumns = $acWebRequest->body["exclude_columns"];
             }
-            if(AcExtensionMethods::arrayContainsKey(key: "query",array: $acWebRequest->body)){
+            if (AcExtensionMethods::arrayContainsKey(key: "query", array: $acWebRequest->body)) {
                 $queryColumns = $this->acDDTable->getSearchQueryColumnNames();
-                $acDDSelectStatement->startGroup(operator:AcEnumDDLogicalOperator::OR);
-                foreach($queryColumns as $columnName){
-                    $acDDSelectStatement->addCondition(columnName:$columnName,operator:AcEnumDDConditionOperator::CONTAINS,value: $acWebRequest->body["query"]);
+                $acDDSelectStatement->startGroup(operator: AcEnumDDLogicalOperator::OR);
+                foreach ($queryColumns as $columnName) {
+                    $acDDSelectStatement->addCondition(columnName: $columnName, operator: AcEnumDDConditionOperator::CONTAINS, value: $acWebRequest->body["query"]);
                 }
                 $acDDSelectStatement->endGroup();
             }
-            if(AcExtensionMethods::arrayContainsKey(key: "filters",array: $acWebRequest->body)){
+            if (AcExtensionMethods::arrayContainsKey(key: "filters", array: $acWebRequest->body)) {
                 $filters = $acWebRequest->body['filters'];
                 $acDDSelectStatement->setConditionsFromFilters($filters);
             }
-            $pageNumber = 1;
-            if(AcExtensionMethods::arrayContainsKey(key: "page_number",array: $acWebRequest->body)){
-                $pageNumber = intval($acWebRequest->body["page_number"]);
-                if($pageNumber<=0){
-                    $pageNumber = 1;
-                }                
+            $getAllRows = false;
+            if (AcExtensionMethods::arrayContainsKey(key: "get_all_rows", array: $acWebRequest->body)) {
+                if (in_array(strtolower($acWebRequest->body["get_all_rows"].""), [true,"true", "yes"])) {
+                    $getAllRows = true;
+                }
             }
-            $acDDSelectStatement->pageNumber = $pageNumber;
-            $pageSize = 50;
-            if(AcExtensionMethods::arrayContainsKey(key: "page_size",array: $acWebRequest->body)){
-                $pageSize = intval($acWebRequest->body["page_size"]);
-                if($pageSize<=0){
-                    $pageSize = 50;
-                } 
+            if (!$getAllRows) {
+                $pageNumber = 1;
+                if (AcExtensionMethods::arrayContainsKey(key: "page_number", array: $acWebRequest->body)) {
+                    $pageNumber = intval($acWebRequest->body["page_number"]);
+                    if ($pageNumber <= 0) {
+                        $pageNumber = 1;
+                    }
+                }
+                $acDDSelectStatement->pageNumber = $pageNumber;
+                $pageSize = 50;
+                if (AcExtensionMethods::arrayContainsKey(key: "page_size", array: $acWebRequest->body)) {
+                    $pageSize = intval($acWebRequest->body["page_size"]);
+                    if ($pageSize <= 0) {
+                        $pageSize = 50;
+                    }
+                }
+                $acDDSelectStatement->pageSize = $pageSize;
             }
-            $acDDSelectStatement->pageSize = $pageSize;
-            if(AcExtensionMethods::arrayContainsKey(key: "order_by",array: $acWebRequest->body)){
+            if (AcExtensionMethods::arrayContainsKey(key: "order_by", array: $acWebRequest->body)) {
                 $acDDSelectStatement->orderBy = $acWebRequest->body["order_by"];
-            }            
+            }
             $getResponse = $acSqlDbTable->getRowsFromAcDDStatement(
                 acDDSelectStatement: $acDDSelectStatement
-            );  
+            );
             $data = $getResponse->toJson();
             $data["sql_statement"] = $acDDSelectStatement->toJson();
+            $data["sql_query"] = $acDDSelectStatement->getSqlStatement();
             return AcWebResponse::json($data);
         };
         return $handler;
